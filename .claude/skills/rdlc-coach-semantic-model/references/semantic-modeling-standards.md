@@ -51,6 +51,34 @@ Any percentage or rate calculated from two additive components (e.g., a placemen
 
 ---
 
+## Part 3 — Microsoft skills-for-fabric Authoring Alignment
+
+Sourced from Microsoft's own `semantic-model-authoring` skill (`skills-for-fabric` repo: `modeling-guidelines.md`, `naming-conventions.md`). These are design-time-relevant principles only — DAX query syntax, trace diagnostics, and performance-tuning content from that same source are execution-time concerns and belong to a future Step 13 Implementation Agent skill, not this reviewer.
+
+Two items below are explicit **corrections/refinements to Part 1**, not additive rules — flagged as such rather than silently merged, since they materially changed decisions in a prior confirmed model (BC SPCA Foster Analysis v1.1).
+
+### 3.1 CORRECTION to 1.2 — No surrogate key on fact tables
+Generic Kimball guidance (1.2) treats a fact-table surrogate key as routine. Microsoft's Fabric/Power BI-specific guidance is stricter and takes precedence in this environment: **do not create a surrogate primary key on a fact table.** Nothing ever relates *to* a fact table's own key — dimensions relate *into* the fact via their FKs — so a fact-level surrogate key is pure memory overhead in a column-store (VertiPaq) engine, with no join benefit. The natural/degenerate key from the source system (e.g., a source transaction ID) is sufficient on its own to guarantee grain uniqueness and support reconciliation/QA. When reviewing a fact table design, ask whether a proposed surrogate fact key is doing any real join work — if not, recommend dropping it in favor of the natural key alone.
+
+### 3.2 CORRECTION to naming convention — No `Fact_`/`Dim_` prefixes
+Microsoft's naming convention explicitly forbids technical prefixes: no `Fact`, `Dim`, `FACT_`, `DIM_`, `STG_` in table names. Use plain business-friendly names instead — **plural** for fact tables (e.g., `Animal Intakes`, `Sales`, `Orders`), **singular** for dimension tables (e.g., `Animal`, `Centre`, `Product`, `Customer`). This applies to build-ready table names (what will actually exist in the Fabric/Power BI model); architect-facing design documentation may still group tables under "Fact Table Definitions" / "Dimensional Model Definitions" as section headers for clarity, but the table names themselves inside those sections should follow this convention. Also applies to columns and measures: readable casing with spaces, no `CamelCase`/`snake_case`/`UPPER_CASE`, spell out abbreviations unless universally understood in the business domain (YTD, MTD, QTD, etc. are fine).
+
+### 3.3 Explicit measures, hidden base columns
+Always use explicit DAX measures rather than relying on a report author's implicit aggregation of a raw column. When a measure aggregates a base fact column (e.g., a measure `Intake Count` defined as `SUM('Animal Intakes'[IntakeCount])`), the base column itself should be marked hidden in the model — the measure is the user-facing interface, not the underlying column. When reviewing a fact table's measures, check that every additive column intended for aggregation has (or will have) a corresponding named, described DAX measure, and flag the base column for hiding once built.
+
+### 3.4 Data type and summarization discipline
+- Use `Int64` for keys/identifiers, `Decimal` (never `Double`) for currency or precise numeric values — `Double` causes rounding errors and compression/performance problems in VertiPaq.
+- Set `SummarizeBy = None` on numeric columns that are not meant to be aggregated — e.g., a `DateKey` (YYYYMMDD integer), `Year`, `Month` number, or a postal code. Without this, Power BI defaults to offering `SUM`/`AVERAGE` on these columns, which is meaningless and a common source of report-author error.
+- Hide foreign key columns on the fact table (the "many" side of every relationship) — they exist for the model's join logic, not for direct report use.
+
+### 3.5 Lean models, memory awareness
+Every column costs memory whether or not it is ever used in a report — this reinforces Part 1.7 ("structure only where evidence demands it") with a concrete mechanism, not just a design philosophy. High-cardinality columns (GUIDs, raw transaction IDs, unsplit DateTime, composite string keys) are the largest memory consumers. When reviewing a draft, treat "does this column justify its memory cost" as a real question for any high-cardinality candidate column, not only a scope-creep question.
+
+### 3.6 Composite keys are unsupported, not just discouraged
+Microsoft's guidance states composite keys are **not supported** in Power BI relationships, not merely a bad practice. This is a hard technical constraint, not a style preference — it directly reinforces the grain-is-a-sentence principle in 1.1: a fact table's uniqueness must come from a single natural/surrogate key column, never from a combination of FK columns, because the model literally cannot relate on a composite key even if the design called for it.
+
+---
+
 ## Further Reading
 
 These are optional references for a human reviewer or junior user who wants to go deeper into a specific principle above. They are not required for this skill's reasoning to function, and this skill does not depend on fetching them.
@@ -61,3 +89,5 @@ These are optional references for a human reviewer or junior user who wants to g
 - Microsoft Learn — Relationship guidance for Power BI: https://learn.microsoft.com/en-us/power-bi/guidance/relationships-nfl
 - Microsoft Learn — DAX best practices: https://learn.microsoft.com/en-us/power-bi/guidance/dax-coding-standards
 - Microsoft Fabric documentation — Lakehouse/Warehouse modeling: https://learn.microsoft.com/en-us/fabric/data-warehouse/
+- Microsoft skills-for-fabric — semantic-model-authoring skill (source for Part 3): https://github.com/microsoft/skills-for-fabric/tree/main/skills/semantic-model-authoring
+- Power BI Semantic Model Authoring skill overview: https://learn.microsoft.com/en-us/power-bi/developer/agentic/semantic-model-authoring-skill-overview

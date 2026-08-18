@@ -1,0 +1,41 @@
+{
+  "$schema_purpose": "Deterministic, hard-constraint CSV output format for rdlc-mock-data-generator. Every value here is a strict compliance requirement. Pair with references/gold-example/ for a visual reference.",
+
+  "file_format": "csv",
+  "encoding": "UTF-8, no BOM",
+  "delimiter": ",",
+  "line_ending": "LF",
+  "quoting": "RFC 4180 — quote any field containing a comma, double-quote, or line break; escape embedded double-quotes by doubling them",
+
+  "file_naming": {
+    "pattern": "<Technical Table Name>.csv",
+    "example": "Fact_AnimalIntake.csv, Dim_Date.csv",
+    "rule": "Must exactly match the Technical Name given for that table in the confirmed Table Definitions document — this is what the Power BI M/Import partition query will reference as its source file."
+  },
+
+  "header_row": {
+    "required": true,
+    "content": "Technical Names only, in the exact same order as listed in the confirmed Table Definitions document's column table",
+    "forbid_business_names_in_header": true,
+    "reason": "CSV is an ETL/source-layer artifact (maps to TMDL sourceColumn); Business Names are applied later, inside the semantic model layer, not in the source file."
+  },
+
+  "value_conventions": {
+    "date_format": "ISO 8601 (YYYY-MM-DD)",
+    "integer_keys": "Plain integers, no leading zeros unless the confirmed Type is explicitly a fixed-width string code",
+    "boolean_or_flag_columns": "Integer 0/1, matching the confirmed column Type (e.g., Int64) — never 'TRUE'/'FALSE' or 'Yes'/'No' string literals",
+    "null_representation": "Empty string (two consecutive delimiters) — never the literal text 'NULL' or 'N/A'",
+    "decimal_separator": "Period only; no thousands separators inside any CSV value",
+    "text_fields": "No leading/trailing whitespace; quote if the value itself contains the delimiter"
+  },
+
+  "one_file_per_table": true,
+  "forbid_combined_workbook_output": true,
+
+  "column_order_rule": "Must match the confirmed Table Definitions document's Technical Name column order exactly, left to right.",
+
+  "verification_step": {
+    "instruction": "After generating all CSVs, re-parse each file and confirm: (1) header matches expected Technical Names in order, (2) every fact-table foreign key value exists in its corresponding dimension file, (3) no unexpected null/blank in a required column.",
+    "required": true
+  }
+}

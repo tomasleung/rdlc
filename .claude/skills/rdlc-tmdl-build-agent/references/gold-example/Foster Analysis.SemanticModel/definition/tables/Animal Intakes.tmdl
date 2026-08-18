@@ -1,0 +1,79 @@
+/// Primary analytical fact table. Grain: one row per intake event, as recorded by ShelterBuddy.
+/// One animal with two separate intakes produces two fact rows sharing one Animal Key.
+/// Supports Foster Discovery reporting and Foster Placement Rate calculations. Date analysis is bound to Intake Date, not Foster Date.
+table 'Animal Intakes'
+
+	/// Count of intake events. Not a distinct-animal count - see grain note above.
+	measure 'Intake Count' = SUM('Animal Intakes'[IntakeCount])
+		formatString: #,##0
+
+	/// Count of intake events where the animal experienced at least one foster placement.
+	measure 'Animals Ever Fostered' = SUM('Animal Intakes'[FosterFlag])
+		formatString: #,##0
+
+	/// Percentage of intake events that experienced foster placement. Recalculates under any filter context.
+	measure 'Foster Placement Rate (%)' = DIVIDE([Animals Ever Fostered], [Intake Count])
+		formatString: 0.00%
+
+	/// ShelterBuddy's unique intake transaction ID (natural key). Guarantees grain uniqueness at load; backend/QA reconciliation only.
+	column 'Source Intake ID'
+		dataType: string
+		isHidden
+		sourceColumn: SourceIntakeID
+
+	column 'Date Key'
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	column 'Centre ID'
+		dataType: string
+		isHidden
+		sourceColumn: CentreID
+
+	column 'Intake Type ID'
+		dataType: string
+		isHidden
+		sourceColumn: IntakeTypeID
+
+	column 'Animal Key'
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: AnimalKey
+
+	/// Constant value = 1. Base column for the Intake Count measure - hidden; use the measure instead. Named without a
+	/// space (unlike other business names) specifically to avoid colliding with the 'Intake Count' measure name -
+	/// TMDL/Power BI forbids a measure and its own aggregated base column sharing an identical name.
+	column IntakeCount
+		dataType: int64
+		formatString: 0
+		isHidden
+		sourceColumn: IntakeCount
+
+	/// Integer 0/1, not Boolean, so it can be SUM()'d directly. Base column for the Animals Ever Fostered measure -
+	/// hidden; use the measure instead. Named without a space for the same name-collision reason as IntakeCount above.
+	column FosterFlag
+		dataType: int64
+		formatString: 0
+		isHidden
+		sourceColumn: FosterFlag
+
+	partition 'Animal Intakes' = m
+		mode: import
+		source =
+			let
+				// Load the Animal Intakes fact fixture from the local Prototype-mode data folder.
+				Source = Csv.Document(File.Contents(#"DataFolder" & "Fact_AnimalIntake.csv"), [Delimiter=",", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				#"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				#"Changed column types" = Table.TransformColumnTypes(#"Promoted headers", {
+					{"SourceIntakeID", type text}, {"DateKey", Int64.Type}, {"CentreID", type text},
+					{"IntakeTypeID", type text}, {"AnimalKey", Int64.Type}, {"IntakeCount", Int64.Type}, {"FosterFlag", Int64.Type}
+				})
+			in
+				#"Changed column types"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,41 @@
+AnimalKey,AnimalID,Species,SpeciesGroup,Breed,AgeGroup,Sex
+1,A00001,Cat,Cat,Domestic Longhair,Adult,Male
+2,A00002,Cat,Cat,Domestic Longhair,Adult,Male
+3,A00003,Cat,Cat,Domestic Longhair,Neonate,Male
+4,A00004,Cat,Cat,Siamese Mix,Juvenile,Male
+5,A00005,Cat,Cat,Domestic Shorthair,Adult,Female
+6,A00006,Dog,Dog,Labrador Mix,Juvenile,Male
+7,A00007,Cat,Cat,Domestic Shorthair,Juvenile,Female
+8,A00008,Rabbit,Small Animal,Dutch Mix,Neonate,Female
+9,A00009,Rabbit,Small Animal,Dutch Mix,Adult,Female
+10,A00010,Dog,Dog,Retriever Mix,Adult,Female
+11,A00011,Dog,Dog,Labrador Mix,Adult,Female
+12,A00012,Dog,Dog,Labrador Mix,Senior,Female
+13,A00013,Dog,Dog,Terrier Mix,Juvenile,Male
+14,A00014,Cat,Cat,Domestic Longhair,Senior,Female
+15,A00015,Dog,Dog,Terrier Mix,Juvenile,Male
+16,A00016,Dog,Dog,Shepherd Mix,Senior,Male
+17,A00017,Dog,Dog,Shepherd Mix,Juvenile,Male
+18,A00018,Cat,Cat,Domestic Longhair,Neonate,Female
+19,A00019,Cat,Cat,Domestic Shorthair,Adult,Female
+20,A00020,Cat,Cat,Siamese Mix,Neonate,Male
+21,A00021,Other,Other,Mixed Breed,Neonate,Female
+22,A00022,Cat,Cat,Domestic Longhair,Neonate,Female
+23,A00023,Dog,Dog,Terrier Mix,Juvenile,Female
+24,A00024,Cat,Cat,Domestic Shorthair,Adult,Male
+25,A00025,Cat,Cat,Siamese Mix,Senior,Female
+26,A00026,Rabbit,Small Animal,Dutch Mix,Juvenile,Male
+27,A00027,Other,Other,Mixed Breed,Adult,Male
+28,A00028,Cat,Cat,Tabby Mix,Juvenile,Female
+29,A00029,Cat,Cat,Domestic Shorthair,Adult,Female
+30,A00030,Dog,Dog,Labrador Mix,Adult,Male
+31,A00031,Dog,Dog,Terrier Mix,Senior,Female
+32,A00032,Dog,Dog,Terrier Mix,Juvenile,Female
+33,A00033,Cat,Cat,Tabby Mix,Adult,Male
+34,A00034,Cat,Cat,Domestic Shorthair,Adult,Male
+35,A00035,Rabbit,Small Animal,Mixed Breed,Senior,Female
+36,A00036,Cat,Cat,Siamese Mix,Neonate,Female
+37,A00037,Dog,Dog,Hound Mix,Neonate,Male
+38,A00038,Dog,Dog,Hound Mix,Juvenile,Male
+39,A00039,Cat,Cat,Domestic Longhair,Adult,Male
+40,A00040,Cat,Cat,Tabby Mix,Juvenile,Female

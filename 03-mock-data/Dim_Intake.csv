@@ -1,0 +1,35 @@
+IntakeTypeID,IntakeType,IntakeGroup
+IT01,Stray - Type 1,Stray
+IT02,Stray - Type 2,Stray
+IT03,Stray - Type 3,Stray
+IT04,Stray - Type 4,Stray
+IT05,Stray - Type 5,Stray
+IT06,Stray - Type 6,Stray
+IT07,Owner Surrender - Type 1,Owner Surrender
+IT08,Owner Surrender - Type 2,Owner Surrender
+IT09,Owner Surrender - Type 3,Owner Surrender
+IT10,Owner Surrender - Type 4,Owner Surrender
+IT11,Owner Surrender - Type 5,Owner Surrender
+IT12,Owner Surrender - Type 6,Owner Surrender
+IT13,Humane Officer Surrender - Type 1,Humane Officer Surrender
+IT14,Humane Officer Surrender - Type 2,Humane Officer Surrender
+IT15,Humane Officer Surrender - Type 3,Humane Officer Surrender
+IT16,Humane Officer Surrender - Type 4,Humane Officer Surrender
+IT17,Other - Type 1,Other
+IT18,Other - Type 2,Other
+IT19,Other - Type 3,Other
+IT20,Other - Type 4,Other
+IT21,Returns - Type 1,Returns
+IT22,Returns - Type 2,Returns
+IT23,Returns - Type 3,Returns
+IT24,Returns - Type 4,Returns
+IT25,Humane Officer Seized - Type 1,Humane Officer Seized
+IT26,Humane Officer Seized - Type 2,Humane Officer Seized
+IT27,Humane Officer Seized - Type 3,Humane Officer Seized
+IT28,Humane Officer Seized - Type 4,Humane Officer Seized
+IT29,Euthanasia Request - Type 1,Euthanasia Request
+IT30,Euthanasia Request - Type 2,Euthanasia Request
+IT31,Euthanasia Request - Type 3,Euthanasia Request
+IT32,Transfer In (External) - Type 1,Transfer In (External)
+IT33,Transfer In (External) - Type 2,Transfer In (External)
+IT34,Transfer In (External) - Type 3,Transfer In (External)

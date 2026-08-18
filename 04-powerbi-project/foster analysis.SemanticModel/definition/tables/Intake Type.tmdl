@@ -1,0 +1,37 @@
+/// Intake Type dimension. Grain: one row per ShelterBuddy intake type (34 source values). SCD Type 1 (overwrite).
+table 'Intake Type'
+	lineageTag: 5441626a-091e-4bd1-8716-325cb9e0de32
+
+	column 'Intake Type ID'
+		dataType: string
+		isHidden
+		lineageTag: 35cd204a-4373-4c67-a3a4-d8ccbcf895e2
+		sourceColumn: IntakeTypeID
+
+	/// Raw ShelterBuddy intake type (e.g., Stray, Owner Surrender, Returns) - 34 distinct values. Use Intake Group for the governed 8-group rollup.
+	column 'Intake Type'
+		dataType: string
+		lineageTag: 199e2b33-ec87-4418-aaad-12179e3612dc
+		sourceColumn: IntakeType
+
+	/// Data-Owner-governed rollup grouping (8 groups). Many-to-one from Intake Type. List may evolve.
+	column 'Intake Group'
+		dataType: string
+		lineageTag: 24ce7c3d-21ec-44ff-a804-bffcfdbdab99
+		sourceColumn: IntakeGroup
+
+	partition 'Intake Type' = m
+		mode: import
+		source =
+				let
+					// Load the Intake Type dimension fixture from the local Prototype-mode data folder.
+					Source = Csv.Document(File.Contents(#"DataFolder" & "Dim_Intake.csv"), [Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+					#"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					#"Changed column types" = Table.TransformColumnTypes(#"Promoted headers", {
+						{"IntakeTypeID", type text}, {"IntakeType", type text}, {"IntakeGroup", type text}
+					})
+				in
+					#"Changed column types"
+
+	annotation PBI_ResultType = Table
+

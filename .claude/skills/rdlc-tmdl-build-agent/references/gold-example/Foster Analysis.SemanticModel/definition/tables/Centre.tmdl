@@ -1,0 +1,39 @@
+/// Centre dimension. 32 centres across 5 regions, all BC, all type "Animal Shelter". SCD Type 1 (overwrite).
+table Centre
+
+	column 'Centre ID'
+		dataType: string
+		isHidden
+		sourceColumn: CentreID
+
+	/// Centre name. Primary descriptive column for this dimension.
+	column Centre
+		dataType: string
+		sourceColumn: CentreName
+
+	/// Operational region. Centre is the finer-grained geography level; Region is the coarser rollup - 5 distinct regions.
+	column Region
+		dataType: string
+		sourceColumn: Region
+
+	/// Supports Power BI map visual geocoding.
+	column 'Postal Code'
+		dataType: string
+		dataCategory: PostalCode
+		summarizeBy: none
+		sourceColumn: PostalCode
+
+	partition Centre = m
+		mode: import
+		source =
+			let
+				// Load the Centre dimension fixture from the local Prototype-mode data folder.
+				Source = Csv.Document(File.Contents(#"DataFolder" & "Dim_Centre.csv"), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				#"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				#"Changed column types" = Table.TransformColumnTypes(#"Promoted headers", {
+					{"CentreID", type text}, {"CentreName", type text}, {"Region", type text}, {"PostalCode", type text}
+				})
+			in
+				#"Changed column types"
+
+	annotation PBI_ResultType = Table

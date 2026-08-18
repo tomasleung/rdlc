@@ -1,0 +1,9 @@
+IntakeTypeID,IntakeType,IntakeGroup
+IT01,Stray,Stray
+IT02,Owner Surrender,Owner Surrender
+IT03,Humane Officer Surrender,Humane Officer Surrender
+IT04,Other,Other
+IT05,Returns,Returns
+IT06,Humane Officer Seized,Humane Officer Seized
+IT07,Euthanasia Request,Euthanasia Request
+IT08,Transfer In (External),Transfer In (External)

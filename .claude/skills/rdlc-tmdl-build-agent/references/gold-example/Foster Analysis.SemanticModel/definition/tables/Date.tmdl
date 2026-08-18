@@ -1,0 +1,83 @@
+/// Calendar date dimension. One row per calendar day, contiguous, 2024-01-01 through 2025-12-31.
+/// Built upstream in Microsoft Fabric per RDLC OS model-first design decision (governed table, not DAX-generated).
+table Date
+	dataCategory: Time
+
+	column 'Date Key'
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	/// Calendar date. Use this column, not Date Key, for all report visuals and slicers.
+	column Date
+		dataType: dateTime
+		formatString: Short Date
+		sourceColumn: Date
+
+	/// Calendar year of the intake date.
+	column Year
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: Year
+
+	/// Calendar quarter (Q1-Q4) of the intake date.
+	column Quarter
+		dataType: string
+		sourceColumn: Quarter
+
+	column Month
+		dataType: int64
+		formatString: 0
+		isHidden
+		summarizeBy: none
+		sourceColumn: Month
+
+	/// Month name, sorted by the numeric Month column (not alphabetically).
+	column 'Month Name'
+		dataType: string
+		sortByColumn: Month
+		sourceColumn: MonthName
+
+	/// ISO week label for the intake date (e.g., W22).
+	column Week
+		dataType: string
+		sourceColumn: Week
+
+	/// Winter (Dec-Feb) / Spring (Mar-May) / Summer (Jun-Aug) / Fall (Sep-Nov). Supports BC seasonal / "kitten season" analysis.
+	column Season
+		dataType: string
+		sourceColumn: Season
+
+	hierarchy 'Calendar Hierarchy'
+
+		level Year
+			column: Year
+
+		level Quarter
+			column: Quarter
+
+		level 'Month Name'
+			column: 'Month Name'
+
+		level Date
+			column: Date
+
+	partition Date = m
+		mode: import
+		source =
+			let
+				// Load the Date dimension fixture from the local Prototype-mode data folder.
+				Source = Csv.Document(File.Contents(#"DataFolder" & "Dim_Date.csv"), [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				#"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				#"Changed column types" = Table.TransformColumnTypes(#"Promoted headers", {
+					{"DateKey", Int64.Type}, {"Date", type date}, {"Year", Int64.Type},
+					{"Quarter", type text}, {"Month", Int64.Type}, {"MonthName", type text},
+					{"Week", type text}, {"Season", type text}
+				})
+			in
+				#"Changed column types"
+
+	annotation PBI_ResultType = Table

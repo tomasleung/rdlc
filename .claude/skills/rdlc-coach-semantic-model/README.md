@@ -27,7 +27,7 @@ rdlc-coach-semantic-model/
     ├── semantic-modeling-standards.md    # Kimball + MS Fabric/Power BI reasoning anchors (soft guidance)
     ├── output-format-spec.json           # Hard, deterministic output document constraints
     └── gold-example/
-        └── TABLE_DEFINITIONS_FOSTER_v1_1.docx   # Real, worked example of correct final output
+        └── TABLE_DEFINITIONS_FOSTER_v1_2.docx   # Real, worked example of correct final output (5-column Technical/Business name schema)
 ```
 
 ## Required input

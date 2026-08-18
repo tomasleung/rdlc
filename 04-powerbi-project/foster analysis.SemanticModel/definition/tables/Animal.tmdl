@@ -1,0 +1,67 @@
+/// Animal dimension. SCD Type 1 (overwrite). Grain: one row per distinct animal (AnimalID from ShelterBuddy).
+table Animal
+	lineageTag: c5ce04e9-a48f-41fc-ad63-6e4f7631e774
+
+	column 'Animal Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b569b193-8c1c-4672-862e-d6197669fc2e
+		summarizeBy: none
+		sourceColumn: AnimalKey
+
+	/// ShelterBuddy's natural Animal ID. Retained to support a future # Animals (distinct count) measure,
+	/// since the fact table's grain is the intake event, not the animal - the same animal can have multiple intakes.
+	column 'Animal ID'
+		dataType: string
+		isHidden
+		lineageTag: 0c2a910a-11a0-475d-a21f-b071635ad095
+		sourceColumn: AnimalID
+
+	/// Animal species as recorded in ShelterBuddy. Use Species Group for a higher-level, Data-Owner-governed rollup.
+	column Species
+		dataType: string
+		lineageTag: 202e3fa2-421f-4f3b-8a1f-7e2ca0b51be8
+		sourceColumn: Species
+
+	/// Data-Owner-confirmed rollup grouping for Species (e.g., Cat, Dog, Small Animal).
+	/// Mapping is NOT yet complete - "Other" is a temporary placeholder for species not yet mapped by the Data Owner, not a finished category.
+	column 'Species Group'
+		dataType: string
+		lineageTag: 073bd585-e476-47b8-994e-56e8f984b2d3
+		sourceColumn: SpeciesGroup
+
+	/// Animal breed as recorded in ShelterBuddy.
+	column Breed
+		dataType: string
+		lineageTag: 063223a3-b2e3-4571-85eb-e2300cf791a0
+		sourceColumn: Breed
+
+	/// Neonate / Juvenile / Adult / Senior - native ShelterBuddy field, no derivation required.
+	column 'Age Group'
+		dataType: string
+		lineageTag: 8338abf4-e7e8-4c92-821a-60eab9d7426b
+		sourceColumn: AgeGroup
+
+	/// Retained as a low-cost, plausible driver. Likely correlated with Species x Age Group (Neonate), not independent - treat findings as a hypothesis.
+	column Sex
+		dataType: string
+		lineageTag: 46f9d7cd-9b74-42b4-bea6-54e0da19e3ad
+		sourceColumn: Sex
+
+	partition Animal = m
+		mode: import
+		source =
+				let
+					// Load the Animal dimension fixture from the local Prototype-mode data folder.
+					Source = Csv.Document(File.Contents(#"DataFolder" & "Dim_Animal.csv"), [Delimiter=",", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+					#"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					#"Changed column types" = Table.TransformColumnTypes(#"Promoted headers", {
+						{"AnimalKey", Int64.Type}, {"AnimalID", type text}, {"Species", type text},
+						{"SpeciesGroup", type text}, {"Breed", type text}, {"AgeGroup", type text}, {"Sex", type text}
+					})
+				in
+					#"Changed column types"
+
+	annotation PBI_ResultType = Table
+
