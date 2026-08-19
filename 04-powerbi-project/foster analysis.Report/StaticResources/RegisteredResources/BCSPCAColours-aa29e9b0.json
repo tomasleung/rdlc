@@ -1,0 +1,177 @@
+{
+  "name": "BCSPCAColours-aa29e9b0.json",
+  "dataColors": [
+    "#00337F",
+    "#D28E00",
+    "#98CAEC",
+    "#72AD00",
+    "#CE9EB5",
+    "#99ADCC",
+    "#4A7637",
+    "#ab8c05",
+    "#3599B8",
+    "#DFBFBF",
+    "#4AC5BB",
+    "#5F6B6D",
+    "#FB8281",
+    "#F4D25A",
+    "#7F898A",
+    "#A4DDEE",
+    "#FDAB89",
+    "#B687AC",
+    "#28738A",
+    "#A78F8F",
+    "#168980",
+    "#293537",
+    "#BB4A4A",
+    "#B59525",
+    "#475052",
+    "#6A9FB0",
+    "#BD7150",
+    "#7B4F71",
+    "#1B4D5C",
+    "#706060",
+    "#0F5C55",
+    "#1C2325"
+  ],
+  "good": "#7EA83F",
+  "neutral": "#F9E376",
+  "bad": "#C64420",
+  "foreground": "#000000",
+  "foregroundNeutralSecondary": "#5F6B6D",
+  "background": "#FFFFFF",
+  "backgroundLight": "#D3D8D9",
+  "backgroundNeutral": "#E4E7E7",
+  "tableAccent": "#00337F",
+  "textClasses": {
+    "label": {
+      "fontFace": "Calibri"
+    },
+    "callout": {
+      "fontFace": "Calibri"
+    },
+    "title": {
+      "fontSize": 14,
+      "fontFace": "Calibri",
+      "color": "#000000"
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFace": "Calibri",
+      "color": "#00337F"
+    }
+  },
+  "visualStyles": {
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#F0F0F0"
+              }
+            },
+            "transparency": 0
+          }
+        ]
+      }
+    },
+    "*": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#D3D8D9"
+              }
+            },
+            "radius": 8,
+            "width": 1
+          }
+        ],
+        "visualHeader": [
+          {
+            "show": false
+          }
+        ],
+        "title": [
+          {
+            "fontFamily": "Calibri",
+            "fontSize": 12,
+            "fontColor": {
+              "solid": {
+                "color": "#00337F"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "slicer": {
+      "*": {
+        "header": [
+          {
+            "fontFamily": "Calibri",
+            "textSize": 10,
+            "fontColor": {
+              "solid": {
+                "color": "#000000"
+              }
+            },
+            "outlineStyle": 0
+          }
+        ],
+        "items": [
+          {
+            "fontFamily": "Calibri",
+            "textSize": 9,
+            "fontColor": {
+              "solid": {
+                "color": "#000000"
+              }
+            },
+            "outlineStyle": 0,
+            "padding": 2
+          }
+        ]
+      }
+    },
+    "cardVisual": {
+      "*": {
+        "value": [
+          {
+            "bold": true,
+            "$id": "default"
+          }
+        ],
+        "label": [
+          {
+            "show": true,
+            "$id": "default"
+          }
+        ],
+        "cardCalloutArea": [
+          {
+            "paddingUniform": 0
+          }
+        ],
+        "title": [
+          {
+            "show": false
+          }
+        ]
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@ table Centre
 	column 'Centre ID'
 		dataType: string
 		isHidden
+		isAvailableInMdx: false
 		lineageTag: 14ae6de2-c7cb-432f-9d8e-9eaca4b1c0f8
 		sourceColumn: CentreID
 

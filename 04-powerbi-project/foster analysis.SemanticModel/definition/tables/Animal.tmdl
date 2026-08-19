@@ -6,6 +6,7 @@ table Animal
 		dataType: int64
 		isHidden
 		formatString: 0
+		isAvailableInMdx: false
 		lineageTag: b569b193-8c1c-4672-862e-d6197669fc2e
 		summarizeBy: none
 		sourceColumn: AnimalKey
@@ -15,6 +16,7 @@ table Animal
 	column 'Animal ID'
 		dataType: string
 		isHidden
+		isAvailableInMdx: false
 		lineageTag: 0c2a910a-11a0-475d-a21f-b071635ad095
 		sourceColumn: AnimalID
 

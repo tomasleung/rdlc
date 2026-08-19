@@ -27,6 +27,7 @@ table 'Animal Intakes'
 	column 'Source Intake ID'
 		dataType: string
 		isHidden
+		isAvailableInMdx: false
 		lineageTag: 05b43c12-dd09-4763-b02c-2792a5ac74cb
 		sourceColumn: SourceIntakeID
 
@@ -34,6 +35,7 @@ table 'Animal Intakes'
 		dataType: int64
 		isHidden
 		formatString: 0
+		isAvailableInMdx: false
 		lineageTag: 3fa1568d-b2fb-4cee-9c06-70e32a34051a
 		summarizeBy: none
 		sourceColumn: DateKey
@@ -41,12 +43,14 @@ table 'Animal Intakes'
 	column 'Centre ID'
 		dataType: string
 		isHidden
+		isAvailableInMdx: false
 		lineageTag: 85e4f87c-f13b-4139-918f-ad8b83c69139
 		sourceColumn: CentreID
 
 	column 'Intake Type ID'
 		dataType: string
 		isHidden
+		isAvailableInMdx: false
 		lineageTag: 23e11205-d16e-43c0-94cf-f1a5043229f0
 		sourceColumn: IntakeTypeID
 
@@ -54,6 +58,7 @@ table 'Animal Intakes'
 		dataType: int64
 		isHidden
 		formatString: 0
+		isAvailableInMdx: false
 		lineageTag: e3831d74-0fb6-47fb-8d1e-1eda58bbd74b
 		summarizeBy: none
 		sourceColumn: AnimalKey
@@ -63,6 +68,7 @@ table 'Animal Intakes'
 		dataType: int64
 		isHidden
 		formatString: 0
+		isAvailableInMdx: false
 		lineageTag: 62b9cf7c-9ab0-4fd1-8d78-f55b8f43d7c7
 		sourceColumn: IntakeCount
 
@@ -71,6 +77,7 @@ table 'Animal Intakes'
 		dataType: int64
 		isHidden
 		formatString: 0
+		isAvailableInMdx: false
 		lineageTag: 4b475970-8e82-4fa8-9c60-71ef03bc72b0
 		sourceColumn: FosterFlag
 

@@ -8,6 +8,7 @@ table Date
 		dataType: int64
 		isHidden
 		formatString: 0
+		isAvailableInMdx: false
 		lineageTag: c2d45025-739d-4772-9f47-b1a29520d3b0
 		summarizeBy: none
 		sourceColumn: DateKey

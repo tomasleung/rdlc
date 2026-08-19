@@ -46,7 +46,36 @@ InnerException1.Stack Trace: ...SingleColumnRelationship.ReadMetadataProperties.
 
 Both were the same underlying mistake (misapplying `///`/description) on two different object types. Two data points isn't a pattern requiring a structural rethink, but it's exactly why `static-validation-checklist.md`'s Section A now explicitly checks for this class of error on every object type it applies to — not just the two that already broke.
 
+---
+
+## 2026-08-19 — Finding: First live Verify Mode pass (dual independent check) surfaces 5 real reference-material gaps
+
+**Not a bug in the built model** — this is a different kind of entry from Fix 1/2 above. The model opened and worked correctly throughout; what changed is our *reference material's* completeness, confirmed via two independent live checks run back-to-back:
+
+1. **Live MCP review** — Claude Code invoked Microsoft's real `powerbi-authoring:semantic-model-authoring` skill directly (not `rdlc-tmdl-build-agent`), connected via `powerbi-modeling-mcp` to the actual running Foster Analysis model, and ran its Workflow: Analyze Best Practices (read-only, `ConnectFolder` → `List`/`Get` operations → `Disconnect`).
+2. **Manual Tabular Editor BPA** — the human operator independently ran the full 71-rule Best Practice Analyzer rule set directly in Tabular Editor against the same live model.
+
+**Findings, triaged:**
+
+| # | Finding | Disposition |
+|---|---|---|
+| 1 | `isAvailableInMdx: false` missing on 11 hidden columns | **Real gap — fixed.** Applied to the live model via `rdlc-tmdl-build-agent` (Authoring Mode); confirmed by both checks independently. |
+| 2 | Hidden-column casing (`IntakeCount`/`FosterFlag`) reads as a naming violation under MS's `naming-conventions.md` taken literally | **Documentation gap, not a model defect.** The design (avoiding a measure/base-column name collision) was already correct; the *reasoning* wasn't explicitly written into our own reference material. Now is. |
+| 3 | `isKey` not set on dimension primary keys (BPA `MARK_PRIMARY_KEYS`) | **Expected — confirms an existing decision.** Exactly the documented MS-wins conflict, firing as predicted. No action. Separately, a real open question about whether `isKey`/"Key Column" has AI-readiness value was surfaced and explicitly **parked, not resolved** — see `modeling-and-ai-readiness-standards.md`. |
+| 4 | `Centre ID`/`Intake Type ID` relationship columns are `String`, not `Int64` | **Already-known, accepted tradeoff** (ShelterBuddy native keys) — now explicitly documented as an exemption for the first time. |
+| 5 | `Animal ID`/`Source Intake ID` flagged as unreferenced hidden columns | **Already-known, accepted** (retained for Phase 2 `DISTINCTCOUNT`/QA use) — now explicitly documented as an exemption for the first time. |
+
+**Fixes applied:**
+- `references/modeling-and-ai-readiness-standards.md` — 5 edits: `isAvailableInMdx` guidance, hidden-column casing exemption (§8), `isKey` parked-question note (§Documented Conflict), String relationship key exemption (§6), retained-column exemption (§11)
+- `references/static-validation-checklist.md` — added `isAvailableInMdx` item; added exemption pointers to the relationship-column and unreferenced-hidden-column checks so future runs don't flag #4/#5 as new defects
+- **Live model**: `rdlc-tmdl-build-agent` applied `isAvailableInMdx: false` to all 11 columns directly via Authoring Mode file edit; static checklist re-run clean afterward
+
+**Also corrected on the record, not silently dropped:** an earlier claim in this session that `isKey` is a "deprecated legacy property" was checked against real sources and found wrong — the deprecated property found was a different, older OLAP-mining-model `IsKey`, not Tabular's `Column.IsKey`. The actual reason for MS's DON'T guidance remains genuinely unstated in their source document.
+
+**Why this matters beyond the specific findings:** this is the first time in the project that live, independent third-party review (not our own static reasoning) fed back into the reference material with a full, honest triage — separating real gaps from already-known accepted tradeoffs from genuinely unresolved open questions, rather than treating every flag as either "fix it" or "ignore it."
+
 ## Outstanding — not yet fixed/decided
 
 - **Bounded MCP retry rule** for Verify Mode — discussed and agreed in principle (max 1 corrected retry, then stop and report), not yet written into `SKILL.md`. See `SOP.md` for the interim manual guidance.
-- No live model has yet been checked against `modeling-and-ai-readiness-standards.md`'s best-practice rules via Verify Mode — only static validation and a successful Desktop open + KPI verification have happened so far (see `TDD-VERIFICATION.md`).
+- **`isKey`/AI-readiness open question** — parked 2026-08-19, not resolved. Revisit if Copilot/AI-agent readiness becomes a real priority; start from `isDefaultLabel` (§10 of `modeling-and-ai-readiness-standards.md`), not `isKey`.
+- **Date table marking / format string discrepancies** (BPA findings #3/#4 from the same review pass) — investigated partially: confirmed the Date table *is* correctly marked in a live, data-loaded Desktop session (the earlier flag was likely a metadata-only MCP connection limitation, not a real gap). Format string application not yet independently re-checked. Low priority, parked.

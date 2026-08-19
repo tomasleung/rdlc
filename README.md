@@ -140,6 +140,7 @@ For the status of the RDLC OS agent ecosystem as a whole (which agents exist, wh
 `rdlc-tmdl-build-agent` is the first skill in this project to run via Claude Code against real local files, rather than conversationally. Its `usage/` subfolder holds the human-facing operating documentation (distinct from `references/`, which is agent-facing):
 
 - `usage/SOP.md` — how to correctly start a Claude Code session, invoke this skill, and troubleshoot
+- `usage/MS-FABRIC-MCP-SETUP.md` — one-time setup for Microsoft's real `semantic-model-authoring` skill + `powerbi-modeling-mcp` (Verify Mode), with real troubleshooting encountered during initial setup
 - `usage/CHANGELOG.md` — real bugs found via actual Power BI Desktop testing, root cause, and permanent fix
 - `usage/TDD-VERIFICATION.md` — the predict-then-confirm verification methodology
 - `usage/FOSTER-ANALYSIS-VALIDATION.md` — the filled-in result of that methodology for this project

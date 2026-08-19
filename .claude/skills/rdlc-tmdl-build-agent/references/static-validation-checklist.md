@@ -40,7 +40,7 @@ If asked to update this file, re-fetch the URL above against the current rule se
 - [ ] Every column feeding a measure's aggregation is hidden.
 - [ ] `SummarizeBy: None` set on every non-aggregatable numeric (IDs, postal codes, year, month number).
 - [ ] `dataCategory` set on geographic columns (city/country/continent/postal code) and lat/long pairs.
-- [ ] Relationship columns use `Int64` where possible, not `String`.
+- [ ] Relationship columns use `Int64` where possible, not `String` — except a documented source-system-constrained exemption (see `modeling-and-ai-readiness-standards.md` §6); do not flag `Centre ID`/`Intake Type ID` in this build as a new defect.
 - [ ] `isAvailableInMdx: false` set on hidden columns not used in sort-by/hierarchy/variation.
 - [ ] Month-name (or similar) text columns have `sortByColumn` configured — never left to sort alphabetically.
 - [ ] **Do NOT set `isKey = true` on dimension primary keys** — documented MS-vs-BPA conflict, MS governs (see `modeling-and-ai-readiness-standards.md`).
@@ -82,7 +82,7 @@ If asked to update this file, re-fetch the URL above against the current rule se
 
 ## H. Maintenance / Hygiene
 
-- [ ] No hidden column exists that isn't referenced by any measure, relationship, hierarchy, or sort-by.
+- [ ] No hidden column exists that isn't referenced by any measure, relationship, hierarchy, or sort-by — except a documented retained-for-future-use exemption (see `modeling-and-ai-readiness-standards.md` §11); do not flag `Animal ID`/`Source Intake ID` in this build as a new defect.
 - [ ] No hidden measure exists that isn't referenced by any other DAX expression.
 - [ ] No data source (named expression) is left unreferenced by any partition.
 - [ ] No empty perspective (if perspectives are used — out of scope for Phase 1).

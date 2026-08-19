@@ -1,6 +1,6 @@
 # RDLC OS — Agent Ecosystem Status Tracker
 
-*Last updated: August 18, 2026 (post real-world Claude Code validation)*
+*Last updated: August 19, 2026 (post live Verify Mode — dual independent check)*
 
 *Temporary home: this file tracks the RDLC OS agent ecosystem as a whole, not this specific project. It currently lives inside `foster-analysis/` for convenience while the ecosystem is still being actively built. It will move to a dedicated skills repo once one exists — do not duplicate it into other project folders (e.g., a future `live-capacity-analysis/`) in the meantime; there should be exactly one copy.*
 
@@ -119,6 +119,18 @@ Both fixes are now permanent in the skill's reference material — not one-off p
 
 **Current stance on skills location**: embedded per-project in `.claude/skills/`, copied rather than shared, since the ecosystem is still actively changing. Deliberate, temporary — not yet worth the sync overhead of a separate skills repo (git submodule or versioned-zip pull) until the skills stabilize. Revisit once a second project (e.g., Live Capacity Analysis) actually starts.
 
+### 3.7 First live Verify Mode pass — dual independent verification (2026-08-19)
+
+Two separate live checks run back-to-back against the built Foster Analysis model:
+1. **Live MCP review** — Claude Code invoked Microsoft's real `powerbi-authoring:semantic-model-authoring` skill directly (not `rdlc-tmdl-build-agent`), via `powerbi-modeling-mcp`, read-only.
+2. **Manual Tabular Editor BPA** — the human operator independently ran the full 71-rule Best Practice Analyzer against the same live model.
+
+**5 findings surfaced, all correctly triaged** — 1 real gap fixed (`isAvailableInMdx` on 11 hidden columns), 1 documentation-only gap closed (hidden-column casing exemption reasoning made explicit), 2 already-known accepted tradeoffs formally documented for the first time (String relationship keys; retained `Animal ID`/`Source Intake ID`), and 1 genuinely open question explicitly parked rather than guessed at (`isKey`'s possible AI-readiness relevance — also caught and corrected an earlier wrong claim in this session that `isKey` is "deprecated legacy," which checked out false on verification). Full detail: `usage/CHANGELOG.md`.
+
+**Setup required to get here was substantial** and is now itself documented for reuse: `usage/MS-FABRIC-MCP-SETUP.md` captures the full real path — plugin marketplace install, the session-restart requirement for MCP registration, the `InteractiveBrowser` auth handshake, and 4 real environment issues hit and resolved along the way (chat-sandbox false negatives when checking tool versions, an unrecognized slash command, a stalled auth timeout, and the mid-session-install-doesn't-count trap).
+
+**Both `modeling-and-ai-readiness-standards.md` and `static-validation-checklist.md` updated** to reflect all 5 findings — including adding exemption pointers to the checklist so it doesn't flag the 2 already-known tradeoffs as new defects on future runs.
+
 ---
 
 ## 4. Output Contract Now Defined for the (Not-Yet-Built) Senior Data Analyst Agent
@@ -135,7 +147,9 @@ Unchanged from before — still the immediate next build candidate. Needs to pro
 - [ ] Design the **PM + Senior Data Analyst** agent (upstream) — the one remaining unbuilt link
 - [x] ~~Open `Foster Analysis.SemanticModel` in an actual Power BI Desktop instance~~ — done 2026-08-18, see §3.5
 - [ ] Add bounded-retry rule to `SKILL.md`'s Verify Mode (max 1 corrected MCP retry, then stop and report) — agreed in principle, not yet written in. Currently only documented as manual guidance in `usage/SOP.md`.
-- [ ] Run Verify Mode (MCP) for the first time — best-practice/semantic checking (naming, hidden flags, `SummarizeBy`) against the live Foster Analysis model. Static validation + KPI accuracy confirmed so far; semantic/BPA-style checking has not been run live yet.
+- [x] ~~Run Verify Mode (MCP) for the first time~~ — done 2026-08-19, twice over (live MCP + manual BPA), see §3.7
+- [ ] `isKey` / AI-readiness open question — parked 2026-08-19, not resolved. Revisit if Copilot/AI-agent readiness becomes a real priority; start from `isDefaultLabel`, not `isKey`.
+- [ ] Date table marking / format string discrepancies (from the same review pass) — partially investigated: Date table confirmed correctly marked in a live, data-loaded Desktop session (earlier flag likely a metadata-only MCP connection limitation). Format string application not yet independently re-checked. Low priority.
 - [ ] Decide whether the `usage/` subfolder pattern (SOP/CHANGELOG/TDD-VERIFICATION) should be promoted to the other two skills, or to a project/root-level pattern — currently only exists for `rdlc-tmdl-build-agent`, the only skill run via Claude Code so far. One data point isn't enough to generalize yet.
 - [ ] Decide report-authoring scope: does a future agent own `.Report/` PBIP output, or does that stay entirely outside this repo structure? (Flagged, not yet decided.)
 - [ ] Once skills stabilize, move them out of per-project `.claude/skills/` into a dedicated skills repo (git submodule or versioned-zip pull) — and move this tracker file there too

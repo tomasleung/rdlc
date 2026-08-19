@@ -5,6 +5,7 @@ table 'Intake Type'
 	column 'Intake Type ID'
 		dataType: string
 		isHidden
+		isAvailableInMdx: false
 		lineageTag: 35cd204a-4373-4c67-a3a4-d8ccbcf895e2
 		sourceColumn: IntakeTypeID
 
