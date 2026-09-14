@@ -1,0 +1,22 @@
+model Model
+	culture: en-CA
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-CA
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode","TMDLView_Desktop"]
+
+annotation PBI_QueryOrder = ["Date","Foster Placements","Foster Animal Month","KPI"]
+
+ref table Date
+ref table 'Foster Placements'
+ref table 'Foster Animal Month'
+ref table KPI
+
+ref cultureInfo en-CA
+

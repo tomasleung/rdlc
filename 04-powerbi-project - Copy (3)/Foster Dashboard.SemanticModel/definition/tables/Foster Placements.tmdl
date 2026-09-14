@@ -1,0 +1,95 @@
+/// One row per foster placement episode.
+/// 
+/// A foster placement begins when an animal enters foster care and ends when the animal leaves foster care or remains active.
+/// 
+/// Source:
+/// gold_foster.fact_foster_placement
+/// 
+/// Supports:
+/// • Foster Placement Count
+/// • Average Foster Duration
+/// • Current Foster Animals
+table 'Foster Placements'
+	lineageTag: 637927f1-ff67-4ff2-8709-9b5f012e7773
+
+	column 'Foster Placement ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 73e7f8ca-ef42-4c97-97fd-78d800ca9644
+		summarizeBy: none
+		sourceColumn: PlacementId
+
+		annotation SummarizationSetBy = User
+
+	column 'SB Animal ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 71fd8d48-fbc7-4a0a-80a3-19b4c6e6dde9
+		summarizeBy: none
+		sourceColumn: AnimalId
+
+		annotation SummarizationSetBy = User
+
+	column 'Foster Location'
+		dataType: string
+		lineageTag: c735c493-3ca9-4427-8f00-be52e11daaba
+		summarizeBy: none
+		sourceColumn: ShelterLocationName
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Foster Start Date Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8d523fa4-e6d2-4e9a-8e67-bd02a08580bb
+		summarizeBy: none
+		sourceColumn: StartDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Foster End Date Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: eee2e80d-dfc8-4b32-9440-4746a112f5eb
+		summarizeBy: none
+		sourceColumn: EndDateKey
+
+		annotation SummarizationSetBy = User
+
+	column 'Foster Duration (Days)'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 6208b84b-fe8a-4780-82c6-6290f3062e2e
+		summarizeBy: none
+		sourceColumn: DurationDays
+
+		annotation SummarizationSetBy = User
+
+	column 'Currently In Foster'
+		dataType: int64
+		formatString: 0
+		lineageTag: e710eddf-7729-479c-b009-cad17e001f2c
+		summarizeBy: none
+		sourceColumn: IsCurrent
+
+		annotation SummarizationSetBy = User
+
+	partition 'gold_foster fact_foster_placement' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(
+				        "zwgqkt2gjj5eldaxf5b4c22xm4-xh5tmosahmpudfij3bmp4m6tdy.datawarehouse.fabric.microsoft.com",
+				        "wh_enterprise"
+				    ),
+				    gold_foster_fact_foster_placement =
+				        Source{[Schema="gold_foster",Item="fact_foster_placement"]}[Data]
+				in
+				    gold_foster_fact_foster_placement
+
+	annotation PBI_ResultType = Table
+

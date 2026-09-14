@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "e5f2d1d2b420add43236",
+  "position": {
+    "x": 320,
+    "y": 464,
+    "z": 1,
+    "height": 304,
+    "width": 976,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "KPI"
+                    }
+                  },
+                  "Property": "Forecast Error Label"
+                }
+              },
+              "queryRef": "KPI.Average Forecast Error Label",
+              "nativeQueryRef": "Forecast Error Label"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "KPI"
+                    }
+                  },
+                  "Property": "Average Forecast Error %"
+                }
+              },
+              "queryRef": "KPI.Average Forecast Error %",
+              "nativeQueryRef": "Average Forecast Error %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "KPI"
+                    }
+                  },
+                  "Property": "Average Forecast Error Label"
+                }
+              },
+              "queryRef": "KPI.Average Forecast Error Label1",
+              "nativeQueryRef": "Average Forecast Error Label"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "KPI"
+                    }
+                  },
+                  "Property": "Forecast Outlook Description"
+                }
+              },
+              "queryRef": "KPI.Forecast Outlook Description",
+              "nativeQueryRef": "Forecast Outlook Description"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "KPI"
+                    }
+                  },
+                  "Property": "Forecast Outlook Headline"
+                }
+              },
+              "queryRef": "KPI.Forecast Outlook Headline",
+              "nativeQueryRef": "Forecast Outlook Headline"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c2f9d8266eb383671592",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "KPI"
+              }
+            },
+            "Property": "Forecast Error Label"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "085c1d3f300b5d0b2ccd",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "KPI"
+              }
+            },
+            "Property": "Average Forecast Error %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "b24a30a1c00acae53900",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "KPI"
+              }
+            },
+            "Property": "Average Forecast Error Label"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "496feeb881d2201e3c73",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "KPI"
+              }
+            },
+            "Property": "Forecast Outlook Description"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "8fe4a59755163e389861",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "KPI"
+              }
+            },
+            "Property": "Forecast Outlook Headline"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

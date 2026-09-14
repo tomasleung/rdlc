@@ -5,7 +5,7 @@ Animal Flow — Foster Pathway Analytics, Phase 1 (BC SPCA). RDLC OS project —
 ## Project Structure
 
 ```
-foster-analysis/
+Root/
 ├── README.md                  # Full agent-chain narrative — read this for the "how it all fits" story
 ├── CLAUDE.md                  # This file
 ├── .claude/skills/             # The 3 RDLC OS agents, embedded in this project

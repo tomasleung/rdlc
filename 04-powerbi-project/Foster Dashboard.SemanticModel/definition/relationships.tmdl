@@ -1,0 +1,8 @@
+relationship FosterPlacementStartDate
+	fromColumn: 'Foster Placements'.'Foster Start Date Key'
+	toColumn: Date.'Date Key'
+
+relationship FosterAnimalMonthDate
+	fromColumn: 'Foster Animal Month'.'Month Date Key'
+	toColumn: Date.'Date Key'
+

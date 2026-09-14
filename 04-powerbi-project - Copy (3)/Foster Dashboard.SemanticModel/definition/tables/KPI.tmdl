@@ -1,0 +1,1182 @@
+table KPI
+	lineageTag: f21f34b4-0bca-4308-a582-061f466099e5
+
+	/// Count of separate foster stays (each trip an animal takes to a foster home),
+	/// regardless of whether the same animal was placed more than once.
+	/// An animal placed twice contributes 2, not 1.
+	measure 'Foster Placement Count' =
+			
+			COUNTROWS('Foster Placements')
+		formatString: #,0
+		displayFolder: Capacity & Support
+		lineageTag: 265073c5-4c17-4908-ba28-40c17c6adc58
+
+	/// Distinct animals that participated in foster care during the selected reporting period.
+	/// 
+	/// Uses the Foster Animal Month snapshot table where one row represents one animal participating in foster care during a given month.
+	/// 
+	/// This is the primary Foster Program KPI and should be used for monthly, quarterly, yearly, benchmark, and forecasting analysis.
+	measure 'Fostered Animals' =
+			
+			DISTINCTCOUNT(
+			    'Foster Animal Month'[SB Animal ID]
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support
+		lineageTag: d732fd26-42f8-48dd-b47c-ccfd13c7e5f1
+
+	/// Distinct animals currently in foster care.
+	/// 
+	/// Uses the active foster placement indicator.
+	measure 'Current Foster Animals' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(
+			        'Foster Placements'[SB Animal ID]
+			    ),
+			    'Foster Placements'[Currently In Foster] = 1
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support
+		lineageTag: 6c5646a8-68b5-4b74-817a-3ea9cdfbc369
+
+	/// Average number of days animals spend in foster care.
+	measure 'Average Foster Duration' =
+			
+			AVERAGE(
+			    'Foster Placements'[Foster Duration (Days)]
+			)
+		formatString: #,0.0
+		displayFolder: Duration
+		lineageTag: 0b8520eb-fa5d-48da-800f-95194b0cc71c
+
+	/// Latest reporting month available in the Foster Animal Month snapshot fact table.
+	/// 
+	/// Used to anchor benchmark, YTD, and forecasting calculations to the most recent complete foster reporting period.
+	/// 
+	/// The measure should always derive from the foster snapshot fact rather than the Date table to avoid selecting periods with no foster activity.
+	measure 'Latest Reporting Date' =
+			
+			VAR LatestMonthKey =
+			    MAXX(
+			        ALL('Foster Animal Month'),
+			        'Foster Animal Month'[Month Date Key]
+			    )
+			RETURN
+			LOOKUPVALUE(
+			    'Date'[Date],
+			    'Date'[Date Key], LatestMonthKey
+			)
+		formatString: General Date
+		displayFolder: Capacity & Support\Historical Foster Animals
+		lineageTag: ddc40fe2-e0af-4444-9553-02ea909393d9
+
+	/// Latest reporting year available in the Foster Animal Month snapshot fact table.
+	/// 
+	/// Used to determine the current in-progress year and completed reporting periods.
+	measure 'Latest Reporting Year' = ```
+			
+			VAR LatestMonthKey =
+			    MAXX(
+			        ALL('Foster Animal Month'),
+			        'Foster Animal Month'[Month Date Key]
+			    )
+			RETURN
+			    LOOKUPVALUE(
+			        'Date'[Year],
+			        'Date'[Date Key], LatestMonthKey
+			    )
+			
+			```
+		formatString: 0
+		displayFolder: Capacity & Support\Historical Foster Animals
+		lineageTag: e05e31ed-95f6-4118-bc25-a49e4c6dbd5a
+
+	/// Percentage growth in annual foster participation between the first reporting year and the most recent completed reporting year.
+	measure 'Program Growth' =
+			
+			VAR StartYear =
+			    [First Reporting Year]
+			
+			VAR EndYear =
+			    [Latest Completed Year]
+			
+			VAR StartYearValue =
+			    CALCULATE(
+			        [Fostered Animals],
+			        REMOVEFILTERS('Date'),
+			        'Date'[Year] = StartYear
+			    )
+			
+			VAR EndYearValue =
+			    CALCULATE(
+			        [Fostered Animals],
+			        REMOVEFILTERS('Date'),
+			        'Date'[Year] = EndYear
+			    )
+			
+			RETURN
+			DIVIDE(
+			    EndYearValue - StartYearValue,
+			    StartYearValue
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: d4f6e9d1-c1d2-4ec9-83a6-156bfa429b99
+
+	/// Total annual foster participation across all completed reporting years.
+	/// 
+	/// Calculated as the sum of yearly Fostered Animals values.
+	/// 
+	/// An animal participating in multiple years contributes once per year
+	measure 'Historical Fostered Animals' =
+			
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date')
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support\Historical Foster Animals
+		lineageTag: db1a08bc-809a-4d42-943e-157cc0b78878
+
+	/// Earliest reporting year available in the Foster Animal Month snapshot fact table.
+	/// 
+	/// Used for KPI labels and historical reporting ranges.
+	measure 'First Reporting Year' =
+			
+			VAR FirstMonthKey =
+			    MINX(
+			        ALL('Foster Animal Month'),
+			        'Foster Animal Month'[Month Date Key]
+			    )
+			RETURN
+			    LOOKUPVALUE(
+			        'Date'[Year],
+			        'Date'[Date Key], FirstMonthKey
+			    )
+		formatString: 0
+		displayFolder: Capacity & Support\Historical Foster Animals
+		lineageTag: d7a6a883-73d8-4606-be1e-225139e32ff5
+
+	/// Dynamic subtitle for the Historical Foster Animals KPI.
+	/// 
+	/// Displays the completed reporting period used in the calculation.
+	measure 'Historical Participation Label' = ```
+			
+			VAR StartYear =
+			    [First Reporting Year]
+			
+			VAR EndYear =
+			    [Latest Reporting Year] 
+			
+			RETURN
+			FORMAT(StartYear, "0")
+			    & "-"
+			    & FORMAT(EndYear, "0")
+			    & " Foster Participation"
+			```
+		displayFolder: Capacity & Support\Historical Foster Animals
+		lineageTag: b8172630-09f3-4196-bc04-2426401a1021
+
+	/// Annual Fostered Animals count for the first reporting year.
+	measure 'Baseline Fostered Animals' =
+			
+			VAR StartYear =
+			    [First Reporting Year]
+			
+			RETURN
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date'),
+			    'Date'[Year] = StartYear
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: b9796ea5-ef0e-4ea5-b8a2-6603f74d7d31
+
+	/// Annual Fostered Animals count for the most recent completed reporting year.
+	measure 'Latest Completed Year Fostered Animals' =
+			
+			VAR EndYear =
+			    [Latest Reporting Year] - 1
+			
+			RETURN
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date'),
+			    'Date'[Year] = EndYear
+			)
+		formatString: 0
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: 6f91e25a-848c-4c0a-b6b0-6afa970d7382
+
+	/// Latest completed year available in the Foster Animal Month snapshot fact table.
+	/// 
+	/// Used to anchor benchmark, YTD, and forecasting calculations to the most recent complete foster reporting period.
+	/// 
+	/// The measure should always derive from the foster snapshot fact rather than the Date table to avoid selecting periods with no foster activity.
+	measure 'Latest Completed Year' =
+			
+			[Latest Reporting Year] - 1
+		formatString: 0
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: 7d376ee8-170f-45e2-998a-5d083fc77f7a
+
+	/// Displays the first reporting year and most recent completed reporting year with their corresponding Fostered Animals values.
+	/// 
+	/// Used as the supporting context label beneath Program Growth.
+	measure 'Program Growth Label' =
+			
+			VAR StartYear =
+			    [First Reporting Year]
+			
+			VAR EndYear =
+			    [Latest Completed Year]
+			
+			VAR StartValue =
+			    [Baseline Fostered Animals]
+			
+			VAR EndValue =
+			    [Latest Completed Year Fostered Animals]
+			
+			RETURN
+			FORMAT(StartYear, "0")
+			    & ": "
+			    & FORMAT(StartValue, "#,0")
+			    & " → "
+			    & FORMAT(EndYear, "0")
+			    & ": "
+			    & FORMAT(EndValue, "#,0")
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: ba4b686b-6090-4c25-aad6-2c0c0f80039a
+
+	measure '5-Year Monthly Benchmark' =
+			
+			VAR LatestDate =
+			    [Latest Reporting Date]
+			
+			VAR BenchmarkMonth =
+			    MONTH(LatestDate)
+			
+			VAR BenchmarkYear =
+			    YEAR(LatestDate)
+			
+			RETURN
+			AVERAGEX(
+			    GENERATESERIES(
+			        BenchmarkYear - 5,
+			        BenchmarkYear - 1,
+			        1
+			    ),
+			    VAR PriorYear = [Value]
+			    RETURN
+			        CALCULATE(
+			            [Fostered Animals],
+			            REMOVEFILTERS('Date'),
+			            'Date'[Year] = PriorYear,
+			            'Date'[Month] = BenchmarkMonth
+			        )
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: dfbf65c5-3b12-4ba1-8e54-7228650e80c6
+
+	measure 'Latest Month Fostered Animals' =
+			
+			VAR LatestMonthKey =
+			    MAXX(
+			        ALL('Foster Animal Month'),
+			        'Foster Animal Month'[Month Date Key]
+			    )
+			RETURN
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date'),
+			    'Foster Animal Month'[Month Date Key] = LatestMonthKey
+			)
+		formatString: 0
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: a7b177c9-d173-4cf9-8dc4-277a89c5390f
+
+	measure 'Monthly Benchmark Variance %' = ```
+			
+			DIVIDE(
+			    [Latest Month Fostered Animals]
+			        - [5-Year Monthly Benchmark],
+			    [5-Year Monthly Benchmark]
+			)
+			
+			```
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: 6ab27e7e-8caa-4b0a-ab45-8774739d0c98
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '5-Year Benchmark Monthly Label' =
+			
+			VAR LatestDate =
+			    [Latest Reporting Date]
+			
+			VAR BenchmarkYear =
+			    YEAR(LatestDate)
+			
+			VAR StartYear =
+			    BenchmarkYear - 5
+			
+			VAR EndYear =
+			    BenchmarkYear - 1
+			
+			RETURN
+			FORMAT(StartYear,"0")
+			    & "-"
+			    & FORMAT(EndYear,"0")
+			    & " Avg"
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: f8ca761b-b6ff-446f-a30a-1f3e2032d8b7
+
+	measure 'Monthly Performance Status Color' =
+			
+			VAR VariancePct =
+			    ABS([Monthly Benchmark Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10, "#4CAF50",
+			        VariancePct <= 0.15, "#FFC107",
+			        "#F44336"
+			    )
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: 289efd9b-8edc-42ef-a618-f22a0c3f3cc9
+
+	measure 'Monthly Performance Status' =
+			
+			VAR VariancePct =
+			    ABS([Monthly Benchmark Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10, "🟢 On Target",
+			        VariancePct <= 0.15, "🟡 Monitor",
+			        "🔴 Action Required"
+			    )
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: 83bb439d-3cb4-4b57-87d4-54e92f3f0e99
+
+	measure 'Prior Year Same Month Fostered Animals' =
+			
+			VAR LatestMonthKey =
+			    MAXX(
+			        ALL('Foster Animal Month'),
+			        'Foster Animal Month'[Month Date Key]
+			    )
+			
+			VAR LatestDate =
+			    LOOKUPVALUE(
+			        'Date'[Date],
+			        'Date'[Date Key],
+			        LatestMonthKey
+			    )
+			
+			VAR PriorYear =
+			    YEAR(LatestDate) - 1
+			
+			VAR CurrentMonth =
+			    MONTH(LatestDate)
+			
+			RETURN
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date'),
+			    'Date'[Year] = PriorYear,
+			    'Date'[Month] = CurrentMonth
+			)
+		formatString: 0
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: dec553fb-3d2b-4327-b4aa-b46cb176413b
+
+	measure 'Prior Year Same Month Variance %' =
+			
+			DIVIDE(
+			    [Latest Month Fostered Animals]
+			        - [Prior Year Same Month Fostered Animals],
+			    [Prior Year Same Month Fostered Animals]
+			)
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: 5a7b553f-9761-4d6b-b228-2df27e63ed70
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Prior Year Same Month Comparison Label' =
+			
+			VAR VariancePct =
+			    [Prior Year Same Month Variance %]
+			
+			VAR LatestDate =
+			    [Latest Reporting Date]
+			
+			RETURN
+			IF(
+			    VariancePct >= 0,
+			    "▲ ",
+			    "▼ "
+			)
+			& FORMAT(ABS(VariancePct), "0.00%")
+			& " vs "
+			& FORMAT(LatestDate, "MMMM")
+			& " "
+			& FORMAT(YEAR(LatestDate) - 1, "0")
+		displayFolder: Capacity & Support\Last Month Comparison
+		lineageTag: 2a84825e-269e-4c5c-b900-28ec65ec5d84
+
+	/// Distinct animals that participated in foster care from January 1 through the same reporting month in the prior year.
+	/// 
+	/// The reporting cutoff month is determined by the latest Month Date Key available in the Foster Animal Month snapshot table.
+	measure 'Prior Year YTD Fostered Animals' =
+			
+			VAR LatestMonthKey =
+			    MAXX(
+			        ALL('Foster Animal Month'),
+			        'Foster Animal Month'[Month Date Key]
+			    )
+			
+			VAR LatestDate =
+			    LOOKUPVALUE(
+			        'Date'[Date],
+			        'Date'[Date Key],
+			        LatestMonthKey
+			    )
+			
+			VAR PriorYearDate =
+			    DATE(
+			        YEAR(LatestDate) - 1,
+			        MONTH(LatestDate),
+			        DAY(LatestDate)
+			    )
+			
+			VAR PriorYear =
+			    YEAR(PriorYearDate)
+			
+			RETURN
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date'),
+			    'Date'[Year] = PriorYear,
+			    'Date'[Date] <= PriorYearDate
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: 3a81ad2b-2c38-450c-9ade-aea8cec4ffea
+
+	/// Current year Fostered Animals from January through latest reporting month.
+	/// 
+	measure 'YTD Fostered Animals' =
+			
+			VAR LatestMonthKey =
+			    MAXX(
+			        ALL('Foster Animal Month'),
+			        'Foster Animal Month'[Month Date Key]
+			    )
+			
+			VAR LatestDate =
+			    LOOKUPVALUE(
+			        'Date'[Date],
+			        'Date'[Date Key],
+			        LatestMonthKey
+			    )
+			
+			VAR LatestYear =
+			    YEAR(LatestDate)
+			
+			RETURN
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date'),
+			    'Date'[Year] = LatestYear,
+			    'Date'[Date] <= LatestDate
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: 43adac16-cb30-4c38-9125-02189dadfcae
+
+	/// Percentage difference between the current YTD Fostered Animals count and the equivalent YTD period in the prior year.
+	/// 
+	/// Formula:
+	/// (Current YTD - Prior Year YTD) / Prior Year YTD
+	measure 'Prior Year YTD Variance %' =
+			
+			DIVIDE(
+			    [YTD Fostered Animals]
+			        - [Prior Year YTD Fostered Animals],
+			    [Prior Year YTD Fostered Animals]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: 559bb72e-15e4-4c2d-a1a3-689e038f73dc
+
+	/// Formatted year-over-year YTD comparison label showing the percentage change from the prior year YTD period.
+	/// 
+	/// Examples:
+	/// ▲ 3.2% vs Aug 2025 YTD
+	/// ▼ 0.5% vs Aug 2025 YTD
+	measure 'Prior Year YTD Comparison Label' =
+			
+			VAR VariancePct =
+			    [Prior Year YTD Variance %]
+			
+			VAR LatestDate =
+			    [Latest Reporting Date]
+			
+			VAR PriorYear =
+			    YEAR(LatestDate) - 1
+			
+			VAR MonthName =
+			    FORMAT(LatestDate, "MMM")
+			
+			VAR DirectionIcon =
+			    IF(
+			        VariancePct >= 0,
+			        "▲ ",
+			        "▼ "
+			    )
+			
+			RETURN
+			DirectionIcon
+			    & FORMAT(ABS(VariancePct), "0.00%")
+			    & " vs "
+			    & MonthName
+			    & " "
+			    & PriorYear
+			    & " YTD"
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: 48b73c01-41a0-4d96-985f-303bdeb0f8e3
+
+	/// Average YTD Fostered Animals through the latest reporting month across the previous five completed years.
+	/// 
+	/// Example:
+	/// 
+	/// Latest Reporting Month = Aug 2026
+	/// 
+	/// Calculate:
+	/// Jan-Aug 2021 Fostered Animals
+	/// Jan-Aug 2022 Fostered Animals
+	/// Jan-Aug 2023 Fostered Animals
+	/// Jan-Aug 2024 Fostered Animals
+	/// Jan-Aug 2025 Fostered Animals
+	/// 
+	/// Average the five YTD values.
+	measure '5-Year YTD Benchmark' =
+			
+			VAR LatestDate =
+			    [Latest Reporting Date]
+			
+			VAR ReportingMonth =
+			    MONTH(LatestDate)
+			
+			VAR ReportingYear =
+			    YEAR(LatestDate)
+			
+			RETURN
+			AVERAGEX(
+			    GENERATESERIES(
+			        ReportingYear - 5,
+			        ReportingYear - 1,
+			        1
+			    ),
+			    VAR BenchmarkYear = [Value]
+			    RETURN
+			        CALCULATE(
+			            [Fostered Animals],
+			            REMOVEFILTERS('Date'),
+			            'Date'[Year] = BenchmarkYear,
+			            'Date'[Month] <= ReportingMonth
+			        )
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: 2df81bd2-86d0-4b5e-b35c-0050a73051a8
+
+	/// Percentage difference between current YTD Fostered Animals and the 5-Year YTD Benchmark.
+	/// 
+	/// Formula:
+	/// 
+	/// (Current YTD Fostered Animals - 5-Year YTD Benchmark)
+	/// /
+	/// 5-Year YTD Benchmark
+	/// 
+	measure 'YTD Benchmark Variance %' =
+			
+			DIVIDE(
+			    [YTD Fostered Animals]
+			        - [5-Year YTD Benchmark],
+			    [5-Year YTD Benchmark]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: 9ae88b88-f31a-4fef-a4ce-8e105d22f42c
+
+	/// Displays the historical benchmark period used in the 5-Year YTD Benchmark calculation.
+	/// 
+	/// Example:
+	/// 2021-2025 Avg
+	measure '5-Year YTD Benchmark Label' =
+			
+			VAR LatestYear =
+			    [Latest Reporting Year]
+			
+			VAR StartYear =
+			    LatestYear - 5
+			
+			VAR EndYear =
+			    LatestYear - 1
+			
+			RETURN
+			FORMAT(StartYear, "0")
+			    & "-"
+			    & FORMAT(EndYear, "0")
+			    & " Avg"
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: c3f81d0d-d767-456b-9771-7c4a3f4e7b75
+
+	/// Performance classification based on YTD Benchmark Variance %.
+	/// 
+	/// Thresholds:
+	/// 
+	/// 🟢 On Target
+	/// Within ±10% of benchmark
+	/// 
+	/// 🟡 Monitor
+	/// Between 10% and 15% variance
+	/// 
+	/// 🔴 Action Required
+	/// Greater than 15% variance
+	/// 
+	measure 'YTD Performance Status' =
+			
+			VAR VariancePct =
+			    ABS([YTD Benchmark Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10, "🟢 On Target",
+			        VariancePct <= 0.15, "🟡 Monitor",
+			        "🔴 Action Required"
+			    )
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: 2368ba1d-0c28-4688-a204-8808622fc454
+
+	/// Returns the hex color associated with the YTD Performance Status.
+	/// 
+	/// Color Rules:
+	/// 
+	/// 🟢 On Target      = #4CAF50
+	/// 🟡 Monitor        = #FFC107
+	/// 🔴 Action Required = #F44336
+	measure 'YTD Performance Status Color' =
+			
+			VAR VariancePct =
+			    ABS([YTD Benchmark Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10, "#4CAF50",
+			        VariancePct <= 0.15, "#FFC107",
+			        "#F44336"
+			    )
+		displayFolder: Capacity & Support\YTD Comparison
+		lineageTag: 4dbc0a81-cc25-4a49-bcbc-6f28ad52895a
+
+	/// Average percentage of annual Fostered Animals that had occurred by the latest reporting month across the previous five completed years.
+	/// 
+	/// Example:
+	/// 
+	/// Latest Reporting Month = August 2026
+	/// 
+	/// For each year:
+	/// 
+	/// 2021 Jan-Aug Fostered Animals ÷ 2021 Full Year Fostered Animals
+	/// 2022 Jan-Aug Fostered Animals ÷ 2022 Full Year Fostered Animals
+	/// 2023 Jan-Aug Fostered Animals ÷ 2023 Full Year Fostered Animals
+	/// 2024 Jan-Aug Fostered Animals ÷ 2024 Full Year Fostered Animals
+	/// 2025 Jan-Aug Fostered Animals ÷ 2025 Full Year Fostered Animals
+	/// 
+	/// Average the five completion ratios.
+	/// 
+	/// Expected Result:
+	/// 88.5%
+	measure 'Historical Completion Ratio' =
+			
+			VAR LatestMonthKey =
+			    MAXX(
+			        ALL('Foster Animal Month'),
+			        'Foster Animal Month'[Month Date Key]
+			    )
+			
+			VAR LatestDate =
+			    LOOKUPVALUE(
+			        'Date'[Date],
+			        'Date'[Date Key],
+			        LatestMonthKey
+			    )
+			
+			VAR ReportingMonth =
+			    MONTH(LatestDate)
+			
+			VAR ReportingYear =
+			    YEAR(LatestDate)
+			
+			RETURN
+			AVERAGEX(
+			    GENERATESERIES(
+			        ReportingYear - 5,
+			        ReportingYear - 1
+			    ),
+			    VAR BenchmarkYear = [Value]
+			
+			    VAR YTDValue =
+			        CALCULATE(
+			            [Fostered Animals],
+			            REMOVEFILTERS('Date'),
+			            'Date'[Year] = BenchmarkYear,
+			            'Date'[Month] <= ReportingMonth
+			        )
+			
+			    VAR FullYearValue =
+			        CALCULATE(
+			            [Fostered Animals],
+			            REMOVEFILTERS('Date'),
+			            'Date'[Year] = BenchmarkYear
+			        )
+			
+			    RETURN
+			        DIVIDE(
+			            YTDValue,
+			            FullYearValue
+			        )
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Capacity & Support\Year-End Projection
+		lineageTag: 95aaee2d-ccac-404a-96fd-032ef54b6a20
+
+	/// Projects the total Fostered Animals count for the current reporting year using the historical YTD completion ratio.
+	/// 
+	/// Formula:
+	/// 
+	/// Current YTD Fostered Animals
+	/// /
+	/// Historical Completion Ratio
+	/// 
+	/// Example:
+	/// 
+	/// Current YTD = 11,312
+	/// Historical Completion Ratio = 88.4%
+	/// 
+	/// 11,312 / 0.884 = 12,800
+	measure 'Year-End Projection' =
+			
+			ROUND(
+			    DIVIDE(
+			        [YTD Fostered Animals],
+			        [Historical Completion Ratio]
+			    ),
+			    0
+			)
+		formatString: #,0
+		displayFolder: Capacity & Support\Year-End Projection
+		lineageTag: b2ef1056-2c13-4e07-9d81-7a4c5b86a919
+
+	/// Percentage difference between the projected year-end Fostered Animals count and the most recent completed year's actual Fostered Animals count.
+	/// 
+	/// Formula:
+	/// 
+	/// (Year-End Projection - Prior Year Actual Fostered Animals)
+	/// /
+	/// Prior Year Actual Fostered Animals
+	measure 'Forecast Variance %' =
+			
+			DIVIDE(
+			    [Year-End Projection]
+			        - [Latest Completed Year Fostered Animals],
+			    [Latest Completed Year Fostered Animals]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Capacity & Support\Year-End Projection
+		lineageTag: 08e34091-0ffe-4817-8c19-aaca0dcfa340
+
+	/// Formatted comparison label showing the projected year-end Fostered Animals count compared to the most recent completed year's actual Fostered Animals count.
+	/// 
+	/// Examples:
+	/// 
+	/// ▲ 0.2% vs 2025 Actual
+	/// ▼ 3.1% vs 2025 Actual
+	measure 'Forecast Comparison Label' =
+			
+			VAR VariancePct =
+			    [Forecast Variance %]
+			
+			VAR ComparisonYear =
+			    [Latest Completed Year]
+			
+			VAR DirectionIcon =
+			    IF(
+			        VariancePct >= 0,
+			        "▲ ",
+			        "▼ "
+			    )
+			
+			RETURN
+			DirectionIcon
+			    & FORMAT(ABS(VariancePct), "0.00%")
+			    & " vs "
+			    & FORMAT(ComparisonYear, "0")
+			    & " Actual"
+		displayFolder: Capacity & Support\Year-End Projection
+		lineageTag: a820ba9b-2cdf-4989-8150-76cc48cb0be9
+
+	/// Executive interpretation of the projected year-end Fostered Animals count compared to the most recent completed year's actual Fostered Animals count.
+	/// 
+	/// Thresholds:
+	/// 
+	/// 🟢 Projected to Finish Near Prior Year Levels
+	/// Within ±10%
+	/// 
+	/// 🟡 Projected to Finish Moderately Above/Below Prior Year
+	/// Between 10% and 15%
+	/// 
+	/// 🔴 Projected to Finish Significantly Above/Below Prior Year
+	/// Greater than 15%
+	measure 'Forecast Status' =
+			
+			VAR VariancePct =
+			    ABS([Forecast Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10,
+			            "🟢 Projected to Finish Near Prior Year Levels",
+			
+			        VariancePct <= 0.15,
+			            "🟡 Projected to Finish Moderately Above/Below Prior Year",
+			
+			        "🔴 Projected to Finish Significantly Above/Below Prior Year"
+			    )
+		displayFolder: Capacity & Support\Year-End Projection
+		lineageTag: 1fbc063d-128f-4a8d-abbc-b37d2b53ddc0
+
+	/// Returns the hex color associated with the Forecast Status measure.
+	/// 
+	/// 🟢 Projected to Finish Near Prior Year Levels = #4CAF50
+	/// 🟡 Projected to Finish Moderately Above/Below Prior Year = #FFC107
+	/// 🔴 Projected to Finish Significantly Above/Below Prior Year = #F44336
+	measure 'Forecast Status Color' = ```
+			
+			VAR VariancePct =
+			    ABS([Forecast Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10, "#4CAF50",
+			        VariancePct <= 0.15, "#FFC107",
+			        "#F44336"
+			    )
+			
+			```
+		displayFolder: Capacity & Support\Year-End Projection
+		lineageTag: 9e63c058-e2b3-48c8-93ad-d33761648ef5
+
+	/// Compound Annual Growth Rate (CAGR) from the first reporting year through the latest completed reporting year.
+	measure 'Long-Term CAGR' =
+			
+			VAR StartYear =
+			    [First Reporting Year]
+			
+			VAR EndYear =
+			    [Latest Completed Year]
+			
+			VAR StartValue =
+			    CALCULATE(
+			        [Fostered Animals],
+			        REMOVEFILTERS('Date'),
+			        'Date'[Year] = StartYear
+			    )
+			
+			VAR EndValue =
+			    CALCULATE(
+			        [Fostered Animals],
+			        REMOVEFILTERS('Date'),
+			        'Date'[Year] = EndYear
+			    )
+			
+			VAR NumberOfYears =
+			    EndYear - StartYear
+			
+			RETURN
+			IF(
+			    StartValue > 0,
+			    POWER(
+			        DIVIDE(
+			            EndValue,
+			            StartValue
+			        ),
+			        DIVIDE(1, NumberOfYears)
+			    ) - 1
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: 34646d50-5e2e-43e9-8d77-e5b6fbe97806
+
+	measure 'Long-Term CAGR Label' =
+			
+			FORMAT([First Reporting Year],"0")
+			    & "-"
+			    & FORMAT([Latest Completed Year],"0")
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: eb28b5f8-ef00-465c-a7b3-6e6225edadb5
+
+	/// Compound Annual Growth Rate using the most recent five completed years.
+	measure 'Recent CAGR' =
+			
+			VAR EndYear =
+			    [Latest Completed Year]
+			
+			VAR StartYear =
+			    EndYear - 4
+			
+			VAR StartValue =
+			    CALCULATE(
+			        [Fostered Animals],
+			        REMOVEFILTERS('Date'),
+			        'Date'[Year] = StartYear
+			    )
+			
+			VAR EndValue =
+			    CALCULATE(
+			        [Fostered Animals],
+			        REMOVEFILTERS('Date'),
+			        'Date'[Year] = EndYear
+			    )
+			
+			VAR NumberOfYears =
+			    EndYear - StartYear
+			
+			RETURN
+			IF(
+			    StartValue > 0,
+			    POWER(
+			        DIVIDE(
+			            EndValue,
+			            StartValue
+			        ),
+			        DIVIDE(1, NumberOfYears)
+			    ) - 1
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: 8d57f797-bccf-4c26-8b32-b43b8b4a2cae
+
+	measure 'Recent CAGR Label' =
+			
+			VAR EndYear =
+			    [Latest Completed Year]
+			
+			VAR StartYear =
+			    EndYear - 4
+			
+			RETURN
+			FORMAT(StartYear,"0")
+			    & "-"
+			    & FORMAT(EndYear,"0")
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: 5e23ed4d-f9b8-4dd5-ae2a-84da6dc69144
+
+	/// Standard color used for Expansion Phase (2006-2009).
+	measure 'Expansion Phase Color' =
+			
+			"#2563EB"
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: c72e9d7d-e471-459b-b440-df06fae31932
+
+	/// Standard color used for Peak Activity Era (2010-2014).
+	measure 'Peak Activity Color' =
+			
+			"#10B981"
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: cdfc3265-9c97-4c65-b63b-2a0ab518fa88
+
+	/// Standard color used for Stable Operations Era (2015-2019).
+	measure 'Stable Operations Color' =
+			
+			"#64748B"
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: cf12dcc8-162b-4672-bf76-05640c5b6ad0
+
+	/// Standard color used for Mature Program Era (2020+).
+	measure 'Mature Program Color' = ```
+			
+			"#4F46E5"
+			
+			```
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: 6d175b67-0684-40e8-a339-9d3a69a387ac
+
+	measure 'Peak Fostered Animals' =
+			
+			MAXX(
+			    VALUES('Date'[Year]),
+			    [Fostered Animals]
+			)
+		formatString: 0
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: cb8b65ae-1b72-406a-86e0-b43b8c9d8dac
+
+	measure 'Peak Year' =
+			
+			VAR PeakValue =
+			    [Peak Fostered Animals]
+			RETURN
+			MAXX(
+			    FILTER(
+			        VALUES('Date'[Year]),
+			        [Fostered Animals] = PeakValue
+			    ),
+			    'Date'[Year]
+			)
+		formatString: 0
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: 66367273-d99c-440f-ab62-485f2c1d930a
+
+	measure 'Peak Label' =
+			
+			"Peak Year: "
+			&
+			FORMAT([Peak Fostered Animals], "#,0")
+		displayFolder: Capacity & Support\Program Growth
+		lineageTag: 03d69ec1-243d-444b-a5ce-01f8c2075a4b
+
+	measure 'Current Year Fostered Animals' =
+			
+			VAR CurrentYear =
+			    [Latest Reporting Year]
+			RETURN
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date'),
+			    'Date'[Year] = CurrentYear
+			)
+		formatString: 0
+		lineageTag: 2b65e568-080b-4bf2-ba88-95cd41a567a0
+
+	measure 'Completed Year Filter' =
+			
+			IF(
+			    SELECTEDVALUE('Date'[Year])
+			        <= [Latest Completed Year],
+			    1,
+			    0
+			)
+		formatString: 0
+		lineageTag: 10428e6b-8a31-4a56-be4d-877360be3142
+
+	/// High-level executive assessment of current program performance based on variance from the 5-Year YTD Benchmark. Examples: Mature & Stable, Monitor Closely, Requires Attention.
+	measure 'Program Status' =
+			
+			VAR VariancePct =
+			    ABS([YTD Benchmark Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10, "Mature & Stable",
+			        VariancePct <= 0.15, "Monitor Closely",
+			        "Requires Attention"
+			    )
+		displayFolder: Capacity & Support\Executive Briefing
+		lineageTag: 1f808d10-6c71-4945-871b-0740569427d1
+
+	/// Hex color associated with Program Status. Used for conditional formatting of KPI cards, status banners, and executive assessment tiles.
+	measure 'Program Status Color' =
+			
+			VAR VariancePct =
+			    ABS([YTD Benchmark Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10, "#4F46E5",
+			        VariancePct <= 0.15, "#D97706",
+			        "#DC2626"
+			    )
+		displayFolder: Capacity & Support\Executive Briefing
+		lineageTag: b84bba05-377c-4da4-9d23-471ba0e69595
+
+	/// Displays the latest reporting period available in the Foster Animal Month snapshot fact table. Example: Through Aug 2026. Used throughout executive and forecast reporting sections.
+	measure 'Reporting Period Label' =
+			
+			"Through "
+			&
+			FORMAT(
+			    [Latest Reporting Date],
+			    "MMM YYYY"
+			)
+		displayFolder: Capacity & Support\Executive Briefing
+		lineageTag: 76af7574-0b0a-41c2-a508-e9c97479c721
+
+	/// Supporting explanation for Program Status. Provides business interpretation of current performance versus historical expectations. Example: Tracking within historical expectations.
+	measure 'Program Status Description' =
+			
+			VAR VariancePct =
+			    ABS([YTD Benchmark Variance %])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        VariancePct <= 0.10,
+			            "Tracking within historical expectations",
+			
+			        VariancePct <= 0.15,
+			            "Tracking slightly outside expected range",
+			
+			        "Performance materially different from historical trend"
+			    )
+		displayFolder: Capacity & Support\Executive Briefing
+		lineageTag: 9e327cf4-9e80-475e-8ee0-0157698d85da
+
+	/// Dynamic forecast narrative summarizing projected year-end foster participation based on current YTD performance and the Historical Completion Ratio forecasting methodology. Used within the Executive Briefing section.
+	measure 'Executive Forecast Narrative' =
+			
+			"Annual foster participation increased from 5,223 animals in 2006 to a peak of 15,763 in 2010. Since then, annual activity has generally remained within the 13,000–15,000 range, indicating a predictable and sustainable level of demand. Historical analysis confirms recurring seasonal peaks between May and August, while recent performance remains aligned with expected operating levels. Based on year-to-date activity through August 2026, the program is projected to support approximately 12,800 fostered animals by year-end."
+		displayFolder: Capacity & Support\Executive Briefing
+		lineageTag: 5c965c22-2ffe-4466-8e77-2d04c05e5f51
+
+	/// Executive summary narrative describing the Foster Program lifecycle, historical growth, operating maturity, and current outlook. Intended for executive consumption and strategic context.
+	measure 'Executive Summary Narrative' =
+			
+			"The Foster Program experienced significant expansion between "
+			&
+			FORMAT([First Reporting Year],"0")
+			&
+			" and "
+			&
+			FORMAT([Peak Year],"0")
+			&
+			" before transitioning into a mature and stable operating model."
+		displayFolder: Capacity & Support\Executive Briefing
+		lineageTag: 38efd936-9e46-4fd7-ac36-3401523feb88
+
+	partition KPI = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(
+				        Json.Document(
+				            Binary.Decompress(
+				                Binary.FromText("i44FAA==", BinaryEncoding.Base64),
+				                Compression.Deflate
+				            )
+				        ),
+				        let _t = ((type nullable text) meta [Serialized.Text = true])
+				        in type table [Column1 = _t]
+				    ),
+				    #"Removed Columns" =
+				        Table.RemoveColumns(Source, {"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

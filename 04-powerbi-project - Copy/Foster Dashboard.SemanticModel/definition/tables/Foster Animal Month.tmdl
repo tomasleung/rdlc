@@ -1,0 +1,56 @@
+/// Supporting monthly snapshot table used to calculate Fostered Animals.
+/// 
+/// One row per Animal per Month touched by Foster.
+/// 
+/// Used for monthly and yearly foster participation analysis.
+/// 
+/// Not intended for direct report author use.
+table 'Foster Animal Month'
+	isHidden
+	lineageTag: e118b5ef-bc05-4caa-a3d3-d688b9680151
+
+	column 'Foster Placement ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1f7ef5f6-e4e9-4532-beea-32c88691b564
+		summarizeBy: none
+		sourceColumn: PlacementId
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'SB Animal ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 46fce891-c76e-495c-899c-5a0cd0574406
+		summarizeBy: none
+		sourceColumn: AnimalId
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Date Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1f1bf7cd-2379-438e-b682-4c78da6193b2
+		summarizeBy: none
+		sourceColumn: MonthDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Foster Animal Month' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(
+				        "zwgqkt2gjj5eldaxf5b4c22xm4-xh5tmosahmpudfij3bmp4m6tdy.datawarehouse.fabric.microsoft.com",
+				        "wh_enterprise"
+				    ),
+				    gold_foster_fact_foster_animal_month =
+				        Source{[Schema="gold_foster",Item="fact_foster_animal_month"]}[Data]
+				in
+				    gold_foster_fact_foster_animal_month
+
+	annotation PBI_ResultType = Table
+
