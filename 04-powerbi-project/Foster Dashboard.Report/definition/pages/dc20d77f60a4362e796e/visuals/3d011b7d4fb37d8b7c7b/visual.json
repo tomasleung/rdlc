@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "3d011b7d4fb37d8b7c7b",
   "position": {
-    "x": 32,
-    "y": 20,
-    "z": 3000,
-    "height": 26,
-    "width": 190,
+    "x": 23.201754385964914,
+    "y": 22.06111111111111,
+    "z": 2000,
+    "height": 34.365217391304341,
+    "width": 149.99999999999997,
     "tabOrder": 1000
   },
   "visual": {
@@ -25,7 +25,7 @@
             "rectangleRoundedCurve": {
               "expr": {
                 "Literal": {
-                  "Value": "60L"
+                  "Value": "15L"
                 }
               }
             }
@@ -92,7 +92,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'EXECUTIVE BRIEFING'"
+                  "Value": "'KEY INSIGHTS'"
                 }
               }
             },
@@ -106,7 +106,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "12D"
                 }
               }
             },

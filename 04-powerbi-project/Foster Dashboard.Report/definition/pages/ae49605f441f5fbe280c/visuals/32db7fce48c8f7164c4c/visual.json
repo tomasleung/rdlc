@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "32db7fce48c8f7164c4c",
+  "position": {
+    "x": 40,
+    "y": 226,
+    "z": 15000,
+    "height": 210,
+    "width": 1840,
+    "tabOrder": 2000
+  },
+  "visualGroup": {
+    "displayName": "Section 1 — Primary Reporting Metric",
+    "groupMode": "ScaleMode"
+  }
+}

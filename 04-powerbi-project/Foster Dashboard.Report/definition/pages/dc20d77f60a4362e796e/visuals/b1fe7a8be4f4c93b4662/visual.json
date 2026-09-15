@@ -7,7 +7,7 @@
     "z": 17200,
     "height": 22,
     "width": 130,
-    "tabOrder": 9000
+    "tabOrder": 5000
   },
   "visual": {
     "visualType": "textbox",
@@ -188,5 +188,6 @@
       ]
     }
   },
-  "parentGroupName": "7d436cf6210fbffa328e"
+  "parentGroupName": "7d436cf6210fbffa328e",
+  "isHidden": true
 }

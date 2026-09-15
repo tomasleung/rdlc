@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "1ad05c8f6b775ec0b93d",
+  "position": {
+    "x": 972,
+    "y": 1100,
+    "z": 21000,
+    "height": 574,
+    "width": 908,
+    "tabOrder": 23
+  },
+  "visualGroup": {
+    "displayName": "Q4 — Forecast Outlook",
+    "groupMode": "ScaleMode"
+  }
+}

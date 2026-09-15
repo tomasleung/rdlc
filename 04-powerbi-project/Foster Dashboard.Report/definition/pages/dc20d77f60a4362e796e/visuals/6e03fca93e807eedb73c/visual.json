@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "6e03fca93e807eedb73c",
   "position": {
-    "x": 1420,
-    "y": 0,
-    "z": 1000,
-    "height": 230,
-    "width": 420,
-    "tabOrder": 2000
+    "x": 1481.6801285915199,
+    "y": 82.075909182238291,
+    "z": 4000,
+    "height": 152,
+    "width": 319.99999999999994,
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "textbox",
@@ -22,8 +22,8 @@
                     "value": "PROGRAM STATUS",
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "10px",
-                      "color": "#64748B"
+                      "fontSize": "14pt",
+                      "color": "#666666"
                     }
                   }
                 ],
@@ -44,7 +44,7 @@
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
                       "fontSize": "20px",
-                      "color": "#4F46E5"
+                      "color": "#4f46e5"
                     }
                   }
                 ],
@@ -64,8 +64,8 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "11px",
-                      "color": "#64748B"
+                      "fontSize": "12pt",
+                      "color": "#64748b"
                     }
                   }
                 ],
@@ -80,13 +80,50 @@
           "properties": {
             "expr": {
               "expr": {
-                "Measure": {
+                "Min": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "KPI"
+                    "Column": {
+                      "Expression": {
+                        "Subquery": {
+                          "Query": {
+                            "Version": 2,
+                            "From": [
+                              {
+                                "Name": "k",
+                                "Entity": "KPI",
+                                "Type": 0
+                              }
+                            ],
+                            "Select": [
+                              {
+                                "Measure": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Source": "k"
+                                    }
+                                  },
+                                  "Property": "Program Status"
+                                },
+                                "Name": "KPI.Program Status"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "Property": "KPI.Program Status"
                     }
                   },
-                  "Property": "Program Status"
+                  "IncludeAllTypes": 1
+                },
+                "Annotations": {
+                  "NaturalLanguage": {
+                    "version": 1,
+                    "kind": "NaturalLanguage",
+                    "annotation": {
+                      "name": "Value 3",
+                      "utterance": "program status"
+                    }
+                  }
                 }
               }
             }
@@ -99,13 +136,50 @@
           "properties": {
             "expr": {
               "expr": {
-                "Measure": {
+                "Min": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "KPI"
+                    "Column": {
+                      "Expression": {
+                        "Subquery": {
+                          "Query": {
+                            "Version": 2,
+                            "From": [
+                              {
+                                "Name": "k",
+                                "Entity": "KPI",
+                                "Type": 0
+                              }
+                            ],
+                            "Select": [
+                              {
+                                "Measure": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Source": "k"
+                                    }
+                                  },
+                                  "Property": "Program Status Description"
+                                },
+                                "Name": "KPI.Program Status Description"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "Property": "KPI.Program Status Description"
                     }
                   },
-                  "Property": "Program Status Description"
+                  "IncludeAllTypes": 1
+                },
+                "Annotations": {
+                  "NaturalLanguage": {
+                    "version": 1,
+                    "kind": "NaturalLanguage",
+                    "annotation": {
+                      "name": "Value 4",
+                      "utterance": "program status description"
+                    }
+                  }
                 }
               }
             }
@@ -132,7 +206,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#F8FAFC'"
+                      "Value": "'#EEF2FF'"
                     }
                   }
                 }
@@ -154,7 +228,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -234,6 +308,19 @@
               "expr": {
                 "Literal": {
                   "Value": "'Status Card'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }

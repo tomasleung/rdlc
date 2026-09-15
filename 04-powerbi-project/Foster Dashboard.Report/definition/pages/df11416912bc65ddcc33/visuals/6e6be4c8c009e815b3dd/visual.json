@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "6e6be4c8c009e815b3dd",
+  "position": {
+    "x": 44,
+    "y": 1312,
+    "z": 20000,
+    "height": 574,
+    "width": 908,
+    "tabOrder": 2000
+  },
+  "visualGroup": {
+    "displayName": "Q3 — Recent Stability",
+    "groupMode": "ScaleMode"
+  }
+}

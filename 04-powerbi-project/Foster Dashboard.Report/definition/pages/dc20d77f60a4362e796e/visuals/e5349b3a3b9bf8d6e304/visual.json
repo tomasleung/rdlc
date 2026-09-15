@@ -7,9 +7,8 @@
     "z": 0,
     "height": 574,
     "width": 908,
-    "tabOrder": 0
+    "tabOrder": 11000
   },
-  "parentGroupName": "c4f192ce94588f8f5c63",
   "visual": {
     "visualType": "shape",
     "objects": {
@@ -197,5 +196,6 @@
         }
       ]
     }
-  }
+  },
+  "parentGroupName": "c4f192ce94588f8f5c63"
 }

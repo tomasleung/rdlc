@@ -4,10 +4,10 @@
   "position": {
     "x": 24,
     "y": 327,
-    "z": 2450,
+    "z": 9000,
     "height": 130,
     "width": 860,
-    "tabOrder": 8
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "pivotTable",
@@ -293,62 +293,6 @@
   "parentGroupName": "1ad05c8f6b775ec0b93d",
   "filterConfig": {
     "filters": [
-      {
-        "name": "213285b700c6d4484a77",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Date"
-              }
-            },
-            "Property": "Year"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "8af6391fcc00a11cce10",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "KPI"
-              }
-            },
-            "Property": "Fostered Animals"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "5f0ae2eea9b7b3126242",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "KPI"
-              }
-            },
-            "Property": "Historical Forecast"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "f62105c0b004525b451a",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "KPI"
-              }
-            },
-            "Property": "Forecast Error %"
-          }
-        },
-        "type": "Advanced"
-      },
       {
         "name": "7b13f746797e0e26e7bc",
         "field": {

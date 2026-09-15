@@ -16,8 +16,8 @@
           "nodeIndex": "Foster Animal Month",
           "nodeLineageTag": "e118b5ef-bc05-4caa-a3d3-d688b9680151",
           "size": {
-            "height": 152,
-            "width": 234
+            "height": 189.53527979963815,
+            "width": 268.53245741566707
           },
           "zIndex": 4
         },
@@ -29,7 +29,7 @@
           "nodeIndex": "Foster Placements",
           "nodeLineageTag": "637927f1-ff67-4ff2-8709-9b5f012e7773",
           "size": {
-            "height": 248,
+            "height": 306.55503648743547,
             "width": 234
           },
           "zIndex": 1

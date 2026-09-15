@@ -1,0 +1,37 @@
+table 'Lifecycle Era'
+	lineageTag: 4770257e-0c44-4144-853f-5b010a7373a8
+
+	column Era
+		lineageTag: 03130445-1ca5-4a96-a05a-5cc0a93f3a26
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Era]
+
+		annotation SummarizationSetBy = Automatic
+
+	column SortOrder
+		formatString: 0
+		lineageTag: cd0b1102-5e39-495b-a4b3-6173560b7cc9
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [SortOrder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Lifecycle Era' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Era", STRING,
+				    "SortOrder", INTEGER,
+				    {
+				        {"Expansion Phase (2006-09)", 1},
+				        {"Peak Activity (2010-14)", 2},
+				        {"Stable Ops (2015-19)", 3},
+				        {"Mature Program (2020-25)", 4}
+				    }
+				)
+
+	annotation PBI_Id = 386ecbb3cea146d89d3644ed10e7b62f
+

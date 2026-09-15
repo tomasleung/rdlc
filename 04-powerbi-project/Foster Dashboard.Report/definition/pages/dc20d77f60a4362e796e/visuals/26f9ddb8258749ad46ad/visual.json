@@ -7,7 +7,7 @@
     "z": 1000,
     "height": 304,
     "width": 860,
-    "tabOrder": 6
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "clusteredColumnChart",
@@ -326,34 +326,6 @@
   "parentGroupName": "c2d6ac88bf9bd68e613e",
   "filterConfig": {
     "filters": [
-      {
-        "name": "8376840030d25c954e80",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Date"
-              }
-            },
-            "Property": "Year"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "218bf9e9b072090a30a6",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "KPI"
-              }
-            },
-            "Property": "Fostered Animals"
-          }
-        },
-        "type": "Advanced"
-      },
       {
         "name": "bc0044fab5755534de69",
         "field": {

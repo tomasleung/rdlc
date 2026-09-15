@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "b0a4261d04f468d823da",
+  "position": {
+    "x": 40,
+    "y": 116,
+    "z": 12000,
+    "height": 230,
+    "width": 1840,
+    "tabOrder": 0
+  },
+  "visualGroup": {
+    "displayName": "Executive Briefing",
+    "groupMode": "ScaleMode"
+  }
+}

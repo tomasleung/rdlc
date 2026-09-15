@@ -7,7 +7,7 @@
     "z": 17000,
     "height": 120,
     "width": 352,
-    "tabOrder": 7000
+    "tabOrder": 6000
   },
   "visual": {
     "visualType": "textbox",
@@ -21,9 +21,10 @@
                   {
                     "value": "2026 YEAR-END PROJECTION",
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "9px",
-                      "color": "#94a3b8"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
                 ]
@@ -41,8 +42,9 @@
                       }
                     },
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "18px",
+                      "fontSize": "16pt",
                       "color": "#4f46e5"
                     }
                   }
@@ -54,8 +56,8 @@
                     "value": "Based on Historical Ratio Forecasting",
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "9px",
-                      "color": "#64748b"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
                 ]
@@ -74,16 +76,16 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "9px",
-                      "color": "#64748b"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   },
                   {
                     "value": " Actual: ",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "9px",
-                      "color": "#64748b"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   },
                   {
@@ -98,8 +100,8 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "9px",
-                      "color": "#64748b"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
                 ]

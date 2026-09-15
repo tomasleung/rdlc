@@ -5,9 +5,9 @@
     "x": 744,
     "y": 0,
     "z": 15000,
-    "height": 120,
+    "height": 145,
     "width": 352,
-    "tabOrder": 1000
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "textbox",
@@ -19,15 +19,15 @@
               {
                 "textRuns": [
                   {
-                    "value": "AUGUST 2026 PERFORMANCE",
+                    "value": "AUGUST 2026 FOSTER ANIMALS",
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "9px",
-                      "color": "#94A3B8"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "left"
+                ]
               },
               {
                 "textRuns": [
@@ -42,13 +42,13 @@
                       }
                     },
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "18px",
-                      "color": "#1E293B"
+                      "fontSize": "16pt",
+                      "color": "#1e293b"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "left"
+                ]
               },
               {
                 "textRuns": [
@@ -64,12 +64,11 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "9px",
-                      "color": "#475569"
+                      "fontSize": "12pt",
+                      "color": "#6b7280"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "left"
+                ]
               },
               {
                 "textRuns": [
@@ -77,8 +76,8 @@
                     "value": "5-Yr Bench: ",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "9px",
-                      "color": "#64748B"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   },
                   {
@@ -93,16 +92,16 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "9px",
-                      "color": "#64748B"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   },
                   {
                     "value": " | Var: ",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "9px",
-                      "color": "#64748B"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   },
                   {
@@ -117,12 +116,11 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "9px",
-                      "color": "#64748B"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "left"
+                ]
               }
             ]
           }

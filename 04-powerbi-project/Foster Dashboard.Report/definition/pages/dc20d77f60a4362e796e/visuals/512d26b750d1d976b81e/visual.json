@@ -7,7 +7,7 @@
     "z": 1000,
     "height": 120,
     "width": 352,
-    "tabOrder": 10000
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "textbox",
@@ -21,13 +21,13 @@
                   {
                     "value": "PROGRAM GROWTH SINCE 2006",
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "9px",
-                      "color": "#94A3B8"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "left"
+                ]
               },
               {
                 "textRuns": [
@@ -47,8 +47,7 @@
                       "color": "#059669"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "left"
+                ]
               },
               {
                 "textRuns": [
@@ -64,12 +63,11 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "10px",
-                      "color": "#64748B"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "left"
+                ]
               }
             ]
           }

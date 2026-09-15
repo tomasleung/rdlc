@@ -511,3 +511,14 @@ What does the metric mean?
 How are benchmarks calculated?
  
 Can I trust the forecast?
+
+
+Based on historical August completion rates:
+
+2021 = 87.7% = YTD august / Full
+2022 = 87.9%
+2023 = 88.0%
+2024 = 90.1%
+2025 = 89.0%
+
+Average = 88.5%

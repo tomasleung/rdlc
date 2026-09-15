@@ -19,7 +19,7 @@
             "height": 152,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 4
         },
         {
           "location": {
@@ -32,7 +32,7 @@
             "height": 248,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 1
         },
         {
           "location": {
@@ -45,7 +45,7 @@
             "height": 300,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 2
         },
         {
           "location": {
@@ -57,11 +57,36 @@
             "height": 104,
             "width": 234
           },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 912.98598516075845,
+            "y": 394.53009068425393
+          },
+          "nodeIndex": "Forecast Outlook Axis",
+          "nodeLineageTag": "86ff2015-4f91-4238-96d4-071f77f16905",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1196.9859851607584,
+            "y": 197.265045342127
+          },
+          "nodeIndex": "Lifecycle Era",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
           "zIndex": 0
         }
       ],
       "name": "All tables",
-      "zoomValue": 100,
+      "zoomValue": 66.60400597371067,
       "pinKeyFieldsToTop": false,
       "showExtraHeaderInfo": false,
       "hideKeyFieldsWhenCollapsed": false,

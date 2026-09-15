@@ -4,12 +4,11 @@
   "position": {
     "x": 24,
     "y": 74,
-    "z": 2300,
+    "z": 9000,
     "height": 18,
     "width": 860,
-    "tabOrder": 5
+    "tabOrder": 5000
   },
-  "parentGroupName": "c4f192ce94588f8f5c63",
   "visual": {
     "visualType": "textbox",
     "objects": {
@@ -189,5 +188,6 @@
         }
       ]
     }
-  }
+  },
+  "parentGroupName": "c4f192ce94588f8f5c63"
 }

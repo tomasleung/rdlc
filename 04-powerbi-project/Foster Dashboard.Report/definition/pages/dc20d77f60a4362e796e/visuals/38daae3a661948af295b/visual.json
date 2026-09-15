@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "38daae3a661948af295b",
   "position": {
-    "x": 1646,
-    "y": 180,
-    "z": 5000,
-    "height": 26,
-    "width": 170,
-    "tabOrder": 4000
+    "x": 1624.6801285915199,
+    "y": 186.57590918223829,
+    "z": 6000,
+    "height": 34.365217391304341,
+    "width": 169.99999999999997,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "textbox",
@@ -30,7 +30,7 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "10px",
+                      "fontSize": "12pt",
                       "color": "#4338ca"
                     }
                   }
@@ -46,13 +46,50 @@
           "properties": {
             "expr": {
               "expr": {
-                "Measure": {
+                "Min": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "KPI"
+                    "Column": {
+                      "Expression": {
+                        "Subquery": {
+                          "Query": {
+                            "Version": 2,
+                            "From": [
+                              {
+                                "Name": "k",
+                                "Entity": "KPI",
+                                "Type": 0
+                              }
+                            ],
+                            "Select": [
+                              {
+                                "Measure": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Source": "k"
+                                    }
+                                  },
+                                  "Property": "Reporting Period Label"
+                                },
+                                "Name": "KPI.Reporting Period Label"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "Property": "KPI.Reporting Period Label"
                     }
                   },
-                  "Property": "Reporting Period Label"
+                  "IncludeAllTypes": 1
+                },
+                "Annotations": {
+                  "NaturalLanguage": {
+                    "version": 1,
+                    "kind": "NaturalLanguage",
+                    "annotation": {
+                      "name": "Value 5",
+                      "utterance": "reporting period label"
+                    }
+                  }
                 }
               }
             }

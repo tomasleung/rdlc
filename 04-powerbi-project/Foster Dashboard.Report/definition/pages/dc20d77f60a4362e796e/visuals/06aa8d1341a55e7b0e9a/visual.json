@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "06aa8d1341a55e7b0e9a",
   "position": {
-    "x": 40,
-    "y": 16,
-    "z": 7000,
+    "x": 32,
+    "y": 32,
+    "z": 3000,
     "height": 64,
-    "width": 1000,
+    "width": 1040,
     "tabOrder": 1000
   },
   "visual": {
@@ -19,28 +19,82 @@
               {
                 "textRuns": [
                   {
-                    "value": "EXECUTIVE DECISION SUPPORT",
+                    "value": {
+                      "propertyIdentifier": {
+                        "objectName": "values",
+                        "propertyName": "expr"
+                      },
+                      "selector": {
+                        "id": "Value 2"
+                      }
+                    },
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "11px",
-                      "color": "#818cf8"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Foster Program Executive Dashboard (2006–2026)",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "22px",
+                      "fontSize": "24pt",
                       "color": "#ffffff"
                     }
                   }
                 ]
               }
             ]
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "expr": {
+              "expr": {
+                "Min": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "Subquery": {
+                          "Query": {
+                            "Version": 2,
+                            "From": [
+                              {
+                                "Name": "k",
+                                "Entity": "KPI",
+                                "Type": 0
+                              }
+                            ],
+                            "Select": [
+                              {
+                                "Measure": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Source": "k"
+                                    }
+                                  },
+                                  "Property": "Report Title"
+                                },
+                                "Name": "KPI.Report Title"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "Property": "KPI.Report Title"
+                    }
+                  },
+                  "IncludeAllTypes": 1
+                },
+                "Annotations": {
+                  "NaturalLanguage": {
+                    "version": 1,
+                    "kind": "NaturalLanguage",
+                    "annotation": {
+                      "name": "Value 2",
+                      "utterance": "Title"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "Value 2"
           }
         }
       ]

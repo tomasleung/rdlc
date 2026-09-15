@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "e62b68d23357e05d553d",
+  "position": {
+    "x": 40,
+    "y": 226,
+    "z": 15000,
+    "height": 380,
+    "width": 1840,
+    "tabOrder": 2000
+  },
+  "visualGroup": {
+    "displayName": "Seasonal Benchmark Chart",
+    "groupMode": "ScaleMode"
+  }
+}

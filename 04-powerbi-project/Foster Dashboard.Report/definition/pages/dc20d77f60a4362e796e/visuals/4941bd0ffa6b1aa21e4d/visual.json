@@ -7,7 +7,7 @@
     "z": 1000,
     "height": 140,
     "width": 860,
-    "tabOrder": 6
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "lineChart",
@@ -386,62 +386,6 @@
         },
         "type": "Advanced",
         "howCreated": "User"
-      },
-      {
-        "name": "1f95385520463d885bc0",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Forecast Outlook Axis"
-              }
-            },
-            "Property": "Period"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "29d25da7ba5d050727b8",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "KPI"
-              }
-            },
-            "Property": "Projection Series"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "d7ba4e546ca04d623d7c",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "KPI"
-              }
-            },
-            "Property": "Planning Outlook Series"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "e6e26af1789a2d7b62e1",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "KPI"
-              }
-            },
-            "Property": "Historical Actuals Series"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

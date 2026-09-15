@@ -17,6 +17,8 @@ ref table Date
 ref table 'Foster Placements'
 ref table 'Foster Animal Month'
 ref table KPI
+ref table 'Forecast Outlook Axis'
+ref table 'Lifecycle Era'
 
 ref cultureInfo en-CA
 

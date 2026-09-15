@@ -3,11 +3,11 @@
   "name": "f3d1f05f045ee2a60a4b",
   "position": {
     "x": 1326,
-    "y": 12,
+    "y": 108,
     "z": 16100,
     "height": 22,
     "width": 130,
-    "tabOrder": 5000
+    "tabOrder": 10000
   },
   "visual": {
     "visualType": "shape",
@@ -25,7 +25,7 @@
             "rectangleRoundedCurve": {
               "expr": {
                 "Literal": {
-                  "Value": "60L"
+                  "Value": "15L"
                 }
               }
             }
@@ -40,7 +40,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFBEB'"
+                      "Value": "'#ECFDF5'"
                     }
                   }
                 }
@@ -72,6 +72,17 @@
           },
           "selector": {
             "id": "default"
+          }
+        },
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
           }
         }
       ]

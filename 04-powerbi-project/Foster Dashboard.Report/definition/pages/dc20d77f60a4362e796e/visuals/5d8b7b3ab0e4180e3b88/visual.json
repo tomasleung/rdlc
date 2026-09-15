@@ -4,10 +4,10 @@
   "position": {
     "x": 0,
     "y": 0,
-    "z": 0,
-    "height": 230,
-    "width": 1400,
-    "tabOrder": 0
+    "z": 1000,
+    "height": 304,
+    "width": 1839.9999999999998,
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "textbox",
@@ -19,12 +19,19 @@
               {
                 "textRuns": [
                   {
-                    "value": "Foster Program Executive Assessment",
+                    "value": "Foster Program Key Findings",
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "22px",
+                      "fontSize": "16pt",
                       "color": "#0f172a"
                     }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
                   }
                 ]
               },
@@ -42,7 +49,7 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
+                      "fontSize": "14pt",
                       "color": "#475569"
                     }
                   },
@@ -50,25 +57,16 @@
                     "value": "  ",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
+                      "fontSize": "14pt",
                       "color": "#475569"
                     }
-                  },
+                  }
+                ]
+              },
+              {
+                "textRuns": [
                   {
-                    "value": {
-                      "propertyIdentifier": {
-                        "objectName": "values",
-                        "propertyName": "expr"
-                      },
-                      "selector": {
-                        "id": "Value 2"
-                      }
-                    },
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "13px",
-                      "color": "#475569"
-                    }
+                    "value": ""
                   }
                 ]
               }
@@ -81,38 +79,56 @@
           "properties": {
             "expr": {
               "expr": {
-                "Measure": {
+                "Min": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "KPI"
+                    "Column": {
+                      "Expression": {
+                        "Subquery": {
+                          "Query": {
+                            "Version": 2,
+                            "From": [
+                              {
+                                "Name": "k",
+                                "Entity": "KPI",
+                                "Type": 0
+                              }
+                            ],
+                            "Select": [
+                              {
+                                "Measure": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Source": "k"
+                                    }
+                                  },
+                                  "Property": "Executive Summary Narrative"
+                                },
+                                "Name": "KPI.Executive Summary Narrative"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "Property": "KPI.Executive Summary Narrative"
                     }
                   },
-                  "Property": "Executive Summary Narrative"
+                  "IncludeAllTypes": 1
+                },
+                "Annotations": {
+                  "NaturalLanguage": {
+                    "version": 1,
+                    "kind": "NaturalLanguage",
+                    "annotation": {
+                      "name": "Value 1",
+                      "utterance": "executive summary narrative"
+                    }
+                  }
                 }
               }
             }
           },
           "selector": {
             "id": "Value 1"
-          }
-        },
-        {
-          "properties": {
-            "expr": {
-              "expr": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "KPI"
-                    }
-                  },
-                  "Property": "Executive Forecast Narrative"
-                }
-              }
-            }
-          },
-          "selector": {
-            "id": "Value 2"
           }
         }
       ]

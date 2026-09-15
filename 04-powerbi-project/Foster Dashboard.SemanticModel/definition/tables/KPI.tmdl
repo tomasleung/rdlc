@@ -163,17 +163,38 @@ table KPI
 	/// Displays the completed reporting period used in the calculation.
 	measure 'Historical Participation Label' = ```
 			
-			VAR StartYear =
-			    [First Reporting Year]
 			
-			VAR EndYear =
-			    [Latest Reporting Year] 
+			VAR FirstDateKey =
+			    CALCULATE(
+			        MIN('Foster Animal Month'[Month Date Key]),
+			        REMOVEFILTERS('Foster Animal Month')
+			    )
+			
+			VAR LastDateKey =
+			    CALCULATE(
+			        MAX('Foster Animal Month'[Month Date Key]),
+			        REMOVEFILTERS('Foster Animal Month')
+			    )
+			
+			VAR StartDate =
+			    LOOKUPVALUE(
+			        'Date'[Date],
+			        'Date'[Date Key], FirstDateKey
+			    )
+			
+			VAR EndDate =
+			    LOOKUPVALUE(
+			        'Date'[Date],
+			        'Date'[Date Key], LastDateKey
+			    )
 			
 			RETURN
-			FORMAT(StartYear, "0")
-			    & "-"
-			    & FORMAT(EndYear, "0")
-			    & " Foster Participation"
+			    FORMAT(StartDate,"yyyy MMM") &
+			    " - " &
+			    FORMAT(EndDate,"yyyy MMM") &
+			    " Foster Participation"
+			
+			
 			```
 		displayFolder: Capacity & Support\Historical Foster Animals
 		lineageTag: b8172630-09f3-4196-bc04-2426401a1021
@@ -294,7 +315,7 @@ table KPI
 			    REMOVEFILTERS('Date'),
 			    'Foster Animal Month'[Month Date Key] = LatestMonthKey
 			)
-		formatString: 0
+		formatString: #,0
 		displayFolder: Capacity & Support\Last Month Comparison
 		lineageTag: a7b177c9-d173-4cf9-8dc4-277a89c5390f
 
@@ -307,10 +328,9 @@ table KPI
 			)
 			
 			```
+		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: Capacity & Support\Last Month Comparison
 		lineageTag: 6ab27e7e-8caa-4b0a-ab45-8774739d0c98
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure '5-Year Benchmark Monthly Label' =
 			
@@ -341,7 +361,7 @@ table KPI
 			RETURN
 			    SWITCH(
 			        TRUE(),
-			        VariancePct <= 0.10, "#4CAF50",
+			        VariancePct <= 0.10, "#047857",
 			        VariancePct <= 0.15, "#FFC107",
 			        "#F44336"
 			    )
@@ -1145,16 +1165,14 @@ table KPI
 		lineageTag: 9e327cf4-9e80-475e-8ee0-0157698d85da
 
 	/// Dynamic forecast narrative summarizing projected year-end foster participation based on current YTD performance and the Historical Completion Ratio forecasting methodology. Used within the Executive Briefing section.
-	measure 'Executive Forecast Narrative' =
-			
-			"Annual foster participation increased from 5,223 animals in 2006 to a peak of 15,763 in 2010. Since then, annual activity has generally remained within the 13,000–15,000 range, indicating a predictable and sustainable level of demand. Historical analysis confirms recurring seasonal peaks between May and August, while recent performance remains aligned with expected operating levels. Based on year-to-date activity through August 2026, the program is projected to support approximately 12,800 fostered animals by year-end."
+	measure 'Executive Forecast Narrative' = ""
 		displayFolder: Capacity & Support\Executive Briefing
 		lineageTag: 5c965c22-2ffe-4466-8e77-2d04c05e5f51
 
 	/// Executive summary narrative describing the Foster Program lifecycle, historical growth, operating maturity, and current outlook. Intended for executive consumption and strategic context.
 	measure 'Executive Summary Narrative' =
 			
-			"The Foster Program experienced significant expansion between "
+			"• The Foster Program experienced significant expansion between "
 			&
 			FORMAT([First Reporting Year],"0")
 			&
@@ -1162,7 +1180,16 @@ table KPI
 			&
 			FORMAT([Peak Year],"0")
 			&
-			" before transitioning into a mature and stable operating model."
+			" before transitioning into a mature and stable operating model." & UNICHAR(10) &
+			"• Foster participation grew from 5,223 animals in 2006 to a peak of 15,763 in 2010." &
+			UNICHAR(10) &
+			"• Annual foster activity has remained stable at approximately 13,000–15,000 range since 2010." &
+			UNICHAR(10) &
+			"• Historical analysis confirms a consistent seasonal pattern, with peak foster participation occurring between May and August each year." &
+			UNICHAR(10) &
+			"• August 2026 performance remains aligned with historical expectations and recent operating trends." &
+			UNICHAR(10) &
+			"• Based on year-to-date activity through August 2026, the program is projected to support approximately 12,775 fostered animals by year-end."
 		displayFolder: Capacity & Support\Executive Briefing
 		lineageTag: 38efd936-9e46-4fd7-ac36-3401523feb88
 
@@ -2533,6 +2560,248 @@ table KPI
 		formatString: #,0
 		displayFolder: Lifecycle Analysis
 		lineageTag: 55d96758-c0f8-4ae4-8e31-d3d6be1d8a41
+
+	/// Monthly Fostered Animals participation for the current reporting year.
+	/// 
+	/// Returns actual monthly participation values for the latest reporting year and is used to compare current performance against the 5-Year Seasonal Benchmark.
+	/// 
+	/// Used by:
+	/// 
+	/// • Typical Annual Foster Activity Pattern
+	/// • Capacity Planning Benchmarks & Variance Tracker
+	/// • Seasonal Operations Analysis
+	measure 'Monthly Participation' =
+			
+			VAR ReportingYear =
+			    [Latest Reporting Year]
+			
+			VAR CurrentMonth =
+			    SELECTEDVALUE('Date'[Month])
+			
+			RETURN
+			CALCULATE(
+			    [Fostered Animals],
+			    REMOVEFILTERS('Date'),
+			    'Date'[Year] = ReportingYear,
+			    'Date'[Month] = CurrentMonth
+			)
+		formatString: #,0
+		displayFolder: Seasonal Operations
+		lineageTag: 2a935eb6-da9f-456e-807e-74c7f343c30b
+
+	/// Percentage difference between Monthly Participation and the 5-Year Seasonal Benchmark for the selected month.
+	/// 
+	/// Formula:
+	/// 
+	/// (Monthly Participation - 5-Year Seasonal Benchmark)
+	/// /
+	/// 5-Year Seasonal Benchmark
+	/// 
+	/// Used to compare current-year monthly foster participation against historical seasonal expectations.
+	/// 
+	/// Positive values indicate participation above benchmark.
+	/// 
+	/// Negative values indicate participation below benchmark.
+	/// 
+	/// Used by the Capacity Planning Benchmarks & Variance Tracker and seasonal operations analysis.
+	measure 'Seasonal Benchmark Variance %' =
+			
+			DIVIDE(
+			    [Monthly Participation]
+			        - [5-Year Seasonal Benchmark],
+			    [5-Year Seasonal Benchmark]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Seasonal Operations
+		lineageTag: a972c641-ceed-4b05-a660-77bcd474e9ba
+
+	/// Assigns a planning priority classification to each month based on established seasonal operating patterns.
+	/// 
+	/// Priority categories indicate the relative level of planning effort required during the month.
+	/// 
+	/// Used by the Capacity Planning Benchmarks & Variance Tracker.
+	measure 'Planning Priority' =
+			
+			VAR CurrentMonth =
+			    SELECTEDVALUE('Date'[Month])
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			
+			    CurrentMonth IN {1,2},
+			        "Low",
+			
+			    CurrentMonth IN {3,4,11,12},
+			        "Moderate",
+			
+			    CurrentMonth IN {9,10},
+			        "Elevated",
+			
+			    CurrentMonth IN {5,6,7,8},
+			        "High"
+			)
+		displayFolder: Seasonal Operations
+		lineageTag: 5d89cfc4-a888-4e24-a70a-46322ab565cd
+
+	/// Returns the designated color associated with each Planning Priority category.
+	/// 
+	/// Used for conditional formatting within the Capacity Planning Benchmarks & Variance Tracker.
+	/// 
+	measure 'Planning Priority Color' =
+			
+			SWITCH(
+			    [Planning Priority],
+			
+			    "Low", "#2563EB",
+			    "Moderate", "#6366F1",
+			    "Elevated", "#10B981",
+			    "High", "#D97706"
+			)
+		displayFolder: Seasonal Operations
+		lineageTag: 35351366-7535-4bc3-93de-67d59839d534
+
+	/// Monthly Fostered Animals participation at the Year-Month grain.
+	/// 
+	/// Returns the distinct Fostered Animals count for the selected reporting month and reporting year.
+	/// 
+	/// Used by the Historical Seasonality Heatmap to visualize long-term seasonal patterns, growth, stabilization, and recurring demand cycles.
+	measure 'Monthly Foster Participation' =
+			
+			[Fostered Animals]
+		formatString: #,0
+		displayFolder: Seasonal Operations
+		lineageTag: 8d4f216f-22ae-46e5-a792-52bde3e32190
+
+	measure 'Seasonality Heatmap Color' =
+			
+			VAR ValueTemp =
+			    [Monthly Foster Participation]
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			
+			    ValueTemp >= 9500, "#92400E",   // Dark Brown
+			
+			    ValueTemp >= 8500, "#D97706",   // Orange
+			
+			    ValueTemp >= 7000, "#F59E0B",   // Amber
+			
+			    ValueTemp >= 5000, "#FCD34D",   // Yellow
+			
+			    ValueTemp >= 2500, "#FEF3C7",   // Light Yellow
+			
+			    ValueTemp >= 1000, "#E2E8F0",   // Gray
+			
+			    "#F8FAFC"                       // Light Gray
+			)
+		displayFolder: Seasonal Operations
+		lineageTag: 949788ff-4604-4f5f-9efc-81b7377850d9
+
+	/// Executive-level summary of seasonal participation patterns, peak activity periods, benchmark performance, and operational planning priorities.
+	/// 
+	/// Provides the primary executive briefing narrative for the Capacity Planning & Seasonal Operations section.
+	measure 'Seasonality Executive Conclusion' = ```
+			
+			"• Foster participation follows a highly predictable seasonal pattern."
+			
+			& UNICHAR(10) & UNICHAR(10)
+			
+			& "• Peak foster activity consistently occurs between "
+			& [Peak Season Start Month]
+			& " and "
+			& [Peak Season End Month]
+			& "."
+			
+			& UNICHAR(10) & UNICHAR(10)
+			
+			& "• "
+			& [Peak Month]
+			& " represents the highest average participation month, while "
+			& [Lowest Month]
+			& " remains the lowest."
+			
+			& UNICHAR(10) & UNICHAR(10)
+			
+			& "• Current-year participation is tracking close to historical seasonal benchmarks."
+			
+			& UNICHAR(10) & UNICHAR(10)
+			
+			& "• Seasonal planning efforts should prioritize recruitment, onboarding, and capacity readiness ahead of the "
+			& [Peak Season Start Month]
+			& "-"
+			& [Peak Season End Month]
+			& " peak operating period."
+			
+			```
+		displayFolder: Seasonal Operations
+		lineageTag: d2558536-f212-4582-b90d-bdc06aaa035f
+
+	/// Executive summary explaining the dashboard methodology, benchmark framework, forecasting approach, and forecast validation results.
+	/// 
+	/// Used within the Methodology, Benchmark, and Trust Center page to provide transparency into how Foster Program metrics are calculated and interpreted.
+	/// 
+	/// This measure combines static methodology explanations with dynamic forecast accuracy metrics to ensure the Trust Center remains current as new forecasting validation results become available.
+	measure 'Trust Center Narrative' =
+			
+			"The dashboard uses Foster Animal Count as its primary reporting metric because it represents the number of unique animals receiving foster care during a reporting period."
+			
+			& UNICHAR(10) & UNICHAR(10)
+			
+			& "Monthly benchmarks are based on recent historical participation patterns using a five-year seasonal benchmark methodology. These benchmarks are used to evaluate current performance, identify seasonal demand patterns, and support operational planning activities."
+			
+			& UNICHAR(10) & UNICHAR(10)
+			
+			& "Year-end projections use Historical Ratio Forecasting based on historical August completion rates. This methodology estimates full-year foster participation by comparing year-to-date activity against historical completion patterns."
+			
+			& UNICHAR(10) & UNICHAR(10)
+			
+			& "Historical validation produced an average forecast error of approximately ±"
+			& FORMAT([Average Forecast Error %], "0.0%")
+			& ", demonstrating that the forecasting methodology performs well when tested against completed reporting years."
+			
+			& UNICHAR(10) & UNICHAR(10)
+			
+			& "Together, these methods provide a consistent, transparent, and evidence-based foundation for monitoring performance, evaluating program trends, and planning future foster program operations."
+		displayFolder: Executive Briefing
+		lineageTag: 7ff312c7-fbff-4f97-a3b0-bf9533b43a76
+
+	/// Dynamic report title displaying the Foster Program Historical & Forecast Baseline report name and the available data period. Automatically updates based on the earliest and latest dates in the model, ensuring the report header always reflects the current reporting range without manual maintenance.
+	measure 'Report Title' =
+			
+			VAR FirstDateKey =
+			    CALCULATE(
+			        MIN('Foster Animal Month'[Month Date Key]),
+			        REMOVEFILTERS('Foster Animal Month')
+			    )
+			
+			VAR LastDateKey =
+			    CALCULATE(
+			        MAX('Foster Animal Month'[Month Date Key]),
+			        REMOVEFILTERS('Foster Animal Month')
+			    )
+			
+			VAR StartDate =
+			    LOOKUPVALUE(
+			        'Date'[Date],
+			        'Date'[Date Key], FirstDateKey
+			    )
+			
+			VAR EndDate =
+			    LOOKUPVALUE(
+			        'Date'[Date],
+			        'Date'[Date Key], LastDateKey
+			    )
+			
+			RETURN
+			    "Foster Program Historical & Forecast Baseline ( " &
+			    FORMAT(StartDate,"yyyy MMM") &
+			    " - " &
+			    FORMAT(EndDate,"yyyy MMM") &
+			    " )"
+		displayFolder: Capacity & Support\Titles
+		lineageTag: 31803443-7e8c-4081-ba19-136bf8f5340f
 
 	partition KPI = m
 		mode: import

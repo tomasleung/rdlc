@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "cca16a3932fc8f612b3a",
+  "position": {
+    "x": 40,
+    "y": 1296,
+    "z": 19000,
+    "height": 300,
+    "width": 1840,
+    "tabOrder": 6
+  },
+  "visualGroup": {
+    "displayName": "Trust Center",
+    "groupMode": "ScaleMode"
+  }
+}

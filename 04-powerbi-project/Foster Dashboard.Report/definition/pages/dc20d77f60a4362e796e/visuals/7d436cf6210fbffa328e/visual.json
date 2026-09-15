@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "7d436cf6210fbffa328e",
   "position": {
-    "x": 40,
-    "y": 366,
+    "x": 48,
+    "y": 456,
     "z": 14000,
-    "height": 120,
+    "height": 145,
     "width": 1840,
-    "tabOrder": 2000
+    "tabOrder": 6000
   },
   "visualGroup": {
     "displayName": "KPI Scorecards",

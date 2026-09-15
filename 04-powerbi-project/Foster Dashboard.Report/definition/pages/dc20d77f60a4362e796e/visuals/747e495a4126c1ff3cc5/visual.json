@@ -7,7 +7,7 @@
     "z": 2000,
     "height": 120,
     "width": 352,
-    "tabOrder": 0
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "textbox",
@@ -21,9 +21,10 @@
                   {
                     "value": "HISTORICAL FOSTER ANIMALS",
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "9px",
-                      "color": "#94a3b8"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
                 ]
@@ -41,8 +42,9 @@
                       }
                     },
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
-                      "fontSize": "22px",
+                      "fontSize": "16pt",
                       "color": "#4f46e5"
                     }
                   }
@@ -62,8 +64,8 @@
                     },
                     "textStyle": {
                       "fontFamily": "Segoe UI",
-                      "fontSize": "10px",
-                      "color": "#64748b"
+                      "fontSize": "12pt",
+                      "color": "#475569"
                     }
                   }
                 ]

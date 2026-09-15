@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "0ed40f8f3b1e4c19c696",
   "position": {
-    "x": 974,
-    "y": 12,
+    "x": 759.2028206850232,
+    "y": 112.9711215580927,
     "z": 15100,
     "height": 22,
-    "width": 110,
-    "tabOrder": 2000
+    "width": 115,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "shape",
@@ -25,7 +25,7 @@
             "rectangleRoundedCurve": {
               "expr": {
                 "Literal": {
-                  "Value": "60L"
+                  "Value": "15L"
                 }
               }
             }
@@ -35,6 +35,13 @@
       "fill": [
         {
           "properties": {
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
             "fillColor": {
               "solid": {
                 "color": {
@@ -43,13 +50,6 @@
                       "Value": "'#ECFDF5'"
                     }
                   }
-                }
-              }
-            },
-            "transparency": {
-              "expr": {
-                "Literal": {
-                  "Value": "0D"
                 }
               }
             }
@@ -72,6 +72,17 @@
           },
           "selector": {
             "id": "default"
+          }
+        },
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
           }
         }
       ]

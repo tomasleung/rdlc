@@ -1,39 +1,46 @@
-Lifecycle Analysis
+Seasonal Operations
 
-├─ Expansion Phase Fostered Animals
-├─ Peak Activity Fostered Animals
-├─ Stable Operations Fostered Animals
-├─ Mature Program Fostered Animals
+EXISTING
+--------
 
-├─ Largest Era Name
-├─ Largest Era Fostered Animals
+├─ 5-Year Seasonal Benchmark
 
-├─ Current Era Name
-├─ Current Era Fostered Animals
+├─ Average Monthly Benchmark
 
-├─ Current vs Peak Era %
-├─ Current vs Peak Era Label
+├─ Peak Month
+├─ Peak Month Fostered Animals
 
-└─ Growth Analysis Executive Insight
+├─ Lowest Month
+├─ Lowest Month Fostered Animals
 
-Expansion Phase Color
-Peak Activity Color
-Stable Operations Color
-Mature Program Color
+├─ Peak Season Start Month
+├─ Peak Season End Month
+├─ Peak Season Label
+
+├─ Seasonal Range %
+├─ Seasonal Range Label
+
+├─ Seasonality Headline
+├─ Seasonality Description
+
+└─ Seasonality Executive Insight
 
 
-Expansion Phase Fostered Animals
-Peak Activity Fostered Animals
-Stable Operations Fostered Animals
-Mature Program Fostered Animals
+NEW
+---
 
-Largest Era Name
-Largest Era Fostered Animals
+├─ 2026 Monthly Participation
 
-Current Era Name
-Current Era Fostered Animals
+├─ Monthly Benchmark Variance %
 
-Current vs Peak Era %
-Current vs Peak Era Label
+├─ Planning Priority
+├─ Planning Priority Color
 
-Growth Analysis Executive Insight
+├─ Monthly Foster Participation
+
+└─ Seasonality Heatmap Color
+
+
+Reusable Existing Measures: 13
+
+New Measures Required: 6
