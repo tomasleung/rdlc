@@ -1,16 +1,6 @@
 table KPI
 	lineageTag: f21f34b4-0bca-4308-a582-061f466099e5
 
-	/// Count of separate foster stays (each trip an animal takes to a foster home),
-	/// regardless of whether the same animal was placed more than once.
-	/// An animal placed twice contributes 2, not 1.
-	measure 'Foster Placement Count' =
-			
-			COUNTROWS('Foster Placements')
-		formatString: #,0
-		displayFolder: Capacity & Support
-		lineageTag: 265073c5-4c17-4908-ba28-40c17c6adc58
-
 	/// Distinct animals that participated in foster care during the selected reporting period.
 	/// 
 	/// Uses the Foster Animal Month snapshot table where one row represents one animal participating in foster care during a given month.
@@ -24,31 +14,6 @@ table KPI
 		formatString: #,0
 		displayFolder: Capacity & Support
 		lineageTag: d732fd26-42f8-48dd-b47c-ccfd13c7e5f1
-
-	/// Distinct animals currently in foster care.
-	/// 
-	/// Uses the active foster placement indicator.
-	measure 'Current Foster Animals' =
-			
-			CALCULATE(
-			    DISTINCTCOUNT(
-			        'Foster Placements'[SB Animal ID]
-			    ),
-			    'Foster Placements'[Currently In Foster] = 1
-			)
-		formatString: #,0
-		displayFolder: Capacity & Support
-		lineageTag: 6c5646a8-68b5-4b74-817a-3ea9cdfbc369
-
-	/// Average number of days animals spend in foster care.
-	measure 'Average Foster Duration' =
-			
-			AVERAGE(
-			    'Foster Placements'[Foster Duration (Days)]
-			)
-		formatString: #,0.0
-		displayFolder: Duration
-		lineageTag: 0b8520eb-fa5d-48da-800f-95194b0cc71c
 
 	/// Latest reporting month available in the Foster Animal Month snapshot fact table.
 	/// 
@@ -3215,6 +3180,7 @@ table KPI
 			    "#111827",      -- Black Text
 			    "#FFFFFF"       -- White Text
 			)
+		displayFolder: Seasonal Operations
 		lineageTag: 8e51a49c-3b76-4def-993a-49cb960abc64
 
 	partition KPI = m
