@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "917245f9547badccc09d",
+  "position": {
+    "x": 32,
+    "y": 624,
+    "z": 18000,
+    "height": 780,
+    "width": 912,
+    "tabOrder": 5000
+  },
+  "visualGroup": {
+    "displayName": "Q1 — Growth Trend",
+    "groupMode": "ScaleMode"
+  }
+}

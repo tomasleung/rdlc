@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Foster Program Historical & Forecast Baseline"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3ff1f140-fc73-42b6-8243-1344dd6a4999"
+  }
+}

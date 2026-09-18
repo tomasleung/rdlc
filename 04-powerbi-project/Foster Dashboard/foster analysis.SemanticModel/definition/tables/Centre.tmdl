@@ -1,0 +1,48 @@
+/// Centre dimension. 33 centres across 4 regions, all BC, all type "Animal Shelter". SCD Type 1 (overwrite).
+table Centre
+	lineageTag: 9aafd3a5-7361-48bc-a243-89bdeb872ce1
+
+	column 'Centre ID'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 14ae6de2-c7cb-432f-9d8e-9eaca4b1c0f8
+		sourceColumn: CentreID
+
+	/// Centre name. Primary descriptive column for this dimension.
+	column Centre
+		dataType: string
+		lineageTag: 875d317b-1648-475d-b1ad-b580bc6f975b
+		sourceColumn: CentreName
+
+	/// Operational region. Centre is the finer-grained geography level; Region is the coarser rollup - 5 distinct regions.
+	column Region
+		dataType: string
+		lineageTag: 83c840ca-2120-465b-b819-96588264e495
+		sourceColumn: Region
+
+	/// Supports Power BI map visual geocoding.
+	column 'Postal Code'
+		dataType: string
+		lineageTag: d84c288b-3d61-4e41-9e20-43459578b706
+		dataCategory: PostalCode
+		summarizeBy: none
+		sourceColumn: PostalCode
+
+	partition Centre = m
+		mode: import
+		source =
+				let
+					// Load the Centre dimension fixture from the local Prototype-mode data folder.
+					Source = Csv.Document(File.Contents(#"DataFolder" & "Dim_Centre.csv"), [Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+					#"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+					#"Changed column types" = Table.TransformColumnTypes(#"Promoted headers", {
+						{"CentreID", type text}, {"CentreName", type text}, {"Region", type text}, {"PostalCode", type text}
+					})
+				in
+					#"Changed column types"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

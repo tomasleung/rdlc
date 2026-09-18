@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "ff03ee450e6a0202700e",
+  "position": {
+    "x": 32,
+    "y": 1085,
+    "z": 3000,
+    "height": 770,
+    "width": 1840,
+    "tabOrder": 2000
+  },
+  "visualGroup": {
+    "displayName": "Historical Seasonality Heatmap",
+    "groupMode": "ScaleMode"
+  }
+}

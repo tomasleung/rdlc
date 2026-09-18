@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "19643d68c7073803edcb",
+  "position": {
+    "x": 976,
+    "y": 624,
+    "z": 19000,
+    "height": 784,
+    "width": 912,
+    "tabOrder": 4000
+  },
+  "visualGroup": {
+    "displayName": "Q2 — Seasonality",
+    "groupMode": "ScaleMode"
+  }
+}

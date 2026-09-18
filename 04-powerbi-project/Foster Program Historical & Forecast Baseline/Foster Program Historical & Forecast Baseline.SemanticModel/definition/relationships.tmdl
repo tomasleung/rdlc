@@ -1,0 +1,4 @@
+relationship FosterAnimalMonthDate
+	fromColumn: 'Foster Animal Month'.'Month Date Key'
+	toColumn: Date.'Date Key'
+

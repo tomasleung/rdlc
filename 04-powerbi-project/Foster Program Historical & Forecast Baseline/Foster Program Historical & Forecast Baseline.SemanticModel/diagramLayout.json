@@ -1,0 +1,98 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 620,
+            "y": 338
+          },
+          "nodeIndex": "Foster Animal Month",
+          "nodeLineageTag": "e118b5ef-bc05-4caa-a3d3-d688b9680151",
+          "size": {
+            "height": 189.53527979963815,
+            "width": 268.53245741566707
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 116
+          },
+          "nodeIndex": "Foster Placements",
+          "nodeLineageTag": "637927f1-ff67-4ff2-8709-9b5f012e7773",
+          "size": {
+            "height": 306.55503648743547,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 428,
+            "y": 0
+          },
+          "nodeIndex": "Date",
+          "nodeLineageTag": "cd82e70a-f152-4213-be93-9781d539a64c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 904,
+            "y": 193
+          },
+          "nodeIndex": "KPI",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 912.98598516075845,
+            "y": 394.53009068425393
+          },
+          "nodeIndex": "Forecast Outlook Axis",
+          "nodeLineageTag": "86ff2015-4f91-4238-96d4-071f77f16905",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1196.9859851607584,
+            "y": 197.265045342127
+          },
+          "nodeIndex": "Lifecycle Era",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 66.60400597371067,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

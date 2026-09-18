@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "c7bd461ce4f855bc5cf9",
+  "position": {
+    "x": 40,
+    "y": 680,
+    "z": 16000,
+    "height": 320,
+    "width": 1840,
+    "tabOrder": 7000
+  },
+  "visualGroup": {
+    "displayName": "Section 2 — Operational Benchmarks & Forecasting Logic",
+    "groupMode": "ScaleMode"
+  }
+}
