@@ -1,0 +1,6 @@
+| Phase                        | Years     | Foster Animal CAGR | Avg Foster Utilization | Intake CAGR | Interpretation                                                                                           |
+| ---------------------------- | --------- | -----------------: | ---------------------: | ----------: | -------------------------------------------------------------------------------------------------------- |
+| Rapid Growth                 | 2006-2009 |         **+11.7%** |              **18.8%** |   **-5.1%** | Foster participation and utilization increased rapidly during the program's early growth years.          |
+| Program Transition           | 2010-2013 |          **-7.9%** |              **24.6%** |  **-11.7%** | Foster participation declined from peak levels, while utilization continued increasing.                  |
+| Stable Participation         | 2014-2019 |          **-1.8%** |              **26.8%** |   **-2.1%** | Foster participation and utilization stabilized within a consistent operating range.                     |
+| High Utilization Environment | 2020-2025 |          **-3.4%** |              **33.4%** |   **-0.2%** | Foster utilization reached the highest levels observed historically despite lower participation volumes. |

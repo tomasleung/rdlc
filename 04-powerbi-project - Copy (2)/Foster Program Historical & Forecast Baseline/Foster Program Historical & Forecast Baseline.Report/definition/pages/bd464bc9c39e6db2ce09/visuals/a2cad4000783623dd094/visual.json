@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "a2cad4000783623dd094",
+  "position": {
+    "x": 16,
+    "y": 1136,
+    "z": 3000,
+    "height": 768,
+    "width": 1900,
+    "tabOrder": 4000
+  },
+  "visualGroup": {
+    "displayName": "Historical Seasonality Heatmap",
+    "groupMode": "ScaleMode"
+  }
+}

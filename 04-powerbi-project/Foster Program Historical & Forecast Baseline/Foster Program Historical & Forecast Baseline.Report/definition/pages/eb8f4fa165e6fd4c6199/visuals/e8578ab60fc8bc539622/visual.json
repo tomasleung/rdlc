@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "e8578ab60fc8bc539622",
   "position": {
     "x": 944,
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "YEAR-END FORECAST APPROACH",
+                    "value": "Forecast Methodology (Ratio Forecasting)",
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
                       "fontSize": "14pt",

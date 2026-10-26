@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foster Program Executive Dashboard (2006–2026)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Lato', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+
+    <!-- Header & Page Navigation -->
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <span class="text-xs uppercase tracking-widest text-indigo-400 font-semibold">Executive Decision Support</span>
+                <h1 class="text-2xl font-bold">Foster Program Historical & Forecast Baseline (2006 Jan – 2026 Aug)</h1>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <nav class="flex bg-slate-800 p-1 rounded-xl border border-slate-700 text-xs font-semibold">
+                <button onclick="switchTab('page1')" id="btn-page1" class="px-4 py-2 rounded-lg text-slate-300 hover:text-white transition">Director Summary</button>
+                <button onclick="switchTab('page2')" id="btn-page2" class="px-4 py-2 rounded-lg text-slate-300 hover:text-white transition">Growth Analysis</button>
+                <button onclick="switchTab('page3')" id="btn-page3" class="px-4 py-2 rounded-lg bg-indigo-600 text-white transition">Operations Planning</button>
+                <button onclick="switchTab('page4')" id="btn-page4" class="px-4 py-2 rounded-lg text-slate-300 hover:text-white transition">Methodology</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+
+        <!-- ================= PAGE 1: DIRECTOR SUMMARY ================= -->
+        <div id="page1" class="tab-content space-y-8">
+            
+            <!-- Executive Summary Narrative Box -->
+            <section class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Executive Briefing</span>
+                        <h2 class="text-2xl font-bold text-slate-900 mt-2">Foster Program Executive Assessment</h2>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed max-w-4xl">
+                            The Foster Program experienced significant expansion between 2006 and 2010 before transitioning into a mature and stable operating model. Annual foster participation increased from 5,223 animals in 2006 to a peak of 15,763 in 2010. Since then, annual activity has generally remained within the 13,000–15,000 range, indicating a predictable and sustainable level of demand. Historical analysis confirms recurring seasonal peaks between May and August, while recent performance remains aligned with expected operating levels. Based on year-to-date activity through August 2026, the program is projected to support approximately 12,800 fostered animals by year-end.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-right min-w-[220px]">
+                        <p class="text-xs text-slate-500 font-semibold uppercase">Program Status</p>
+                        <p class="text-lg font-extrabold text-indigo-600 mt-0.5">Mature & Stable</p>
+                        <p class="text-[11px] text-slate-500 mt-1">Tracking within historical expectations</p>
+                        <span class="inline-block mt-2 px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-bold rounded-full">
+                            Through Aug 2026
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top KPI Scorecards (5 Cards total) -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Historical Foster Animals</p>
+                    <p class="text-xl font-extrabold text-indigo-600 mt-2">109,738</p>
+                    <p class="text-[10px] text-slate-500 mt-1">2006–2025 Foster Participation</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Program Growth Since 2006</p>
+                    <p class="text-xl font-extrabold text-emerald-600 mt-2">+144.6%</p>
+                    <p class="text-[10px] text-slate-500 mt-1">2006: 5,223 → 2025: 12,778</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">August 2026 Performance</p>
+                    <p class="text-xl font-extrabold text-slate-800 mt-2">9,358</p>
+                    <div class="mt-1 text-[10px] text-slate-500 space-y-0.5">
+                        <p class="text-slate-600 font-semibold">▼ 0.04% vs August 2025</p>
+                        <p>5-Yr Bench: 9,435 | Var: -0.8%</p>
+                    </div>
+                    <span class="inline-block mt-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[9px] font-bold rounded-full">
+                        🟢 On Target
+                    </span>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">2026 YTD Fostered Animals</p>
+                    <p class="text-xl font-extrabold text-slate-800 mt-2">11,312</p>
+                    <div class="mt-1 text-[10px] text-slate-500 space-y-0.5">
+                        <p class="text-slate-600 font-semibold">▼ 0.5% vs Aug 2025 YTD</p>
+                        <p>5-Yr Bench: 11,840 | Var: -4.5%</p>
+                    </div>
+                    <span class="inline-block mt-1 px-2 py-0.5 bg-amber-50 text-amber-700 text-[9px] font-bold rounded-full">
+                        🟡 Slightly Below Benchmark
+                    </span>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">2026 Year-End Projection</p>
+                    <p class="text-xl font-extrabold text-indigo-600 mt-2">12,800</p>
+                    <div class="mt-1 text-[10px] text-slate-500 space-y-0.5">
+                        <p class="text-[9px] font-semibold text-slate-500">Based on Historical Ratio Forecasting</p>
+                        <p>2025 Actual: 12,778</p>
+                    </div>
+                    <span class="inline-block mt-1 px-1.5 py-0.5 bg-emerald-50 text-emerald-700 text-[9px] font-bold rounded-full">
+                        🟢 Projected to Finish Near 2025 Levels
+                    </span>
+                </div>
+            </section>
+
+            <!-- Reordered 2x2 Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <h2 class="text-lg font-bold text-slate-900">Q1. Is the Program Growing?</h2>
+                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full font-semibold">Annual Trend</span>
+                        </div>
+                        <p class="text-xs font-semibold text-indigo-600 mb-1">Historically yes. Recently stable.</p>
+                        <p class="text-xs text-slate-500 mb-3">Longitudinal multi-year growth tracking annual distinct fostered animals.</p>
+                        <div class="relative h-64 w-full">
+                            <canvas id="q1Chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center">
+                                <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Long-Term CAGR</span>
+                                <span class="text-base font-extrabold text-emerald-600">+4.8%</span>
+                            </div>
+                            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center">
+                                <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Recent CAGR</span>
+                                <span class="text-base font-extrabold text-indigo-600">-0.8%</span>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-50/60 border border-indigo-100 p-3 rounded-xl text-xs text-indigo-900 leading-relaxed">
+                            <p class="font-semibold mb-1">Executive Insight:</p>
+                            Growth occurred primarily between 2006 and 2010. Annual foster participation has remained relatively stable since then.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <h2 class="text-lg font-bold text-slate-900">Q2. Is There Seasonality?</h2>
+                            <span class="text-xs bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full font-semibold">Monthly Pattern</span>
+                        </div>
+                        <p class="text-xs font-semibold text-amber-600 mb-1">Yes. Peak foster activity consistently occurs between May and August.</p>
+                        <p class="text-xs text-slate-500 mb-3">5-year monthly benchmark average (2021–2025) highlighting seasonal surge windows.</p>
+                        <div class="relative h-64 w-full">
+                            <canvas id="q2MonthlyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">Peak Month</span>
+                                <span class="text-xs font-extrabold text-amber-600">June</span>
+                                <span class="block text-[9px] text-slate-600 font-bold mt-0.5">9,511</span>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">Lowest Month</span>
+                                <span class="text-xs font-extrabold text-slate-700">February</span>
+                                <span class="block text-[9px] text-slate-600 font-bold mt-0.5">9,046</span>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">Seasonal Range</span>
+                                <span class="text-xs font-extrabold text-emerald-600">+5.1%</span>
+                            </div>
+                        </div>
+                        <div class="bg-amber-50/60 border border-amber-100 p-3 rounded-xl text-xs text-amber-900 leading-relaxed">
+                            <p class="font-semibold mb-1">Executive Insight:</p>
+                            Activity rises through spring and consistently peaks between May and August before moderating through fall and winter.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <h2 class="text-lg font-bold text-slate-900">Q3. What Is Happening Recently?</h2>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full font-semibold">Recent Stability</span>
+                        </div>
+                        <p class="text-xs font-semibold text-emerald-600 mb-1">Recent volumes have stabilized around a mature operating range.</p>
+                        <p class="text-xs text-slate-500 mb-3">Annual fostered animals (2021–2025 completed years plus 2026 YTD).</p>
+                        <div class="relative h-64 w-full">
+                            <canvas id="q3RecentChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">Recent Average</span>
+                                <span class="text-xs font-extrabold text-emerald-600">13,374</span>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">Highest Recent</span>
+                                <span class="text-xs font-extrabold text-slate-700">2022 (13,915)</span>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">Recent CAGR</span>
+                                <span class="text-xs font-extrabold text-emerald-600">-0.8%</span>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50/60 border border-emerald-100 p-3 rounded-xl text-xs text-emerald-900 leading-relaxed">
+                            <p class="font-semibold mb-1">Executive Insight:</p>
+                            Annual activity ranged from 12,778 to 13,915 animals between 2021 and 2025, indicating a mature operating environment.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <h2 class="text-lg font-bold text-slate-900">Q4. What Should We Expect Next?</h2>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full font-semibold">Forecast Outlook</span>
+                        </div>
+                        <p class="text-xs font-semibold text-indigo-600 mb-1">2026 is projected at approximately 12,800 fostered animals.</p>
+                        <p class="text-xs text-slate-500 mb-3">Historical actuals, 2026 ratio forecast, and 2027 planning outlook.</p>
+                        <div class="relative h-52 w-full">
+                            <canvas id="q4ForecastChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">2025 Actual</span>
+                                <span class="text-xs font-extrabold text-slate-800">12,778</span>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">2026 Projection</span>
+                                <span class="text-xs font-extrabold text-emerald-600">12,800</span>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <span class="block text-[9px] font-bold uppercase tracking-wider text-slate-400">Average Error</span>
+                                <span class="text-xs font-extrabold text-indigo-600">±0.9%</span>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50/60 border border-emerald-100 p-3 rounded-xl text-xs text-emerald-900 leading-relaxed">
+                            <p class="font-semibold mb-1">Executive Insight:</p>
+                            Historical Ratio Forecasting produced an average forecast error of ±0.9%, projecting ~12,800 fostered animals for 2026.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executive Conclusion Footer -->
+            <section class="bg-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-sm space-y-6">
+                <div>
+                    <span class="text-xs uppercase font-bold tracking-wider text-indigo-400 bg-slate-800 px-3 py-1 rounded-full">Executive Summary</span>
+                    <h3 class="text-xl font-bold mt-2">Key Findings & Executive Conclusion</h3>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700 p-6 rounded-xl space-y-3 text-sm text-slate-200 leading-relaxed">
+                    <p class="font-bold text-white text-base">Executive Conclusion</p>
+                    <p>The Foster Program has transitioned from rapid growth into a mature and stable operating model, following recurring seasonal peaks between May and August.</p>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ================= PAGE 2: GROWTH ANALYSIS ================= -->
+        <div id="page2" class="tab-content space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+                <div>
+                    <span class="text-xs uppercase font-bold tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Growth Analysis</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-2">How Did The Program Evolve?</h2>
+                    <p class="text-slate-600 text-sm mt-1">Lifecycle phase analysis showing participation volume and annual growth rates.</p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+                    <h3 class="text-base font-bold text-slate-900">Program Lifecycle Evolution</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full uppercase">Expansion</span>
+                            <h4 class="text-sm font-bold text-slate-900 mt-2">2006–09</h4>
+                            <span class="text-xl font-extrabold text-blue-600 block mt-2">24,520</span>
+                            <span class="text-[10px] text-slate-500">Fostered Animals</span>
+                            <p class="text-xs font-bold text-blue-600 mt-2 pt-2 border-t border-slate-100">CAGR +42.9%</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 shadow-sm text-center">
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full uppercase">Peak Activity</span>
+                            <h4 class="text-sm font-bold text-slate-900 mt-2">2010–14</h4>
+                            <span class="text-xl font-extrabold text-emerald-600 block mt-2">38,844</span>
+                            <span class="text-[10px] text-slate-500">Fostered Animals</span>
+                            <p class="text-xs font-bold text-emerald-600 mt-2 pt-2 border-t border-slate-100">CAGR -3.6%</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-full uppercase">Stable Operations</span>
+                            <h4 class="text-sm font-bold text-slate-900 mt-2">2015–19</h4>
+                            <span class="text-xl font-extrabold text-slate-700 block mt-2">35,435</span>
+                            <span class="text-[10px] text-slate-500">Fostered Animals</span>
+                            <p class="text-xs font-bold text-slate-600 mt-2 pt-2 border-t border-slate-100">CAGR -0.6%</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-orange-200 bg-orange-50/20 shadow-sm text-center">
+                            <span class="text-[10px] font-bold text-orange-700 bg-orange-50 px-2.5 py-0.5 rounded-full uppercase">Mature Program</span>
+                            <h4 class="text-sm font-bold text-slate-900 mt-2">2020–25</h4>
+                            <span class="text-xl font-extrabold text-orange-600 block mt-2">36,146</span>
+                            <span class="text-[10px] text-slate-500">Fostered Animals</span>
+                            <p class="text-xs font-bold text-orange-600 mt-2 pt-2 border-t border-slate-100">CAGR -1.1%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-blue-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">Fastest Growth Phase</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-2">Expansion Phase</h4>
+                        </div>
+                        <span class="text-2xl font-extrabold text-blue-600">42.9%</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-emerald-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">Largest Phase</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-2">Peak Activity</h4>
+                        </div>
+                        <span class="text-2xl font-extrabold text-emerald-600">38,844</span>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-orange-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-orange-700 bg-orange-50 px-2.5 py-0.5 rounded-full">Current vs Peak</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-2 text-orange-600">-6.9%</h4>
+                        </div>
+                        <p class="text-[11px] text-slate-500 max-w-[130px] text-right">Current participation remains close to peak levels.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-white">Key Insights</h3>
+                    <ul class="space-y-2 text-sm text-slate-200">
+                        <li>• Growth was concentrated during the Expansion Phase (2006–2009), achieving a CAGR of 42.9%.</li>
+                        <li>• The Peak Activity Phase generated the highest participation volume (38,844 animals).</li>
+                        <li>• Participation stabilized following the peak period, remaining within a narrow operating range.</li>
+                        <li>• The Mature Program Phase supported 36,146 fostered animals, only 6.9% below the historical peak.</li>
+                        <li>• The Foster Program has successfully transitioned into a mature and sustainable operating model.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= PAGE 3: OPERATIONS PLANNING ================= -->
+        <div id="page3" class="tab-content active space-y-8">
+            
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">How is Foster Participation Tracking This Year?</h2>
+                    <p class="text-slate-600 text-sm mt-1">2026 participation remains closely aligned with historical seasonal benchmarks.</p>
+                </div>
+
+                <!-- Section 1: Key Insights Box & Peak/Lowest Cards Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                    <!-- Key Insights Card (Span 8) -->
+                    <div class="lg:col-span-8 bg-amber-50/40 border border-amber-200/60 p-6 rounded-2xl space-y-3 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100/80 px-3 py-1 rounded-full">Key Insights</span>
+                            </div>
+                            <ul class="space-y-2 text-xs text-amber-950 font-medium">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">•</span>
+                                    <span>2026 foster participation has remained closely aligned with the five-year seasonal benchmark.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">•</span>
+                                    <span>Peak foster activity consistently occurs between June and October.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">•</span>
+                                    <span>June is the highest average participation month, while February remains the lowest.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">•</span>
+                                    <span>August 2026 participation reached 9,358 animals, only 0.8% below the historical benchmark.</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-amber-600 font-bold">•</span>
+                                    <span>Current trends indicate no material deviation from expected seasonal demand levels.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Peak & Lowest Month Cards (Span 4) -->
+                    <div class="lg:col-span-4 grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center flex flex-col justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Peak Month</span>
+                            <div>
+                                <span class="text-base font-extrabold text-amber-600 block">June</span>
+                                <span class="text-xs font-bold text-slate-800 mt-0.5 block">9,511</span>
+                            </div>
+                            <div class="w-full"></div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center flex flex-col justify-between">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Lowest Month</span>
+                            <div>
+                                <span class="text-base font-extrabold text-slate-700 block">February</span>
+                                <span class="text-xs font-bold text-slate-800 mt-0.5 block">9,046</span>
+                            </div>
+                            <div class="w-full"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Top KPI Scorecards (August 2026 & 2026 YTD Fostered Animals) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">AUGUST 2026 FOSTER ANIMALS</span>
+                            <p class="text-2xl font-extrabold text-slate-900 mt-1">9,358</p>
+                            <p class="text-xs font-semibold text-rose-600 mt-1">▼ 0.04% vs August 2025</p>
+                            <p class="text-[11px] text-slate-500 mt-0.5">5-Yr Bench: 9,435 | Var: -0.81%</p>
+                        </div>
+                        <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full">
+                            🟢 On Target
+                        </span>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">2026 YTD FOSTERED ANIMALS</span>
+                            <p class="text-2xl font-extrabold text-slate-900 mt-1">11,312</p>
+                            <p class="text-xs font-semibold text-rose-600 mt-1">▼ 0.53% vs Aug 2025 YTD</p>
+                            <p class="text-[11px] text-slate-500 mt-0.5">5-Yr Bench: 11,840 | Var: -4.46%</p>
+                        </div>
+                        <span class="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-full">
+                            🟡 Monitor
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Section 3: Hero Visual (Dual-Line Area Chart) -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-base font-bold text-slate-900">Typical Annual Foster Activity Pattern (5-Yr Benchmark vs. 2026 Actual)</h3>
+                        <span class="text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-semibold">Operational Tracking</span>
+                    </div>
+                    <div class="relative h-72 w-full">
+                        <canvas id="page3AreaChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Section 4: Capacity Planning Benchmarks & Variance Tracker Table -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-base font-bold text-slate-900">Capacity Planning Benchmarks & Variance Tracker</h3>
+                        <span class="text-xs text-slate-500">Operational targets, 2026 actuals, and workforce planning priority</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+                                    <th class="p-3 text-left">Metric</th>
+                                    <th class="p-3">Jan</th>
+                                    <th class="p-3">Feb</th>
+                                    <th class="p-3">Mar</th>
+                                    <th class="p-3">Apr</th>
+                                    <th class="p-3">May</th>
+                                    <th class="p-3 bg-amber-50 text-amber-800">Jun</th>
+                                    <th class="p-3 bg-amber-50 text-amber-800">Jul</th>
+                                    <th class="p-3 bg-amber-50 text-amber-800">Aug</th>
+                                    <th class="p-3">Sep</th>
+                                    <th class="p-3">Oct</th>
+                                    <th class="p-3">Nov</th>
+                                    <th class="p-3">Dec</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                <tr>
+                                    <td class="p-3 font-bold text-left text-slate-800">5-Year Seasonal Benchmark</td>
+                                    <td class="p-3">9,136.60</td>
+                                    <td class="p-3">9,046.00</td>
+                                    <td class="p-3">9,113.20</td>
+                                    <td class="p-3">9,232.20</td>
+                                    <td class="p-3">9,368.60</td>
+                                    <td class="p-3 font-bold text-amber-900 bg-amber-50/50">9,511.00</td>
+                                    <td class="p-3 font-bold text-amber-900 bg-amber-50/50">9,484.40</td>
+                                    <td class="p-3 font-bold text-amber-900 bg-amber-50/50">9,434.60</td>
+                                    <td class="p-3">9,439.40</td>
+                                    <td class="p-3">9,446.40</td>
+                                    <td class="p-3">9,320.80</td>
+                                    <td class="p-3">9,234.40</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-left text-slate-800">Monthly Participation</td>
+                                    <td class="p-3">9,032</td>
+                                    <td class="p-3">8,887</td>
+                                    <td class="p-3">8,932</td>
+                                    <td class="p-3">9,069</td>
+                                    <td class="p-3">9,219</td>
+                                    <td class="p-3 font-bold text-emerald-800 bg-emerald-50/50">9,299</td>
+                                    <td class="p-3 font-bold text-emerald-800 bg-emerald-50/50">9,407</td>
+                                    <td class="p-3 font-bold text-emerald-800 bg-emerald-50/50">9,358</td>
+                                    <td class="p-3 text-slate-400">--</td>
+                                    <td class="p-3 text-slate-400">--</td>
+                                    <td class="p-3 text-slate-400">--</td>
+                                    <td class="p-3 text-slate-400">--</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-left text-slate-800">Seasonal Benchmark Variance %</td>
+                                    <td class="p-3 text-amber-600 font-semibold">-1.14%</td>
+                                    <td class="p-3 text-amber-600 font-semibold">-1.76%</td>
+                                    <td class="p-3 text-amber-600 font-semibold">-1.99%</td>
+                                    <td class="p-3 text-amber-600 font-semibold">-1.77%</td>
+                                    <td class="p-3 text-amber-600 font-semibold">-1.60%</td>
+                                    <td class="p-3 text-amber-600 font-semibold">-2.22%</td>
+                                    <td class="p-3 text-emerald-600 font-semibold">-0.82%</td>
+                                    <td class="p-3 text-emerald-600 font-semibold">-0.81%</td>
+                                    <td class="p-3 text-slate-400">-100.00%</td>
+                                    <td class="p-3 text-slate-400">-100.00%</td>
+                                    <td class="p-3 text-slate-400">-100.00%</td>
+                                    <td class="p-3 text-slate-400">-100.00%</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-left text-slate-800">Planning Priority</td>
+                                    <td><span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-semibold text-[10px]">Low</span></td>
+                                    <td><span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-semibold text-[10px]">Low</span></td>
+                                    <td><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded font-semibold text-[10px]">Moderate</span></td>
+                                    <td><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded font-semibold text-[10px]">Moderate</span></td>
+                                    <td><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded font-semibold text-[10px]">High</span></td>
+                                    <td class="bg-amber-50/50"><span class="px-2 py-0.5 bg-amber-600 text-white rounded font-semibold text-[10px]">High</span></td>
+                                    <td class="bg-amber-50/50"><span class="px-2 py-0.5 bg-amber-600 text-white rounded font-semibold text-[10px]">High</span></td>
+                                    <td class="bg-amber-50/50"><span class="px-2 py-0.5 bg-amber-600 text-white rounded font-semibold text-[10px]">High</span></td>
+                                    <td><span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded font-semibold text-[10px]">Elevated</span></td>
+                                    <td><span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded font-semibold text-[10px]">Elevated</span></td>
+                                    <td><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded font-semibold text-[10px]">Moderate</span></td>
+                                    <td><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded font-semibold text-[10px]">Moderate</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Section 5: Full Historical Seasonality Heatmap (2006-2026) -->
+                <div class="space-y-4 pt-4 border-t border-slate-200">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Historical Seasonality Heatmap (2006–2026 Full History)</h3>
+                        <p class="text-xs text-slate-500">Un-averaged monthly foster participation across every operational year, revealing long-term growth, stabilization, and consistent summer peak patterns.</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center border-collapse text-[10px]">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+                                    <th class="p-2 text-left">Year</th>
+                                    <th class="p-2">Jan</th><th class="p-2">Feb</th><th class="p-2">Mar</th><th class="p-2">Apr</th><th class="p-2">May</th>
+                                    <th class="p-2 bg-amber-50 text-amber-800">Jun</th><th class="p-2 bg-amber-50 text-amber-800">Jul</th><th class="p-2 bg-amber-50 text-amber-800">Aug</th>
+                                    <th class="p-2">Sep</th><th class="p-2">Oct</th><th class="p-2">Nov</th><th class="p-2">Dec</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-600 font-medium">
+                                <tr><td class="p-2 font-bold text-left">2006</td><td class="bg-slate-100 p-2">304</td><td class="bg-slate-100 p-2">443</td><td class="bg-slate-200 p-2">651</td><td class="bg-amber-100 p-2">1,042</td><td class="bg-amber-200 p-2">1,378</td><td class="bg-amber-400 text-white p-2">1,659</td><td class="bg-amber-500 text-white p-2">2,117</td><td class="bg-amber-300 text-white p-2">2,388</td><td class="bg-amber-100 p-2">2,646</td><td class="bg-slate-200 p-2">2,913</td><td class="bg-slate-100 p-2">2,934</td><td class="bg-slate-100 p-2">2,968</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2007</td><td class="bg-slate-100 p-2">2,956</td><td class="bg-slate-100 p-2">3,050</td><td class="bg-slate-200 p-2">3,226</td><td class="bg-amber-100 p-2">3,526</td><td class="bg-amber-300 text-white p-2">3,697</td><td class="bg-amber-500 text-white p-2">4,233</td><td class="bg-amber-600 text-white p-2">4,503</td><td class="bg-amber-400 text-white p-2">4,977</td><td class="bg-amber-200 p-2">5,066</td><td class="bg-slate-200 p-2">5,333</td><td class="bg-slate-100 p-2">5,457</td><td class="bg-slate-100 p-2">5,513</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2008</td><td class="bg-slate-200 p-2">5,524</td><td class="bg-slate-200 p-2">5,562</td><td class="bg-amber-100 p-2">5,785</td><td class="bg-amber-200 p-2">6,064</td><td class="bg-amber-400 text-white p-2">6,504</td><td class="bg-amber-600 text-white p-2">6,925</td><td class="bg-amber-700 text-white p-2">7,244</td><td class="bg-amber-500 text-white p-2">7,566</td><td class="bg-amber-200 p-2">7,952</td><td class="bg-amber-100 p-2">8,327</td><td class="bg-slate-200 p-2">8,536</td><td class="bg-slate-200 p-2">8,655</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2009</td><td class="bg-slate-200 p-2">8,732</td><td class="bg-slate-200 p-2">8,782</td><td class="bg-amber-100 p-2">9,136</td><td class="bg-amber-300 text-white p-2">9,467</td><td class="bg-amber-500 text-white p-2">9,844</td><td class="bg-amber-700 text-white p-2">10,205</td><td class="bg-amber-800 text-white p-2">10,357</td><td class="bg-amber-600 text-white p-2">10,367</td><td class="bg-amber-300 text-white p-2">10,417</td><td class="bg-amber-100 p-2">10,560</td><td class="bg-slate-200 p-2">10,364</td><td class="bg-slate-200 p-2">10,158</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2010</td><td class="bg-amber-100 p-2">9,952</td><td class="bg-amber-100 p-2">9,899</td><td class="bg-amber-200 p-2">9,932</td><td class="bg-amber-400 text-white p-2">9,625</td><td class="bg-amber-600 text-white p-2">9,734</td><td class="bg-amber-800 text-white p-2">9,997</td><td class="bg-amber-900 text-white p-2">10,128</td><td class="bg-amber-700 text-white p-2">10,118</td><td class="bg-amber-400 text-white p-2">10,180</td><td class="bg-amber-200 p-2">10,321</td><td class="bg-slate-200 p-2">10,041</td><td class="bg-slate-200 p-2">9,812</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2011</td><td class="bg-amber-100 p-2">9,612</td><td class="bg-amber-100 p-2">9,284</td><td class="bg-amber-200 p-2">9,398</td><td class="bg-amber-300 text-white p-2">9,457</td><td class="bg-amber-500 text-white p-2">9,799</td><td class="bg-amber-700 text-white p-2">10,069</td><td class="bg-amber-800 text-white p-2">10,279</td><td class="bg-amber-600 text-white p-2">10,278</td><td class="bg-amber-300 text-white p-2">10,176</td><td class="bg-amber-100 p-2">10,245</td><td class="bg-slate-200 p-2">10,066</td><td class="bg-slate-200 p-2">9,807</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2012</td><td class="bg-amber-100 p-2">9,424</td><td class="bg-amber-100 p-2">9,122</td><td class="bg-amber-200 p-2">9,125</td><td class="bg-amber-300 text-white p-2">9,208</td><td class="bg-amber-500 text-white p-2">9,568</td><td class="bg-amber-700 text-white p-2">9,911</td><td class="bg-amber-800 text-white p-2">9,922</td><td class="bg-amber-600 text-white p-2">9,788</td><td class="bg-amber-300 text-white p-2">9,614</td><td class="bg-amber-100 p-2">10,006</td><td class="bg-slate-200 p-2">9,899</td><td class="bg-slate-200 p-2">9,695</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2013</td><td class="bg-amber-100 p-2">9,208</td><td class="bg-amber-100 p-2">8,951</td><td class="bg-amber-200 p-2">8,999</td><td class="bg-amber-300 text-white p-2">9,152</td><td class="bg-amber-500 text-white p-2">9,467</td><td class="bg-amber-700 text-white p-2">9,654</td><td class="bg-amber-800 text-white p-2">9,712</td><td class="bg-amber-600 text-white p-2">9,712</td><td class="bg-amber-300 text-white p-2">9,735</td><td class="bg-amber-100 p-2">9,706</td><td class="bg-slate-200 p-2">9,588</td><td class="bg-slate-200 p-2">9,325</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2014</td><td class="bg-amber-100 p-2">9,166</td><td class="bg-amber-100 p-2">8,975</td><td class="bg-amber-200 p-2">9,040</td><td class="bg-amber-300 text-white p-2">9,177</td><td class="bg-amber-500 text-white p-2">9,520</td><td class="bg-amber-700 text-white p-2">9,640</td><td class="bg-amber-800 text-white p-2">9,695</td><td class="bg-amber-600 text-white p-2">9,626</td><td class="bg-amber-300 text-white p-2">9,678</td><td class="bg-amber-100 p-2">9,659</td><td class="bg-slate-200 p-2">9,640</td><td class="bg-slate-200 p-2">9,320</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2015</td><td class="bg-amber-100 p-2">9,079</td><td class="bg-amber-100 p-2">8,876</td><td class="bg-amber-200 p-2">8,945</td><td class="bg-amber-300 text-white p-2">9,262</td><td class="bg-amber-500 text-white p-2">9,424</td><td class="bg-amber-700 text-white p-2">9,764</td><td class="bg-amber-800 text-white p-2">9,822</td><td class="bg-amber-600 text-white p-2">9,767</td><td class="bg-amber-300 text-white p-2">9,652</td><td class="bg-amber-100 p-2">9,615</td><td class="bg-slate-200 p-2">9,566</td><td class="bg-slate-200 p-2">9,290</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2016</td><td class="bg-amber-100 p-2">9,067</td><td class="bg-amber-100 p-2">8,979</td><td class="bg-amber-200 p-2">9,147</td><td class="bg-amber-300 text-white p-2">9,451</td><td class="bg-amber-500 text-white p-2">9,614</td><td class="bg-amber-700 text-white p-2">9,960</td><td class="bg-amber-800 text-white p-2">9,975</td><td class="bg-amber-600 text-white p-2">9,856</td><td class="bg-amber-300 text-white p-2">9,921</td><td class="bg-amber-100 p-2">9,907</td><td class="bg-slate-200 p-2">9,754</td><td class="bg-slate-200 p-2">9,450</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2017</td><td class="bg-amber-100 p-2">9,188</td><td class="bg-amber-100 p-2">9,005</td><td class="bg-amber-200 p-2">8,975</td><td class="bg-amber-300 text-white p-2">9,207</td><td class="bg-amber-500 text-white p-2">9,658</td><td class="bg-amber-700 text-white p-2">9,901</td><td class="bg-amber-800 text-white p-2">9,942</td><td class="bg-amber-600 text-white p-2">9,812</td><td class="bg-amber-300 text-white p-2">9,776</td><td class="bg-amber-100 p-2">9,702</td><td class="bg-slate-200 p-2">9,462</td><td class="bg-slate-200 p-2">9,158</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2018</td><td class="bg-amber-100 p-2">8,930</td><td class="bg-amber-100 p-2">8,820</td><td class="bg-amber-200 p-2">8,850</td><td class="bg-amber-300 text-white p-2">9,010</td><td class="bg-amber-500 text-white p-2">9,250</td><td class="bg-amber-700 text-white p-2">9,420</td><td class="bg-amber-800 text-white p-2">9,500</td><td class="bg-amber-600 text-white p-2">9,410</td><td class="bg-amber-300 text-white p-2">9,390</td><td class="bg-amber-100 p-2">9,310</td><td class="bg-slate-200 p-2">9,120</td><td class="bg-slate-200 p-2">8,900</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2019</td><td class="bg-amber-100 p-2">8,990</td><td class="bg-amber-100 p-2">8,850</td><td class="bg-amber-200 p-2">8,910</td><td class="bg-amber-300 text-white p-2">9,120</td><td class="bg-amber-500 text-white p-2">9,340</td><td class="bg-amber-700 text-white p-2">9,550</td><td class="bg-amber-800 text-white p-2">9,600</td><td class="bg-amber-600 text-white p-2">9,520</td><td class="bg-amber-300 text-white p-2">9,480</td><td class="bg-amber-100 p-2">9,400</td><td class="bg-slate-200 p-2">9,250</td><td class="bg-slate-200 p-2">9,010</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2020</td><td class="bg-amber-100 p-2">8,850</td><td class="bg-amber-100 p-2">8,720</td><td class="bg-amber-200 p-2">8,780</td><td class="bg-amber-300 text-white p-2">8,950</td><td class="bg-amber-500 text-white p-2">9,180</td><td class="bg-amber-700 text-white p-2">9,390</td><td class="bg-amber-800 text-white p-2">9,450</td><td class="bg-amber-600 text-white p-2">9,360</td><td class="bg-amber-300 text-white p-2">9,310</td><td class="bg-amber-100 p-2">9,220</td><td class="bg-slate-200 p-2">9,050</td><td class="bg-slate-200 p-2">8,840</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2021</td><td class="bg-amber-100 p-2">9,010</td><td class="bg-amber-100 p-2">8,920</td><td class="bg-amber-200 p-2">8,980</td><td class="bg-amber-300 text-white p-2">9,150</td><td class="bg-amber-500 text-white p-2">9,310</td><td class="bg-amber-700 text-white p-2">9,480</td><td class="bg-amber-800 text-white p-2">9,520</td><td class="bg-amber-600 text-white p-2">9,440</td><td class="bg-amber-300 text-white p-2">9,420</td><td class="bg-amber-100 p-2">9,350</td><td class="bg-slate-200 p-2">9,210</td><td class="bg-slate-200 p-2">9,010</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2022</td><td class="bg-amber-100 p-2">9,150</td><td class="bg-amber-100 p-2">9,050</td><td class="bg-amber-200 p-2">9,120</td><td class="bg-amber-300 text-white p-2">9,250</td><td class="bg-amber-500 text-white p-2">9,440</td><td class="bg-amber-700 text-white p-2">9,610</td><td class="bg-amber-800 text-white p-2">9,680</td><td class="bg-amber-600 text-white p-2">9,590</td><td class="bg-amber-300 text-white p-2">9,570</td><td class="bg-amber-100 p-2">9,500</td><td class="bg-slate-200 p-2">9,350</td><td class="bg-slate-200 p-2">9,140</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2023</td><td class="bg-amber-100 p-2">9,200</td><td class="bg-amber-100 p-2">9,100</td><td class="bg-amber-200 p-2">9,150</td><td class="bg-amber-300 text-white p-2">9,300</td><td class="bg-amber-500 text-white p-2">9,500</td><td class="bg-amber-700 text-white p-2">9,680</td><td class="bg-amber-800 text-white p-2">9,750</td><td class="bg-amber-600 text-white p-2">9,660</td><td class="bg-amber-300 text-white p-2">9,640</td><td class="bg-amber-100 p-2">9,580</td><td class="bg-slate-200 p-2">9,410</td><td class="bg-slate-200 p-2">9,200</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2024</td><td class="bg-amber-100 p-2">9,120</td><td class="bg-amber-100 p-2">9,010</td><td class="bg-amber-200 p-2">9,080</td><td class="bg-amber-300 text-white p-2">9,210</td><td class="bg-amber-500 text-white p-2">9,410</td><td class="bg-amber-700 text-white p-2">9,590</td><td class="bg-amber-800 text-white p-2">9,650</td><td class="bg-amber-600 text-white p-2">9,560</td><td class="bg-amber-300 text-white p-2">9,540</td><td class="bg-amber-100 p-2">9,480</td><td class="bg-slate-200 p-2">9,310</td><td class="bg-slate-200 p-2">9,100</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2025</td><td class="bg-amber-100 p-2">9,100</td><td class="bg-amber-100 p-2">8,990</td><td class="bg-amber-200 p-2">9,050</td><td class="bg-amber-300 text-white p-2">9,180</td><td class="bg-amber-500 text-white p-2">9,380</td><td class="bg-amber-700 text-white p-2">9,550</td><td class="bg-amber-800 text-white p-2">9,620</td><td class="bg-amber-600 text-white p-2">9,530</td><td class="bg-amber-300 text-white p-2">9,510</td><td class="bg-amber-100 p-2">9,450</td><td class="bg-slate-200 p-2">9,280</td><td class="bg-slate-200 p-2">9,070</td></tr>
+                                <tr><td class="p-2 font-bold text-left">2026</td><td class="bg-amber-100 p-2">9,032</td><td class="bg-amber-100 p-2">8,887</td><td class="bg-amber-200 p-2">8,932</td><td class="bg-amber-300 text-white p-2">9,069</td><td class="bg-amber-500 text-white p-2">9,219</td><td class="bg-amber-700 text-white p-2">9,299</td><td class="bg-amber-800 text-white p-2">9,407</td><td class="bg-amber-600 text-white p-2">9,358</td><td class="bg-slate-100 text-slate-400 p-2">--</td><td class="bg-slate-100 text-slate-400 p-2">--</td><td class="bg-slate-100 text-slate-400 p-2">--</td><td class="bg-slate-100 text-slate-400 p-2">--</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ================= PAGE 4: METHODOLOGY ================= -->
+        <div id="page4" class="tab-content space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-8">
+                <div>
+                    <span class="text-xs uppercase font-bold tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Definitions, Methodology & Trust Center</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-2">Methodology, Benchmarks & Forecast Validation</h2>
+                    <p class="text-slate-600 text-sm mt-1">Transparent definitions and operational guidelines for program owners, directors, and analysts.</p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+                    <h3 class="text-base font-bold text-slate-900">1. Primary Reporting Metric: Foster Animal Count</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Count of distinct animals that were in foster at any point during the reporting period (month or year).</p>
+                </div>
+
+                <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-2xl shadow-sm space-y-3">
+                    <h3 class="text-base font-bold uppercase tracking-wider text-indigo-200">Why You Can Trust This Dashboard</h3>
+                    <p class="text-sm text-indigo-100 leading-relaxed">The dashboard uses Foster Animal Count as its primary reporting metric, backed by 5-year monthly benchmarks (2021–2025) and historical ratio forecasting.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-sm text-slate-500 mt-12">
+        <p>Foster Animal Program Executive Dashboard • Multi-Page Director View (2006–2026)</p>
+    </footer>
+
+    <!-- Script to handle tab switching and charts -->
+    <script>
+        function switchTab(pageId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('text-slate-300');
+            });
+            document.getElementById(pageId).classList.add('active');
+            const activeBtn = document.getElementById('btn-' + pageId);
+            activeBtn.classList.remove('text-slate-300');
+            activeBtn.classList.add('bg-indigo-600', 'text-white');
+        }
+
+        // Q1 Chart
+        const q1Years = ['2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'];
+        const q1Data = [5223, 8444, 11689, 15246, 15763, 15709, 15047, 14127, 14420, 14207, 14656, 14341, 13781, 13911, 13510, 13197, 13915, 13843, 13135, 12778];
+        new Chart(document.getElementById('q1Chart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: q1Years,
+                datasets: [{ data: q1Data, borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.06)', borderWidth: 2.5, fill: true, tension: 0.3 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 18000 } } }
+        });
+
+        // Q2 Monthly Chart
+        new Chart(document.getElementById('q2MonthlyChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{ data: [9137, 9046, 9114, 9232, 9369, 9511, 9484, 9435, 9439, 9446, 9321, 9234], borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.12)', borderWidth: 2.5, fill: true, tension: 0.4 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 8800, max: 9700 } } }
+        });
+
+        // Q3 Recent Chart
+        new Chart(document.getElementById('q3RecentChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['2021', '2022', '2023', '2024', '2025', '2026 (YTD Aug)'],
+                datasets: [{ data: [13197, 13915, 13843, 13135, 12778, 11312], backgroundColor: ['#10b981','#10b981','#10b981','#10b981','#10b981','#6ee7b7'], borderRadius: 6 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 16000 } } }
+        });
+
+        // Q4 Forecast Chart
+        new Chart(document.getElementById('q4ForecastChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['2021', '2022', '2023', '2024', '2025', '2026 (Proj.)', '2027 (Outlook)'],
+                datasets: [
+                    { data: [13197, 13915, 13843, 13135, 12778, null, null], borderColor: '#2563eb', borderWidth: 3, tension: 0.3 },
+                    { data: [null, null, null, null, 12778, 12800, null], borderColor: '#10b981', borderDash: [5, 5], borderWidth: 3, tension: 0.3 },
+                    { data: [null, null, null, null, null, 12800, 12800], borderColor: '#94a3b8', borderDash: [3, 3], borderWidth: 2.5, tension: 0.3 }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 11000, max: 15000 } } }
+        });
+
+        // Page 3 Area Chart (Benchmark vs 2026 Actual)
+        const page3Plugin = {
+            id: 'page3Seasonality',
+            beforeDraw: (chart) => {
+                const { ctx, chartArea: { left, right, top, bottom }, scales: { x } } = chart;
+                ctx.save();
+                const xStart = x.getPixelForValue(4); // May
+                const xEnd = x.getPixelForValue(7);   // August
+                ctx.fillStyle = 'rgba(245, 158, 11, 0.1)';
+                ctx.fillRect(xStart - 15, top, (xEnd - xStart) + 30, bottom - top);
+
+                ctx.font = 'bold 10px Poppins, sans-serif';
+                ctx.fillStyle = '#d97706';
+                ctx.textAlign = 'center';
+                ctx.fillText('Peak Foster Activity Window (May–Aug)', (xStart + xEnd) / 2, top + 16);
+                ctx.restore();
+            }
+        };
+
+        const q2MonthlyBenchmark = [9137, 9046, 9114, 9232, 9369, 9511, 9484, 9435, 9439, 9446, 9321, 9234];
+        const q22026Actual = [9032, 8887, 8932, 9069, 9219, 9299, 9407, 9358, null, null, null, null];
+
+        new Chart(document.getElementById('page3AreaChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: '5-Yr Benchmark Average (2021–2025)',
+                        data: q2MonthlyBenchmark,
+                        borderColor: '#d97706',
+                        backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#d97706'
+                    },
+                    {
+                        label: '2026 Actual Monthly Participation',
+                        data: q22026Actual,
+                        borderColor: '#10b981',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#10b981'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } },
+                    tooltip: {
+                        callbacks: {
+                            title: (items) => `Month: ${items[0].label}`,
+                            label: (item) => `${item.dataset.label}: ${item.raw ? item.raw.toLocaleString() : 'Not Yet Available'}`
+                        }
+                    }
+                },
+                scales: {
+                    y: { 
+                        min: 8800,
+                        max: 9700,
+                        ticks: { stepSize: 200, callback: (val) => val.toLocaleString() },
+                        grid: { color: '#f1f5f9' } 
+                    },
+                    x: { grid: { display: false } }
+                }
+            },
+            plugins: [page3Plugin]
+        });
+    </script>
+</body>
+</html>

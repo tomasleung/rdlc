@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "0b9da005a5e3053c00a1",
+  "position": {
+    "x": 8.2608695652173925,
+    "y": 480,
+    "z": 2000,
+    "height": 160,
+    "width": 1858.6956521739132,
+    "tabOrder": 0
+  },
+  "visualGroup": {
+    "displayName": "Capacity Planning Variance Tracker",
+    "groupMode": "ScaleMode"
+  },
+  "parentGroupName": "b2c9ba3d86888cb98143"
+}

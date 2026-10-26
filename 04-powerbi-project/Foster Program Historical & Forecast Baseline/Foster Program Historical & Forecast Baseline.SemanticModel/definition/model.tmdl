@@ -9,15 +9,15 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_ProTooling = ["DevMode","TMDLView_Desktop"]
+annotation PBI_ProTooling = ["DevMode","TMDLView_Desktop","MCP-PBIModeling"]
 
-annotation PBI_QueryOrder = ["Date","Foster Animal Month","KPI"]
+annotation PBI_QueryOrder = ["Date","Foster Animal Month","KPI","Intake"]
 
 ref table Date
 ref table 'Foster Animal Month'
 ref table KPI
 ref table 'Forecast Outlook Axis'
-ref table 'Lifecycle Era'
+ref table Intake
 
 ref cultureInfo en-CA
 

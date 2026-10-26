@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{DOCUMENT_DESCRIPTION}}">
+  <title>{{DOCUMENT_TITLE}} | {{ARTIFACT_TYPE}}</title>
+  <style>
+    :root {
+      --navy: #18364a;
+      --blue: #176b87;
+      --teal: #2f7f78;
+      --green: #3f7652;
+      --amber: #a56616;
+      --red: #9b3d35;
+      --ink: #24323b;
+      --muted: #5d6c75;
+      --line: #d8e0e4;
+      --soft: #f3f7f8;
+      --blue-soft: #eaf4f7;
+      --green-soft: #edf6ef;
+      --amber-soft: #fff6e8;
+      --red-soft: #fbeeed;
+      --grey-soft: #f5f6f7;
+      --white: #ffffff;
+      --page-width: 920px;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: #dfe5e8; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--white);
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.47;
+    }
+    a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+    .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+    .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+    h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+    h1 { font-size: 28pt; line-height: 1.08; margin: 8mm 0 3mm; }
+    h2 { font-size: 18pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+    h3 { font-size: 13.5pt; margin: 7mm 0 2.5mm; }
+    h4 { font-size: 11.5pt; margin: 5mm 0 2mm; }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin: 1.1mm 0; }
+
+    .cover { min-height: 235mm; display: flex; flex-direction: column; }
+    .cover-main { margin-top: 28mm; }
+    .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+    .subtitle { color: var(--muted); font-size: 13pt; max-width: 700px; }
+    .status { display: inline-block; margin-top: 6mm; padding: 2mm 4mm; border-radius: 99px; background: var(--amber-soft); color: #7b4a0c; font-weight: 700; }
+    .cover-meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+    .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .value { font-weight: 650; color: var(--navy); }
+
+    .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+    .callout.approved, .callout.in-scope { border-color: var(--green); background: var(--green-soft); }
+    .callout.warning, .callout.deferred, .callout.limitation { border-color: var(--amber); background: var(--amber-soft); }
+    .callout.risk { border-color: var(--red); background: var(--red-soft); }
+    .callout.note { border-color: #7b8990; background: var(--grey-soft); }
+    .callout strong:first-child { color: var(--navy); }
+
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th, td { padding: 2.8mm 3.2mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--navy); color: var(--white); text-align: left; font-size: 9pt; letter-spacing: .02em; }
+    .metadata th:first-child, .metadata td:first-child { width: 29%; }
+
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 4mm 0 6mm; }
+    .definition-card { border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: 8px; padding: 5mm; break-inside: avoid; }
+    .definition-card h3 { margin: 0 0 2mm; font-size: 14pt; }
+    .formula { font-family: Consolas, "Courier New", monospace; background: var(--soft); padding: 2.5mm 3mm; border-radius: 5px; margin: 2mm 0 3mm; }
+    .code { white-space: pre-wrap; font-family: Consolas, "Courier New", monospace; font-size: 8.7pt; background: #202a31; color: #eef5f7; padding: 4mm; border-radius: 7px; break-inside: avoid; }
+    .small { font-size: 9pt; color: var(--muted); }
+    .tag { display: inline-block; padding: 1mm 2.5mm; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); font-size: 8.5pt; font-weight: 700; margin: .7mm 1mm .7mm 0; }
+    .toc a { border: 0; }
+    .toc ol { columns: 2; column-gap: 10mm; }
+    .approval td { height: 15mm; }
+    .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+    .avoid-break { break-inside: avoid; }
+    .page-break { break-before: page; }
+
+    @page {
+      size: Letter;
+      margin: 15mm 14mm 17mm;
+      @bottom-left { content: "{{CONFIDENTIALITY_LABEL}}"; color: #6b7880; font-size: 8pt; }
+      @bottom-right { content: "Page " counter(page) " of " counter(pages); color: #6b7880; font-size: 8pt; }
+    }
+    @media print {
+      html, body { background: var(--white); }
+      .page { max-width: none; padding: 0; }
+      .cover { page-break-after: always; }
+      a { color: inherit; border-bottom: 0; }
+    }
+    @media (max-width: 720px) {
+      .page { padding: 8mm; }
+      .card-grid, .cover-meta { grid-template-columns: 1fr; }
+      .toc ol { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+<main class="page">
+  <section class="cover">
+    <div class="eyebrow">{{CAPABILITY_DOMAIN}}</div>
+    <div class="cover-main">
+      <h1>{{DOCUMENT_TITLE}}</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">{{ARTIFACT_TYPE}}<br>{{RDLC_PHASE}} · {{RDLC_STAGE}}</p>
+      <span class="status">{{DOCUMENT_STATUS}} · Version {{DOCUMENT_VERSION}}</span>
+    </div>
+    <div class="callout approved">
+      <strong>Decision supported</strong><br>
+      {{DECISION_SUPPORTED_SUMMARY}}
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Author</div><div class="value">{{AUTHOR}}</div></div>
+      <div><div class="label">Created</div><div class="value">{{CREATED_DATE}}</div></div>
+      <div><div class="label">Business decision owner</div><div class="value">{{BUSINESS_DECISION_OWNER}}</div></div>
+      <div><div class="label">Business definition owner</div><div class="value">{{BUSINESS_DEFINITION_OWNER}}</div></div>
+      <div><div class="label">Technical owner</div><div class="value">{{TECHNICAL_OWNER}}</div></div>
+      <div><div class="label">Classification</div><div class="value">{{CONFIDENTIALITY_LABEL}}</div></div>
+    </div>
+  </section>
+
+  <section id="metadata">
+    <h2>Document metadata</h2>
+    <table class="metadata">
+      <thead><tr><th>Field</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>RDLC document type</td><td>{{ARTIFACT_TYPE}}</td></tr>
+        <tr><td>RDLC phase</td><td>{{RDLC_PHASE}}</td></tr>
+        <tr><td>RDLC stage</td><td>{{RDLC_STAGE}}</td></tr>
+        <tr><td>Capability name</td><td>{{CAPABILITY_NAME}}</td></tr>
+        <tr><td>Capability domain</td><td>{{CAPABILITY_DOMAIN}}</td></tr>
+        <tr><td>Author</td><td>{{AUTHOR}}</td></tr>
+        <tr><td>Version</td><td>{{DOCUMENT_VERSION}}</td></tr>
+        <tr><td>Status</td><td>{{DOCUMENT_STATUS}}</td></tr>
+        <tr><td>Created date</td><td>{{CREATED_DATE}}</td></tr>
+        <tr><td>Last updated</td><td>{{LAST_UPDATED_DATE}}</td></tr>
+        <tr><td>Historical window</td><td>{{HISTORICAL_WINDOW}}</td></tr>
+        <tr><td>Refresh frequency</td><td>{{REFRESH_FREQUENCY}}</td></tr>
+        <tr><td>Primary delivery</td><td>{{PRIMARY_DELIVERY}}</td></tr>
+        <tr><td>Business decision owner</td><td>{{BUSINESS_DECISION_OWNER}}</td></tr>
+        <tr><td>Business definition owner</td><td>{{BUSINESS_DEFINITION_OWNER}}</td></tr>
+        <tr><td>Technical owner</td><td>{{TECHNICAL_OWNER}}</td></tr>
+        <tr><td>Source-system authority</td><td>{{SOURCE_SYSTEM_AUTHORITY}}</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#summary">Executive summary</a></li>
+      <li><a href="#problem">Business problem</a></li>
+      <li><a href="#decision">Decision supported</a></li>
+      <li><a href="#current-state">Current state</a></li>
+      <li><a href="#desired-capability">Desired capability</a></li>
+      <li><a href="#business-questions">Business questions</a></li>
+      <li><a href="#analytical-approach">Analytical approach</a></li>
+      <li><a href="#definitions">Business definitions and KPI contracts</a></li>
+      <li><a href="#data-sources">Data sources</a></li>
+      <li><a href="#design-requirements">Data-design requirements</a></li>
+      <li><a href="#scope">Scope</a></li>
+      <li><a href="#constraints">Assumptions, constraints, dependencies, and limitations</a></li>
+      <li><a href="#report-requirements">Report and consumption requirements</a></li>
+      <li><a href="#data-quality">Data quality and validation</a></li>
+      <li><a href="#success-criteria">Success criteria</a></li>
+      <li><a href="#acceptance-criteria">Acceptance criteria</a></li>
+      <li><a href="#deliverables">Deliverables</a></li>
+      <li><a href="#governance">Governance and change control</a></li>
+      <li><a href="#approvals">Approvals</a></li>
+      <li><a href="#appendices">Appendices</a></li>
+    </ol>
+  </nav>
+
+  <section id="summary"><h2>01 · Executive summary</h2>{{EXECUTIVE_SUMMARY_HTML}}</section>
+  <section id="problem"><h2>02 · Business problem</h2>{{BUSINESS_PROBLEM_HTML}}</section>
+  <section id="decision"><h2>03 · Decision supported</h2>{{DECISION_SUPPORTED_HTML}}</section>
+  <section id="current-state"><h2>04 · Current state</h2>{{CURRENT_STATE_HTML}}</section>
+  <section id="desired-capability"><h2>05 · Desired capability</h2>{{DESIRED_CAPABILITY_HTML}}</section>
+  <section id="business-questions"><h2>06 · Business questions</h2>{{BUSINESS_QUESTIONS_HTML}}</section>
+  <section id="analytical-approach"><h2>07 · Analytical approach</h2>{{ANALYTICAL_APPROACH_HTML}}</section>
+
+  <section id="definitions">
+    <h2>08 · Business definitions and KPI contracts</h2>
+    <div class="card-grid">
+      {{KPI_DEFINITION_CARDS_HTML}}
+    </div>
+    {{DEFINITION_NOTES_HTML}}
+  </section>
+
+  <section id="data-sources"><h2>09 · Data sources</h2>{{DATA_SOURCES_HTML}}</section>
+  <section id="design-requirements"><h2>10 · Data-design requirements</h2>{{DATA_DESIGN_REQUIREMENTS_HTML}}</section>
+  <section id="scope"><h2>11 · Scope</h2>{{SCOPE_HTML}}</section>
+  <section id="constraints"><h2>12 · Assumptions, constraints, dependencies, and accepted limitations</h2>{{CONSTRAINTS_HTML}}</section>
+  <section id="report-requirements"><h2>13 · Report and consumption requirements</h2>{{REPORT_REQUIREMENTS_HTML}}</section>
+  <section id="data-quality"><h2>14 · Data quality and validation</h2>{{DATA_QUALITY_HTML}}</section>
+  <section id="success-criteria"><h2>15 · Success criteria</h2>{{SUCCESS_CRITERIA_HTML}}</section>
+  <section id="acceptance-criteria"><h2>16 · Acceptance criteria</h2>{{ACCEPTANCE_CRITERIA_HTML}}</section>
+  <section id="deliverables"><h2>17 · Deliverables</h2>{{DELIVERABLES_HTML}}</section>
+  <section id="governance"><h2>18 · Governance and change control</h2>{{GOVERNANCE_HTML}}</section>
+
+  <section id="approvals">
+    <h2>19 · Approvals</h2>
+    <table class="approval">
+      <thead><tr><th>Role</th><th>Name</th><th>Decision</th><th>Date</th></tr></thead>
+      <tbody>{{APPROVAL_ROWS_HTML}}</tbody>
+    </table>
+  </section>
+
+  <section id="appendices"><h2>20 · Appendices</h2>{{APPENDICES_HTML}}</section>
+
+  <div class="footer-note">{{FOOTER_TEXT}}</div>
+</main>
+</body>
+</html>

@@ -10,9 +10,11 @@
 /// 
 /// The table enables the visualization to display forecast and planning periods that do not exist as actual records in the Date dimension.
 table 'Forecast Outlook Axis'
+	isHidden
 	lineageTag: 86ff2015-4f91-4238-96d4-071f77f16905
 
 	column Period
+		isHidden
 		lineageTag: 4658b8af-4dfd-4078-b684-f4e214d1e6a4
 		summarizeBy: none
 		isNameInferred
@@ -21,6 +23,7 @@ table 'Forecast Outlook Axis'
 		annotation SummarizationSetBy = Automatic
 
 	column SortOrder
+		isHidden
 		formatString: 0
 		lineageTag: 5b94eca1-371c-427c-83fb-a663c085881a
 		summarizeBy: sum

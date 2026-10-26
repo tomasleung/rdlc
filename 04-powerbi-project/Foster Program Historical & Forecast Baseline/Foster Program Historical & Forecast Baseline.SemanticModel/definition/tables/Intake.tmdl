@@ -1,0 +1,50 @@
+table Intake
+	isHidden
+	lineageTag: cdcb0728-c94d-46f0-9f41-8dd31cad38de
+
+	column Id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3cb0eefa-8f18-4cbb-8c4a-b7282e5d7ba3
+		summarizeBy: count
+		sourceColumn: Id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnimalId
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 93b6e303-53cc-4797-b962-2644f26ecb4f
+		summarizeBy: distinctCount
+		sourceColumn: AnimalId
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column IntakeDateKey
+		dataType: string
+		isHidden
+		lineageTag: 67a6ec75-78b8-4a84-aa4d-610e607f7487
+		summarizeBy: none
+		sourceColumn: IntakeDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Intake = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("zwgqkt2gjj5eldaxf5b4c22xm4-xh5tmosahmpudfij3bmp4m6tdy.datawarehouse.fabric.microsoft.com", "wh_enterprise"),
+				    gold_foster_vw_fact_intake = Source{[Schema="gold_foster",Item="vw_fact_intake"]}[Data]
+				in
+				    gold_foster_vw_fact_intake
+
+	changedProperty = IsHidden
+

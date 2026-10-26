@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "32b49289ef4a2b449b29",
   "position": {
     "x": 944,
@@ -27,7 +27,7 @@
                     }
                   },
                   {
-                    "value": "88.5%",
+                    "value": "68.9%",
                     "textStyle": {
                       "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",
@@ -74,7 +74,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Forecast performance was validated against previously completed years and achieved an average forecasting error of approximately ",
+                    "value": "Forecast performance was validated against previously completed reporting Years (2021 - 2025) and achieved an average forecasting error of approximately ",
                     "textStyle": {
                       "fontFamily": "Segoe UI Semibold",
                       "fontSize": "12pt",
@@ -82,7 +82,7 @@
                     }
                   },
                   {
-                    "value": "±0.9%.",
+                    "value": "±2.5%.",
                     "textStyle": {
                       "fontWeight": "bold",
                       "fontFamily": "Segoe UI Semibold",

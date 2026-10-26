@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "fc966e20007a7ad64ea1",
+  "position": {
+    "x": 0,
+    "y": 96,
+    "z": 2000,
+    "height": 256,
+    "width": 940,
+    "tabOrder": 2000
+  },
+  "visualGroup": {
+    "displayName": "Seasonal Operations Executive Insight",
+    "groupMode": "ScaleMode"
+  },
+  "parentGroupName": "8b72456259b08602838c"
+}

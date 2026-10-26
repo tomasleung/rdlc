@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "9e20d3ce6c62393b5968",
+  "position": {
+    "x": 950,
+    "y": 118,
+    "z": 3000,
+    "height": 170,
+    "width": 940,
+    "tabOrder": 3000
+  },
+  "visualGroup": {
+    "displayName": "Seasonal Planning KPI Tiles",
+    "groupMode": "ScaleMode"
+  },
+  "parentGroupName": "8b72456259b08602838c"
+}

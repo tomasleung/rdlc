@@ -1,0 +1,28 @@
+relationship AnimalIntakes-Date
+	fromColumn: 'Animal Intake'.'Date Key'
+	toColumn: Date.'Date Key'
+
+relationship AnimalIntakes-Centre
+	fromColumn: 'Animal Intake'.'Centre ID'
+	toColumn: Centre.'Centre ID'
+
+relationship AnimalIntakes-Animal
+	fromColumn: 'Animal Intake'.'Animal Key'
+	toColumn: 'Animal Type'.'Animal Key'
+
+relationship AnimalIntakes-IntakeType
+	fromColumn: 'Animal Intake'.'Intake Type ID'
+	toColumn: 'Intake Type'.'Intake Type ID'
+
+relationship AutoDetected_87b21e71-0fe9-4fad-9c9b-0d4572901086
+	fromColumn: 'Animal Intake'.AnimalGender
+	toColumn: 'Animal Gender'.'Animal Gender'
+
+relationship d7fbbf10-f2d0-2087-37c8-436212ba2247
+	fromColumn: 'Animal Intake'.AnimalAge
+	toColumn: 'Animal Age'.'Animal Age'
+
+relationship d4ebdbc2-c30f-6935-d3bf-069b485a0093
+	fromColumn: 'Animal Intake'.AnimalBreed
+	toColumn: 'Animal Breed'.'Animal Breed'
+

@@ -1,0 +1,8 @@
+relationship FosterAnimalMonthDate
+	fromColumn: 'Foster Animal Month'.'Month Date Key'
+	toColumn: Date.'Date Key'
+
+relationship d2a4151c-c32a-cde4-2c5c-23010cebe8b5
+	fromColumn: Intake.IntakeDateKey
+	toColumn: Date.'Date Key'
+
