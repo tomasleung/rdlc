@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Animal Types and Foster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
+<style>
+  /* Same layout as Intake Animal Count: rule, where the dates come from, worked examples, comparison, reference */
+  :root {
+    --paper: #fbfcfd;
+    --panel: #f1f4f8;
+    --ink: #1c2530;
+    --muted: #586676;
+    --rule: #d9e0e8;
+    --sb: #2f5f8f;
+    --sb-soft: #e3ecf5;
+    --intake: #1d6b5a;
+    --intake-soft: #e0f1ec;
+    --care-soft: #e9eef4;
+    --no: #a3302f;
+    --no-soft: #f8e6e6;
+    --font-display: "Source Serif 4", Georgia, serif;
+    --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #12171d; --panel: #1a2129; --ink: #e4e9ef; --muted: #9aa8b7; --rule: #2b3541;
+      --sb: #7fb0e0; --sb-soft: #1d2a38; --intake: #5cc4a6; --intake-soft: #17302a; --care-soft: #1e2833;
+      --no: #e88282; --no-soft: #2d1a1a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #12171d; --panel: #1a2129; --ink: #e4e9ef; --muted: #9aa8b7; --rule: #2b3541;
+    --sb: #7fb0e0; --sb-soft: #1d2a38; --intake: #5cc4a6; --intake-soft: #17302a; --care-soft: #1e2833;
+    --no: #e88282; --no-soft: #2d1a1a;
+  }
+
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--font-body); padding-inline: 20px; padding-block: 40px 72px; }
+  .page { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
+  section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  header { display: flex; flex-direction: column; gap: 10px; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.25; }
+  h1 { font-size: 2.1rem; font-weight: 700; }
+  h2 { font-size: 1.45rem; font-weight: 700; border-top: 1px solid var(--rule); padding-top: 22px; }
+  h3 { font-size: 1.1rem; font-weight: 600; }
+  p { margin: 0; max-width: 68ch; }
+  ul, ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; max-width: 68ch; }
+  .eyebrow { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--sb); font-weight: 600; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .88rem; color: var(--muted); }
+  .lede { font-size: 1.08rem; }
+  .muted { color: var(--muted); }
+  code { font-family: var(--font-mono); font-size: .86em; background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+
+  .rule-box { border: 1px solid var(--rule); border-left: 4px solid var(--intake); border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .rule-box .statement { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { background: var(--panel); font-weight: 600; font-size: .83rem; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.t { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.yes td { background: var(--intake-soft); }
+  tr.no td { color: var(--muted); }
+  tr.total td { background: var(--panel); font-weight: 600; }
+
+  .sbscreen { border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+  .sbscreen .bar { background: var(--sb); color: #fff; font-size: .8rem; font-weight: 600; padding: 6px 12px; }
+  :root[data-theme="dark"] .sbscreen .bar { color: #0e1720; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sbscreen .bar { color: #0e1720; } }
+  .sbscreen .tablewrap { border: 0; border-radius: 0; }
+  .sbscreen th { background: var(--sb-soft); }
+
+  .tag { display: inline-block; font-size: .76rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+  .tag.yes, .tag.outcome { background: var(--intake); color: var(--paper); }
+  .tag.incare { background: var(--sb-soft); color: var(--sb); }
+  .tag.no { background: var(--no-soft); color: var(--no); }
+  .tag.out, .tag.other { background: var(--panel); color: var(--muted); }
+
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .src { border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .src h3 { font-size: 1rem; }
+  .src.yes { border-top: 4px solid var(--intake); }
+  .src.sb { border-top: 4px solid var(--sb); }
+  .src p { font-size: .92rem; }
+
+  .example { display: flex; flex-direction: column; gap: 12px; }
+  .example + .example { border-top: 1px dashed var(--rule); padding-top: 22px; }
+  .verdict { background: var(--panel); border-radius: 8px; padding: 10px 14px; font-size: .95rem; }
+
+  /* month strips */
+  .years { display: flex; flex-direction: column; gap: 10px; }
+  .year { display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: center; }
+  .year .y { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+  .m { text-align: center; font-size: .72rem; padding: 6px 0; border-radius: 4px; background: var(--panel); color: var(--muted); }
+  .m.on { background: var(--intake); color: var(--paper); font-weight: 600; }
+  .m.pre { background: var(--care-soft); color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule); }
+  .key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .85rem; color: var(--muted); }
+  .key span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+  /* reference tables */
+  details summary { cursor: pointer; font-weight: 600; color: var(--sb); }
+  details .tablewrap { margin-top: 10px; }
+  .ref table { font-size: .84rem; }
+  .ref th, .ref td { padding: 5px 10px; }
+  .ref td.c, .ref th.c { text-align: center; }
+  .tick { color: var(--intake); font-weight: 700; }
+
+  footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; }
+  @media (max-width: 520px) { h1 { font-size: 1.7rem; } body { padding-block: 24px 56px; } .m { font-size: .62rem; } }
+  .page { max-width: 1500px; }
+  @media print { @page { size: landscape; margin: 10mm; } body { padding: 0; } .tablewrap { overflow: visible; } tr { break-inside: avoid; } }
+  td.ap { white-space: nowrap; font-size: .85rem; }
+  tr.cand td { background: var(--no-soft); }
+  .cands table { font-size: .8rem; } .cands td:nth-child(9) { min-width: 180px; } .cands th { white-space: normal; }
+  .ref { overflow-x: visible; } .ref table { font-size: .74rem; } .ref th, .ref td { padding: 4px 6px; } .ref th { white-space: normal; vertical-align: bottom; }
+  .ref .tag { font-size: .68rem; padding: 0 6px; } .ref td:nth-child(2) { min-width: 140px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">Foster Pathway Analytics · Animal type definition</div>
+    <h1>Animal types and foster: which types are never fostered?</h1>
+    <div class="meta"><span>Version 0.1</span><span>Draft for SB Data Owner and Foster Manager review</span><span>October 2026</span></div>
+    <p class="lede">Every intake has an animal type. Some types are almost never fostered: by SOP, wild animals are released, sent to a rehabilitation centre or euthanized, not placed in a foster home. Counting them in <b>Intake Animals</b> or <b>Animals in Care</b> lowers the foster rate without telling us anything about foster. This document asks the SB Data Owner: <b>are these animal types never meant to be fostered, and should we filter them out when we measure foster?</b> A suggestion for grouping the remaining types follows as a second step.</p>
+  </header>
+
+  <section>
+    <h2>The question</h2>
+    <div class="rule-box">
+      <div class="statement">6 animal types were fostered less than 1% of the time since 2019. Should they be filtered out of Intake Animals and Animals in Care when measuring foster, and shown separately?</div>
+      <ul>
+        <li>They are 17,089 intake animals since 2006 (3.6% of all), of which 102 were ever fostered; since 2019, 3 of 5,179.</li>
+        <li>In 2025, filtering them out changes % Animals in Foster from 31.1% to 32.3%, and % Animals in Care Fostered from 28.7% to 29.7%.</li>
+        <li>Filtered animals are not deleted: they stay in ShelterBuddy and are shown separately in the report.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Animal types not used for foster (candidates to filter)</h2>
+    <p>Animal types fostered less than 1% of the time since 2019 (or, if not used since 2019, over all years). For each, the SB Data Owner (Michelle) and Foster Manager (Maggie) choose: filter out, or keep, in row D8 of the pack register.</p>
+    <div class="tablewrap ref cands"><table>
+      <thead><tr><th>Animal type</th><th class="n">Intake animals 2006–2026</th><th class="n">Ever fostered</th><th class="n">% fostered</th><th class="n">Fostered since 2019</th><th class="n">Intake animals 2025</th><th>Most common outcome</th><th>Main source types</th><th>Why (from the data)</th><th>Answer in the pack</th></tr></thead>
+      <tbody><tr><td><b>Bird - Wildlife</b><br><span class="muted">Id 56</span></td><td class="n">8,660</td><td class="n">49</td><td class="n">0.6%</td><td class="n">1 of 2,420</td><td class="n">221</td><td>Euthanized 20%, Transfer Out 20%</td><td>Wildlife 39%, Ambulance 29%</td><td>Wild birds: released, transferred to a rehabilitation centre, or euthanized</td><td class="ap"><b>D8</b></td></tr><tr><td><b>Mammal - Wildlife</b><br><span class="muted">Id 52</span></td><td class="n">8,273</td><td class="n">32</td><td class="n">0.4%</td><td class="n">2 of 2,733</td><td class="n">298</td><td>DOA 56%, Euthanized 11%</td><td>DOA - ACO 32%, Ambulance 19%</td><td>Wild mammals: mostly dead on arrival or euthanized</td><td class="ap"><b>D8</b></td></tr><tr><td><b>Reptile - Wildlife</b><br><span class="muted">Id 54</span></td><td class="n">123</td><td class="n">21</td><td class="n">17.1%</td><td class="n">0 of 7</td><td class="n">0</td><td>Transfer Out 42%, Adopted 17%</td><td>Stray 32%, Wildlife 23%</td><td>Wild reptiles: none fostered since 2019 (earlier fosters look like pet turtles typed as wildlife)</td><td class="ap"><b>D8</b></td></tr><tr><td><b>Mammal - Exotic</b><br><span class="muted">Id 90</span></td><td class="n">18</td><td class="n">0</td><td class="n">0.0%</td><td class="n">0 of 15</td><td class="n">0</td><td>Transfer Out 78%, Adopted 6%</td><td>Humane Officer Seized 78%, Owner Surrender 11%</td><td>Seized exotic mammals, mostly transferred out (Animal Protection Services)</td><td class="ap"><b>D8</b></td></tr><tr><td><b>Amphibian - Wildlife</b><br><span class="muted">Id 57</span></td><td class="n">12</td><td class="n">0</td><td class="n">0.0%</td><td class="n">0 of 4</td><td class="n">0</td><td>Euthanized by Offsite Vet 42%, Transfer Out 17%</td><td>Wildlife 58%, Ambulance 17%</td><td>Wild amphibians: released or transferred</td><td class="ap"><b>D8</b></td></tr><tr><td><b>Marsupial</b><br><span class="muted">Id 53</span></td><td class="n">3</td><td class="n">0</td><td class="n">0.0%</td><td class="n">0 of 0</td><td class="n">0</td><td>DOA - Final Disposition 100%</td><td>DOA - Wildlife 100%</td><td>Three animals, all dead on arrival (2010): a retired type</td><td class="ap"><b>D8</b></td></tr></tbody>
+    </table></div>
+    <p class="muted">The next lowest types are fostered far more often (e.g. Farm Animal - Exotic, Bird - Exotic: about 8–14%), so the line between the candidates and the rest is clear.</p>
+  </section>
+
+  <section>
+    <h2>Why filter by animal type, not only by source type</h2>
+    <p>The source type document already sets aside wildlife, dead-on-arrival and end-of-life <b>source types</b>. But wildlife animals do not always come in through those source types:</p>
+    <div class="two">
+      <div class="tablewrap"><table>
+        <thead><tr><th>Source type pathway of the wildlife intake (since 2006)</th><th class="n">Intakes</th><th class="n">Share</th></tr></thead>
+        <tbody><tr><td>Dead on arrival source types</td><td class="n">4,578</td><td class="n">26.7%</td></tr><tr><td>Wildlife source types</td><td class="n">4,980</td><td class="n">29.1%</td></tr><tr><td>End-of-life source types</td><td class="n">38</td><td class="n">0.2%</td></tr><tr><td>Care and adoption source types (e.g. Ambulance, Stray)</td><td class="n">5,449</td><td class="n">31.8%</td></tr><tr><td>Short-stay source types (e.g. ACO - Impound)</td><td class="n">2,075</td><td class="n">12.1%</td></tr><tr><td>Born into the program</td><td class="n">1</td><td class="n">0.0%</td></tr><tr class="total"><td>All wildlife intakes</td><td class="n">17,121</td><td class="n">100%</td></tr></tbody>
+      </table></div>
+      <div class="src sb"><h3>Both rules are needed</h3><p>44.0% of wildlife intakes (11.5% since 2019) came in through an ordinary source type, for example an injured bird brought by the <i>Ambulance</i> or a wild animal picked up as <i>ACO - Impound</i>. Only the animal type shows they are wildlife.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Impact of filtering, 2025</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Measure</th><th class="n">Base today</th><th class="n">Fostered</th><th class="n">Rate today</th><th class="n">Base after filtering</th><th class="n">Fostered</th><th class="n">Rate after</th><th class="n">Animals filtered out</th></tr></thead>
+      <tbody><tr><td>Intake Animals (Phase 1 measure: % Animals in Foster)</td><td class="n">13,863</td><td class="n">4,314</td><td class="n">31.1%</td><td class="n">13,344</td><td class="n">4,314</td><td class="n"><b>32.3%</b></td><td class="n">519</td></tr><tr><td>Animals in Care (Phase 2 measure: % Animals in Care Fostered)</td><td class="n">15,017</td><td class="n">4,312</td><td class="n">28.7%</td><td class="n">14,498</td><td class="n">4,312</td><td class="n"><b>29.7%</b></td><td class="n">519</td></tr></tbody>
+    </table></div>
+    <p class="muted">Intake Animals: incoming intakes dated in 2025 (local extract). Animals in Care: animals in care at least one day in 2025 (local stays, rules v0.3), before any source type filter; with the source type document's filter as well, Animals in Care is 14,009. Fostered Animals from the Phase 1 gold table. Preliminary until the rules are approved.</p>
+  </section>
+
+  <section>
+    <h2>Questions for the data owners</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>#</th><th>Question</th><th>Lead</th><th>Suggestion</th><th>Answer in the pack</th></tr></thead>
+      <tbody><tr><td>1</td><td>Are the animal types above never meant to be fostered (SOP)? If yes, filter them out of Intake Animals and Animals in Care when measuring foster, and show them separately.</td><td>Michelle</td><td>Yes for the four wildlife types; confirm Mammal - Exotic</td><td class="ap"><b>D8</b></td></tr><tr><td>2</td><td>Filter by animal type even when the source type is an ordinary one (e.g. a wild bird brought in as Ambulance or Stray)?</td><td>Michelle</td><td>Yes</td><td class="ap"><b>D9</b></td></tr><tr><td>3</td><td>Reptile - Wildlife was fostered in the past (pet turtles?): should staff use Reptile - Exotic for pets?</td><td>Michelle</td><td>Confirm the SOP</td><td class="ap"><b>D10</b></td></tr><tr><td>4</td><td>Second level: report the remaining types in four groups (Cat, Dog, Small Animal incl. Rabbit, Other)?</td><td>Maggie</td><td>Yes</td><td class="ap"><b>D12</b></td></tr><tr><td>5</td><td>Second level: show Kitten and Puppy as well as their family total in the foster views?</td><td>Maggie</td><td>Yes</td><td class="ap"><b>D12</b></td></tr></tbody>
+    </table></div>
+    <p class="muted">Answers are recorded in one place: the decision register of the <a href="Foster Analysis Pack - Phase 2.html">Foster Analysis Pack – Phase 2</a> (Part 2, section D), in the row shown.</p>
+  </section>
+
+  <section>
+    <h2>Evidence: every animal type</h2>
+    <p>All 29 animal types found on intakes and statuses, sorted by % fostered since 2019 (lowest first). Candidates to filter are highlighted.</p>
+    <div class="tablewrap ref"><table>
+      <thead><tr><th class="n">Id</th><th>Animal type</th><th></th><th class="n">Intake animals<br>2006–2026</th><th class="n">Fostered<br>animals</th><th class="n">%<br>fostered</th><th class="n">% fostered<br>since 2019</th><th class="n">Median<br>days</th><th class="n">Last<br>used</th><th class="n">Centres</th><th>Main centre</th><th>Main source types</th><th>Most common outcome</th><th>Group<br>(second level)</th></tr></thead>
+      <tbody><tr class=cand><td class="n">54</td><td>Reptile - Wildlife</td><td><span class="tag no">Candidate to filter</span></td><td class="n">123</td><td class="n">21</td><td class="n">17.1%</td><td class="n">0.0%</td><td class="n">4</td><td class="n">2026</td><td class="n">22</td><td>Vancouver 27%</td><td>Stray 32%, Wildlife 23%</td><td>Transfer Out 42%, Adopted 17%</td><td><span class="tag no">Wildlife</span></td></tr><tr class=cand><td class="n">90</td><td>Mammal - Exotic</td><td><span class="tag no">Candidate to filter</span></td><td class="n">18</td><td class="n">·</td><td class="n">0.0%</td><td class="n">0.0%</td><td class="n">146</td><td class="n">2023</td><td class="n">5</td><td>Animal Protection Services 78%</td><td>Humane Officer Seized 78%, Owner Surrender 11%</td><td>Transfer Out 78%, Adopted 6%</td><td><span class="tag outcome">Other</span></td></tr><tr class=cand><td class="n">57</td><td>Amphibian - Wildlife</td><td><span class="tag no">Candidate to filter</span></td><td class="n">12</td><td class="n">·</td><td class="n">0.0%</td><td class="n">0.0%</td><td class="n">1</td><td class="n">2021</td><td class="n">7</td><td>Alberni-Clayoquot 33%</td><td>Wildlife 58%, Ambulance 17%</td><td>Euthanized by Offsite Vet 42%, Transfer Out 17%</td><td><span class="tag no">Wildlife</span></td></tr><tr class=cand><td class="n">53</td><td>Marsupial</td><td><span class="tag no">Candidate to filter</span></td><td class="n">3</td><td class="n">·</td><td class="n">0.0%</td><td class="n">—</td><td class="n">0</td><td class="n">2010</td><td class="n">1</td><td>Coquitlam 100%</td><td>DOA - Wildlife 100%</td><td>DOA - Final Disposition 100%</td><td><span class="tag outcome">Other</span></td></tr><tr class=cand><td class="n">56</td><td>Bird - Wildlife</td><td><span class="tag no">Candidate to filter</span></td><td class="n">8,660</td><td class="n">49</td><td class="n">0.6%</td><td class="n">0.0%</td><td class="n">0</td><td class="n">2026</td><td class="n">40</td><td>Vancouver 34%</td><td>Wildlife 39%, Ambulance 29%</td><td>Euthanized 20%, Transfer Out 20%</td><td><span class="tag no">Wildlife</span></td></tr><tr class=cand><td class="n">52</td><td>Mammal - Wildlife</td><td><span class="tag no">Candidate to filter</span></td><td class="n">8,273</td><td class="n">32</td><td class="n">0.4%</td><td class="n">0.1%</td><td class="n">0</td><td class="n">2026</td><td class="n">36</td><td>Vancouver 21%</td><td>DOA - ACO 32%, Ambulance 19%</td><td>DOA 56%, Euthanized 11%</td><td><span class="tag no">Wildlife</span></td></tr><tr><td class="n">88</td><td>Farm Animal - Exotic</td><td></td><td class="n">2,225</td><td class="n">217</td><td class="n">9.8%</td><td class="n">7.5%</td><td class="n">29</td><td class="n">2026</td><td class="n">38</td><td>Victoria 17%</td><td>Owner Surrender 69%, Stray 16%</td><td>Adopted 61%, Adopted Unaltered 23%</td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">60</td><td>Fish</td><td></td><td class="n">480</td><td class="n">54</td><td class="n">11.2%</td><td class="n">10.1%</td><td class="n">16</td><td class="n">2026</td><td class="n">20</td><td>Animal Protection Services 21%</td><td>Humane Officer Seized 36%, Owner Surrender 18%</td><td>Adopted 35%, Transfer Out 26%</td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">1</td><td>Bird - Exotic</td><td></td><td class="n">5,836</td><td class="n">507</td><td class="n">8.7%</td><td class="n">13.9%</td><td class="n">14</td><td class="n">2026</td><td class="n">36</td><td>Victoria 12%</td><td>Owner Surrender 45%, Stray 28%</td><td>Adopted 50%, Adopted Unaltered 22%</td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">3</td><td>Dog</td><td></td><td class="n">105,589</td><td class="n">10,692</td><td class="n">10.1%</td><td class="n">15.3%</td><td class="n">4</td><td class="n">2026</td><td class="n">41</td><td>North Cariboo 9%</td><td>Stray 41%, Owner Surrender 27%</td><td>Redeemed 42%, Adopted Altered 39%</td><td><span class="tag yes">Dog</span></td></tr><tr><td class="n">2</td><td>Cat</td><td></td><td class="n">159,876</td><td class="n">20,315</td><td class="n">12.7%</td><td class="n">15.6%</td><td class="n">15</td><td class="n">2026</td><td class="n">41</td><td>Vancouver 7%</td><td>Stray 45%, Owner Surrender 33%</td><td>Adopted Altered 52%, Euthanized 15%</td><td><span class="tag yes">Cat</span></td></tr><tr><td class="n">89</td><td>invertebrate</td><td></td><td class="n">37</td><td class="n">3</td><td class="n">8.1%</td><td class="n">20.0%</td><td class="n">14</td><td class="n">2026</td><td class="n">8</td><td>Vernon 38%</td><td>Emergency Boarding 38%, Humane Officer Surrendered 30%</td><td>Redeemed 46%, Adopted Unaltered 27%</td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">91</td><td>Reptile - Exotic</td><td></td><td class="n">805</td><td class="n">108</td><td class="n">13.4%</td><td class="n">25.9%</td><td class="n">9</td><td class="n">2026</td><td class="n">33</td><td>Animal Protection Services 12%</td><td>Stray 29%, Humane Officer Surrendered 19%</td><td>Transfer Out 30%, Adopted 19%</td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">93</td><td>Small Animal - Exotic</td><td></td><td class="n">523</td><td class="n">85</td><td class="n">16.3%</td><td class="n">26.1%</td><td class="n">14</td><td class="n">2026</td><td class="n">34</td><td>Victoria 14%</td><td>Owner Surrender 56%, Stray 22%</td><td>Adopted 42%, Adopted Unaltered 19%</td><td><span class="tag incare">Small Animal</span></td></tr><tr><td class="n">92</td><td>Small Animal</td><td></td><td class="n">15,723</td><td class="n">2,276</td><td class="n">14.5%</td><td class="n">26.4%</td><td class="n">20</td><td class="n">2026</td><td class="n">38</td><td>Vancouver 18%</td><td>Owner Surrender 57%, Stray 14%</td><td>Adopted 48%, Adopted Unaltered 21%</td><td><span class="tag incare">Small Animal</span></td></tr><tr><td class="n">63</td><td>Rabbit</td><td></td><td class="n">9,738</td><td class="n">2,168</td><td class="n">22.3%</td><td class="n">36.3%</td><td class="n">41</td><td class="n">2026</td><td class="n">40</td><td>Victoria 12%</td><td>Owner Surrender 36%, Stray 35%</td><td>Adopted Altered 54%, Adopted Unaltered 11%</td><td><span class="tag incare">Small Animal</span></td></tr><tr><td class="n">94</td><td>Farm Animal</td><td></td><td class="n">6,998</td><td class="n">1,829</td><td class="n">26.1%</td><td class="n">47.7%</td><td class="n">27</td><td class="n">2026</td><td class="n">36</td><td>Animal Protection Services 32%</td><td>Humane Officer Seized 36%, Humane Officer Surrendered 23%</td><td>Adopted 49%, Transfer Out 13%</td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">16</td><td>Puppy</td><td></td><td class="n">28,386</td><td class="n">10,099</td><td class="n">35.6%</td><td class="n">48.5%</td><td class="n">20</td><td class="n">2026</td><td class="n">40</td><td>Williams Lake 9%</td><td>Owner Surrender 48%, Stray 25%</td><td>Adopted Altered 66%, Adopted Unaltered 19%</td><td><span class="tag yes">Dog</span></td></tr><tr><td class="n">15</td><td>Kitten</td><td></td><td class="n">119,583</td><td class="n">60,914</td><td class="n">50.9%</td><td class="n">59.8%</td><td class="n">33</td><td class="n">2026</td><td class="n">41</td><td>Kamloops 7%</td><td>Stray 45%, Owner Surrender 40%</td><td>Adopted Altered 62%, Adopted Unaltered 15%</td><td><span class="tag yes">Cat</span></td></tr><tr><td class="n">87</td><td>Amphibian - Exotic</td><td></td><td class="n">27</td><td class="n">2</td><td class="n">7.4%</td><td class="n">66.7%</td><td class="n">15</td><td class="n">2024</td><td class="n">11</td><td>Nanaimo 33%</td><td>Owner Surrender 39%, Humane Officer Seized 29%</td><td>Transfer Out 41%, Released by Agency 15%</td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">14</td><td>Horse</td><td></td><td class="n">407</td><td class="n">294</td><td class="n">72.2%</td><td class="n">85.0%</td><td class="n">66</td><td class="n">2026</td><td class="n">10</td><td>Animal Protection Services 75%</td><td>Humane Officer Seized 61%, Humane Officer Surrendered 22%</td><td>Adopted Offsite 22%, Adopted 18%</td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">18</td><td>Cattle <span class=muted>(status only)</span></td><td></td><td class="n">·</td><td class="n">·</td><td class="n"></td><td class="n">—</td><td class="n"></td><td class="n">never</td><td class="n"></td><td></td><td></td><td></td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">19</td><td>Sheep <span class=muted>(status only)</span></td><td></td><td class="n">·</td><td class="n">·</td><td class="n"></td><td class="n">—</td><td class="n"></td><td class="n">never</td><td class="n"></td><td></td><td></td><td></td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">21</td><td>Goat <span class=muted>(status only)</span></td><td></td><td class="n">·</td><td class="n">·</td><td class="n"></td><td class="n">—</td><td class="n"></td><td class="n">never</td><td class="n"></td><td></td><td></td><td></td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">4</td><td>Fowl <span class=muted>(status only)</span></td><td></td><td class="n">·</td><td class="n">·</td><td class="n"></td><td class="n">—</td><td class="n"></td><td class="n">never</td><td class="n"></td><td></td><td></td><td></td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">45</td><td>Zoo</td><td></td><td class="n">·</td><td class="n">·</td><td class="n"></td><td class="n">—</td><td class="n"></td><td class="n">never</td><td class="n"></td><td></td><td></td><td></td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">50</td><td>Llama</td><td></td><td class="n">·</td><td class="n">·</td><td class="n"></td><td class="n">—</td><td class="n"></td><td class="n">never</td><td class="n"></td><td></td><td></td><td></td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">73</td><td>Llama</td><td></td><td class="n">·</td><td class="n">·</td><td class="n"></td><td class="n">—</td><td class="n"></td><td class="n">never</td><td class="n"></td><td></td><td></td><td></td><td><span class="tag outcome">Other</span></td></tr><tr><td class="n">75</td><td>Alpaca</td><td></td><td class="n">·</td><td class="n">·</td><td class="n"></td><td class="n">—</td><td class="n"></td><td class="n">never</td><td class="n"></td><td></td><td></td><td></td><td><span class="tag outcome">Other</span></td></tr></tbody>
+    </table></div>
+    <ul class="muted">
+      <li><b>Animal type</b> is the type on the intake record (it can change later, e.g. Kitten to Cat). <i>Status only</i> types appear on statuses but never on an intake.</li>
+      <li><b>Counts:</b> distinct animals with an incoming intake of that type, January 2006 to September 2026. <b>Fostered:</b> a Phase 1 foster placement (location history) matched to the animal's latest intake before the foster; recent intakes may not be fostered yet.</li>
+      <li>A type with a handful of animals moves a lot with one case. Full table: <code>Output/AnimalTypeReference.csv</code>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Second level: grouping the remaining types (suggestion)</h2>
+    <p>Once the types not used for foster are filtered out, the rest can be reported in four groups. Cat and Dog have enough animals for centre comparisons; Small Animal and Other are province-level views.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Group</th><th class="n">Animal types</th><th class="n">Intake animals 2006–2026</th><th class="n">% fostered</th><th class="n">% fostered since 2019</th><th>Suggested use</th></tr></thead>
+      <tbody><tr><td><span class="tag yes">Cat</span><br><span class="muted">Cat and Kitten</span></td><td class="n">2</td><td class="n">276,204</td><td class="n">29.3%</td><td class="n">34.8%</td><td>Report; Kitten also shown</td></tr><tr><td><span class="tag yes">Dog</span><br><span class="muted">Dog and Puppy</span></td><td class="n">2</td><td class="n">132,779</td><td class="n">15.6%</td><td class="n">24.2%</td><td>Report; Puppy also shown</td></tr><tr><td><span class="tag incare">Small Animal</span><br><span class="muted">Small mammals kept as pets, including rabbits</span></td><td class="n">3</td><td class="n">25,980</td><td class="n">17.4%</td><td class="n">29.4%</td><td>Report, province level</td></tr><tr><td><span class="tag outcome">Other</span><br><span class="muted">Birds, farm animals, horses, reptiles, fish and other pets</span></td><td class="n">10</td><td class="n">16,833</td><td class="n">17.9%</td><td class="n">33.0%</td><td>Report, province level, not ranked</td></tr><tr><td><span class="tag no">Wildlife</span><br><span class="muted">Wild animals: released, transferred to a rehabilitation centre, or euthanized. Not foster-eligible</span></td><td class="n">4</td><td class="n">17,068</td><td class="n">0.6%</td><td class="n">0.1%</td><td>Filtered out if question 1 is agreed</td></tr></tbody>
+    </table></div>
+    <h3>Young animals</h3>
+    <p>Within Cat and Dog, fostering is mostly young animals, so the foster views should also show Kitten and Puppy:</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Animal type</th><th>Group</th><th class="n">Intake animals 2006–2026</th><th class="n">% fostered</th><th class="n">% fostered since 2019</th></tr></thead>
+      <tbody><tr><td><b>Kitten</b></td><td>Cat</td><td class="n">119,583</td><td class="n">50.9%</td><td class="n">59.8%</td></tr><tr><td><b>Cat</b></td><td>Cat</td><td class="n">159,876</td><td class="n">12.7%</td><td class="n">15.6%</td></tr><tr><td><b>Puppy</b></td><td>Dog</td><td class="n">28,386</td><td class="n">35.6%</td><td class="n">48.5%</td></tr><tr><td><b>Dog</b></td><td>Dog</td><td class="n">105,589</td><td class="n">10.1%</td><td class="n">15.3%</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <footer>Companion to <i>Intake Source Types and Care Pathways</i>, <i>Animals in Care</i> and <i>Centre and Animal Type</i>. Generated by <code>analysis/phase2/animal_types_html.py</code>.</footer>
+</div>
+</body>
+</html>

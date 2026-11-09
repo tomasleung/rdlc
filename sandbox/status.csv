@@ -1,0 +1,121 @@
+Id,Name,IsInCare,IsInFosterCare,IsOutgoing,IsAdoption,IsDeceased
+1,Euthanasia / Cremation Request,True,False,False,False,False
+2,Euthanized,False,False,True,False,True
+3,Available For Adoption,True,False,False,False,False
+4,In Foster,True,True,False,False,False
+6,Awaiting Spay/Neuter,True,False,False,False,False
+7,Under Vet Care,True,False,False,False,False
+8,Awaiting Foster,True,False,False,False,False
+9,Awaiting Sort,True,False,False,False,False
+12,Found,False,False,False,False,False
+16,Redeemed,False,False,True,False,False
+19,Matched,False,False,False,False,False
+20,Hold,True,False,False,False,False
+22,Transfer Out,False,False,True,False,False
+23,Unassisted Death,False,False,True,False,True
+24,Returned To Owner,False,False,True,False,False
+25,Hold Finder,True,False,False,False,False
+27,Escaped,False,False,True,False,False
+28,Protective Custody/Hold,True,False,False,False,False
+29,Protective Custody/Transferred Ownership,True,False,False,False,False
+30,Due For Release,True,False,False,False,False
+31,Hold For Possible Match,True,False,False,False,False
+32,Returned Protective Custody Animal,False,False,True,False,False
+33,Hold Intervention,True,False,False,False,False
+35,Hold In Foster,True,True,False,False,False
+36,Protective Custody In Foster,True,True,False,False,False
+37,Adoption Pending / Hold On Property Check,True,False,False,False,False
+38,Hold In Vet Care,True,False,False,False,False
+39,Police Hold,True,False,False,False,False
+40,Hold Quarantine,True,False,False,False,False
+42,Awaiting Euthanasia,True,False,False,False,False
+43,Cremated,False,False,True,False,True
+44,Bite Quarantine,True,False,False,False,False
+45,Information,False,False,False,False,False
+46,Interred,False,False,True,False,True
+47,Lost,False,False,False,False,False
+48,Euthanasia - RTO,False,False,True,False,True
+49,Emergency Boarding,True,False,False,False,False
+50,Adopted Altered,False,False,True,True,False
+51,Adopted Offsite(Unaltered),False,False,True,True,False
+52,Adopted Offsite(Altered),False,False,True,True,False
+53,Hold Euthanasia,True,False,False,False,False
+54,Court Hold,True,False,False,False,False
+55,Awaiting Behavioral Assessment,True,False,False,False,False
+56,Adopted Unaltered,False,False,True,True,False
+57,Wildlife Released,False,False,True,False,False
+59,Cremation - Private,False,False,True,False,True
+60,Cremation - Communal,False,False,True,False,True
+61,DOA,False,False,True,False,True
+63,Hold Agency Transfer,True,False,False,False,False
+64,Released To Rescue,False,False,True,False,False
+65,Owner Relinquishment,True,False,False,False,False
+67,EOA - Euthanized on Arrival,False,False,True,False,True
+68,Rehabilitating,True,False,False,False,False
+71,Returned Surrender,False,False,True,False,False
+72,Stray Hold,True,False,False,False,False
+75,DOA - Final Disposition,False,False,True,False,True
+76,Emergency Evacuation - Released,False,False,True,False,False
+77,Emergency Evacuation - Permanent,False,False,True,False,False
+78,Emergency Evacuation - Temporary,True,False,False,False,False
+79,Awaiting Final Disposition,True,False,False,False,True
+80,Released to Wildlife Rehabilitator,False,False,True,False,False
+81,Stolen,False,False,True,False,False
+84,Awaiting Behaviour Retest,True,False,False,False,False
+85,Awaiting Behaviour Completion,True,False,False,False,False
+86,Euthanized by Offsite Vet,False,False,True,False,True
+87,Released to Owner at Vet,False,False,True,False,False
+88,Euthanasia In Field,False,False,True,False,True
+89,Boarding Client,False,False,False,False,False
+90,Unresolved File,False,False,True,False,False
+91,Awaiting Transfer,True,False,False,False,False
+92,Available for Adoption - In Foster,True,True,False,False,False
+93,Returned Home,False,False,False,False,False
+100,Redemption (Offsite),False,False,True,False,False
+101,Bite Quarantine (Home),False,False,True,False,False
+102,Seized Release,False,False,True,False,False
+103,Bequest Animal On Site,True,False,False,False,False
+104,Bequest Animal Off Site,True,False,False,False,False
+105,Released/Forfeited to Shelter,True,False,False,False,False
+107,Protective Custody Hold Quarantine,True,False,False,False,False
+110,Deceased,False,False,False,False,True
+111,Awaiting Surgery - Not Spay/Neuter,True,False,False,False,False
+112,Awaiting Vet Exam / Health Check,True,False,False,False,False
+113,Awaiting Triage,True,False,False,False,False
+114,Awaiting Spay Check,True,False,False,False,False
+115,Adopted Offsite,False,False,True,True,False
+116,PAT,True,False,False,False,False
+117,Disposition Under Final Review,True,False,False,False,False
+118,Available for Adoption - Offsite,True,False,False,False,False
+119,Hospitalised,True,False,False,False,False
+120,Species Management,True,False,False,False,False
+121,Under Behavior Modification,True,False,False,False,False
+122,Awaiting Triage Completion,True,False,False,False,False
+123,DOA Transfer,False,False,True,False,True
+124,Available for Adoption - Awaiting Spay/Neuter,True,False,False,False,False
+125,Privately Rehomed - New Owner Unknown,False,False,False,False,False
+126,Post-operative Death,False,False,True,False,True
+127,Stray - In Foster,True,True,False,False,False
+130,Awaiting Spay/Neuter - In Foster,True,True,False,False,False
+131,Sanctuary/Life Resident,True,False,False,False,False
+133,Unassisted Death - In Foster,False,False,True,False,True
+137,Emergency Boarding Returned To Owner,False,False,True,False,False
+140,Protective Custody - Awaiting Foster,True,False,False,False,False
+142,Awaiting Vet Approval - In Foster,True,True,False,False,False
+143,Emergency Evacuation - In Foster,True,True,False,False,False
+144,Euthanised During Stray Hold Time,True,False,False,False,True
+145,DOA - Released to Owner,False,False,True,False,True
+146,Adopted - Awaiting Pickup,True,False,False,True,False
+147,ID Trace,True,False,False,False,False
+148,Bite Quarantine/RTO,True,False,False,False,False
+149,Available For Adoption - No Web Presence,True,False,False,False,False
+150,Stray Hold - In Vet Care,True,False,False,False,False
+151,Stray Hold - Awaiting transfer,True,False,False,False,False
+152,Adopted to Finder,False,False,True,True,False
+155,Possible Match,False,False,False,False,False
+156,Released by Agency,False,False,True,False,False
+157,Return to Habitat,False,False,True,False,False
+158,Bite Quarantine - In Foster,True,True,False,False,False
+159,Entered Care,False,False,False,False,False
+160,Unassisted Death - In Transit,False,False,True,False,True
+161,Transfer Out - Awaiting Pickup,True,False,False,False,False

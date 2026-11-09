@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analysis Design | Foster Centre and Animal Type Utilization</title>
+<style>
+  :root {
+    --navy:#18364a; --blue:#176b87; --teal:#2f7f78; --green:#3f7652;
+    --amber:#a56616; --red:#9b3d35; --ink:#24323b; --muted:#5d6c75;
+    --line:#d8e0e4; --soft:#f3f7f8; --blue-soft:#eaf4f7; --green-soft:#edf6ef;
+    --amber-soft:#fff6e8; --grey-soft:#f5f6f7; --white:#fff;
+  }
+  * { box-sizing:border-box; }
+  html { background:#dfe5e8; }
+  body { margin:0; color:var(--ink); background:#fff; font-family:"Segoe UI", Arial, sans-serif; font-size:10.5pt; line-height:1.47; }
+  a { color:var(--blue); text-decoration:none; border-bottom:1px solid #9fc4d1; }
+  .page { max-width:920px; margin:0 auto; padding:18mm 17mm 20mm; background:#fff; }
+  .eyebrow { color:var(--blue); font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:9pt; }
+  h1,h2,h3,h4 { font-family:Georgia,"Times New Roman",serif; color:var(--navy); page-break-after:avoid; }
+  h1 { font-size:27pt; line-height:1.1; margin:8mm 0 3mm; }
+  h2 { font-size:17pt; margin:11mm 0 4mm; padding-top:2mm; border-top:2px solid var(--navy); }
+  h3 { font-size:13pt; margin:7mm 0 2.5mm; }
+  h4 { font-size:11pt; margin:5mm 0 2mm; }
+  p { margin:0 0 3mm; }
+  ul,ol { margin:2mm 0 4mm 6mm; padding-left:5mm; }
+  li { margin:1.1mm 0; }
+  .subtitle { color:var(--muted); font-size:13pt; max-width:700px; }
+  .status { display:inline-block; margin-top:6mm; padding:2mm 4mm; border-radius:99px; background:var(--amber-soft); color:#7b4a0c; font-weight:700; }
+  .cover { min-height:230mm; display:flex; flex-direction:column; }
+  .cover-main { margin-top:26mm; }
+  .cover-rule { width:55mm; height:4px; background:var(--teal); margin:7mm 0; }
+  .cover-meta { margin-top:auto; display:grid; grid-template-columns:1fr 1fr; gap:5mm; border-top:1px solid var(--line); padding-top:6mm; }
+  .label { color:var(--muted); font-size:8.5pt; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+  .value { font-weight:650; color:var(--navy); }
+  .callout { margin:4mm 0; padding:4mm 5mm; border-left:4px solid var(--blue); background:var(--blue-soft); border-radius:0 8px 8px 0; break-inside:avoid; }
+  .callout.green { border-color:var(--green); background:var(--green-soft); }
+  .callout.amber { border-color:var(--amber); background:var(--amber-soft); }
+  .callout.grey { border-color:#7b8990; background:var(--grey-soft); }
+  .callout strong:first-child { color:var(--navy); }
+  table { width:100%; border-collapse:separate; border-spacing:0; margin:3mm 0 5mm; border:1px solid var(--line); border-radius:8px; overflow:hidden; break-inside:auto; }
+  thead { display:table-header-group; }
+  tr { break-inside:avoid; }
+  th,td { padding:2.6mm 3mm; vertical-align:top; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+  th:last-child,td:last-child { border-right:0; }
+  tr:last-child td { border-bottom:0; }
+  th { background:var(--navy); color:#fff; text-align:left; font-size:8.6pt; letter-spacing:.02em; }
+  td { font-size:9.3pt; }
+  .meta th { width:29%; }
+  .driver-grid { display:grid; grid-template-columns:1fr; gap:4mm; margin:4mm 0 6mm; }
+  .driver { border:1px solid var(--line); border-top:4px solid var(--teal); border-radius:8px; padding:5mm; break-inside:avoid; }
+  .driver h3 { margin:0 0 2mm; font-size:13.5pt; }
+  .driver .tag { margin-top:1mm; }
+  .small { font-size:9pt; color:var(--muted); }
+  .tag { display:inline-block; padding:1mm 2.5mm; border-radius:99px; background:var(--soft); border:1px solid var(--line); font-size:8.5pt; font-weight:700; margin:.7mm 1mm .7mm 0; }
+  .tag.must { background:var(--green-soft); color:#2c5c3e; border-color:#bfe0cb; }
+  .tag.prefer { background:var(--amber-soft); color:#7b4a0c; border-color:#f0d9b0; }
+  .tag.avoid { background:#fbeceb; color:#7a2c25; border-color:#f0c6c2; }
+  .tag.open { background:var(--grey-soft); color:#4a565c; border-color:var(--line); }
+  .toc a { border:0; }
+  .toc ol { columns:2; column-gap:10mm; }
+  .insight-card { border:1px solid var(--line); border-radius:8px; padding:4.5mm 5mm; margin:0 0 4mm; break-inside:avoid; }
+  .insight-card h4 { margin:0 0 1.5mm; font-size:11.5pt; display:flex; align-items:center; gap:2.5mm; flex-wrap:wrap; }
+  .insight-card .id { font-family:Consolas,"Courier New",monospace; font-size:9.5pt; color:var(--blue); font-weight:700; }
+  .field-row { display:grid; grid-template-columns:130px 1fr; gap:2mm; margin:1mm 0; font-size:9.3pt; }
+  .field-row .fl { color:var(--muted); font-weight:700; font-size:8.5pt; text-transform:uppercase; letter-spacing:.03em; padding-top:0.3mm; }
+  .field-row .fv.permit { color:#2c5c3e; }
+  .field-row .fv.prohibit { color:#7a2c25; }
+  .checklist { list-style:none; margin:2mm 0 4mm; padding:0; }
+  .checklist li { padding:1.3mm 0 1.3mm 7mm; position:relative; font-size:9.6pt; }
+  .checklist li.yes::before { content:"✔"; position:absolute; left:0; color:#2c5c3e; font-weight:700; }
+  .checklist li.no::before { content:"✖"; position:absolute; left:0; color:#7a2c25; font-weight:700; }
+  .footer-note { margin-top:10mm; padding-top:3mm; border-top:1px solid var(--line); font-size:8.5pt; color:var(--muted); }
+  .avoid { break-inside:avoid; }
+  @page { size:Letter; margin:15mm 14mm 17mm; @bottom-left { content:"BC SPCA · Internal Use Only"; color:#6b7880; font-size:8pt; } @bottom-right { content:"Page " counter(page) " of " counter(pages); color:#6b7880; font-size:8pt; } }
+  @media print {
+    html, body { background:#fff; }
+    .page { max-width:none; padding:0; }
+    .cover { page-break-after:always; }
+    h2 { break-before:auto; }
+    a { color:inherit; border-bottom:0; }
+  }
+  @media (max-width:720px) {
+    .page { padding:8mm; }
+    .driver-grid,.cover-meta { grid-template-columns:1fr; }
+    .toc ol { columns:1; }
+    .field-row { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+<section class="cover">
+  <div class="eyebrow">Animal Flow · Foster Analysis · RDLC OS</div>
+  <div class="cover-main">
+    <h1>Centre and Animal Type Foster Utilization</h1>
+    <div class="cover-rule"></div>
+    <p class="subtitle">Analysis Design Brief &amp; Insight Specification Register<br>Produced by <code>rdlc-data-analysis</code> from the confirmed-pending BRD</p>
+    <span class="status">Draft · Demonstration Run · Version 0.1</span>
+  </div>
+  <div class="callout amber">
+    <strong>Not yet confirmed</strong><br>
+    Built from BRD v0.2, whose own Approvals table (§19) still shows 3 of 4 roles Pending. This artifact is a first demonstration of the rebuilt <code>rdlc-data-analysis</code> skill's output shape — treat every row as draft until both the source BRD and this register are signed off.
+  </div>
+  <div class="cover-meta">
+    <div><div class="label">Produced by</div><div class="value">rdlc-data-analysis (RDLC OS)</div></div>
+    <div><div class="label">Created</div><div class="value">26 October 2026</div></div>
+    <div><div class="label">Pipeline position</div><div class="value">rdlc-grill-coach → BRD → rdlc-data-analysis → Analysis Design</div></div>
+    <div><div class="label">Downstream</div><div class="value">rdlc-coach-semantic-model</div></div>
+    <div><div class="label">Input BRD</div><div class="value">Foster Centre &amp; Animal Type Utilization v0.2</div></div>
+    <div><div class="label">Classification</div><div class="value">Internal use only</div></div>
+  </div>
+</section>
+
+<section id="metadata">
+<h2>Document metadata</h2>
+<table class="meta"><tbody>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>RDLC document type</td><td>Analysis Design Brief &amp; Insight Specification Register</td></tr>
+<tr><td>RDLC stage</td><td>Analysis Design (between BRD confirmation and Semantic Model Design)</td></tr>
+<tr><td>Produced by</td><td><code>rdlc-data-analysis</code> skill</td></tr>
+<tr><td>Input BRD</td><td><code>BRD_Foster_Centre_Animal_Type_Utilization_v0.2.html</code>, Version 0.2, Draft for business review</td></tr>
+<tr><td>Version</td><td>0.1</td></tr>
+<tr><td>Status</td><td>Draft — demonstration run, not confirmed</td></tr>
+<tr><td>Created date</td><td>2026-10-26</td></tr>
+<tr><td>ID prefix</td><td><code>CATU-</code> (Centre &amp; Animal Type Utilization) — derived from this BRD's capability name</td></tr>
+<tr><td>Handoff gate</td><td>Not met — see §08</td></tr>
+</tbody></table>
+</section>
+
+<section class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#questions">Primary business questions</a></li><li><a href="#approach">Analytical approach</a></li>
+<li><a href="#data">Data used</a></li><li><a href="#drivers">Drivers</a></li>
+<li><a href="#open">Open question</a></li><li><a href="#summary">Insight register — summary</a></li>
+<li><a href="#detail">Insight register — detail</a></li><li><a href="#gate">Handoff gate check</a></li>
+</ol>
+</section>
+
+<section id="questions">
+<h2>01 · Primary business questions</h2>
+<p class="small">Restated verbatim from BRD §06 — not reinvented.</p>
+<ol>
+<li>How many animals are in care by month, Centre, Region, and Animal Type?</li>
+<li>How many of those animals experience qualifying foster care?</li>
+<li>What share of Animals in Care experience foster care?</li>
+<li>Which centres and regions use foster most?</li>
+<li>Which animal-type families use foster most?</li>
+<li>Where are changes occurring over time?</li>
+<li>How often do animals relate to multiple centres in one month?</li>
+<li>What data-quality gaps affect interpretation?</li>
+</ol>
+</section>
+
+<section id="approach">
+<h2>02 · Analytical approach</h2>
+<p>Each Animal-in-Care-month is evaluated once per Centre × Animal Type Family group: did this animal experience a qualifying foster stay (Phase 1's unmodified foster-definition logic) overlapping at least one day of the month? Organization-wide totals are computed independently from dimensional subtotals, never by summing them, because an animal can validly belong to more than one Centre or Animal Type group within the same month (BRD §7.1).</p>
+</section>
+
+<section id="data">
+<h2>03 · Data used</h2>
+<p>Reporting Month, Animal ID, Care Episode ID, Effective Centre, Effective Region, Source Animal Type ID/Label, Normalized Animal Type Family, Is Animal in Care, Is Fostered Animal, Foster Days, Unmapped Centre Flag, Unknown Animal Type Flag, Data Conflict Flag — all per BRD §07.1/§09, none added.</p>
+</section>
+
+<section id="drivers">
+<h2>04 · Drivers</h2>
+<p class="small">Only three — the BRD's confirmed in-scope dimensions. <strong>Not</strong> Species-level, Age Group, or Municipality: all three are explicitly out of scope or deferred per BRD §11 and this project's documented gaps.</p>
+<div class="driver-grid">
+<article class="driver">
+<h3>Driver 1 — Time</h3>
+<p><strong>Story:</strong> Where are changes occurring over time? (BQ6)</p>
+<p><strong>Views:</strong> monthly trend from Jan 2006, year-over-year percentage-point change, current-quarter vs. year-to-date.</p>
+<p><span class="tag must">YoY comparison · Must</span></p>
+</article>
+<article class="driver">
+<h3>Driver 2 — Centre &amp; Region</h3>
+<p><strong>Story:</strong> Which centres/regions use foster most, and is that difference real or just a different animal-type mix? (BQ1, BQ4, BQ7, BQ8)</p>
+<p><strong>Views:</strong> Centre/Region volume &amp; utilization ranking, Centre × Type mix-adjustment, multiple-centre attribution, Unmapped Centre data-quality view.</p>
+<p><span class="tag must">Top-N / Pareto · Must</span> <span class="tag prefer">Standardization · Prefer</span></p>
+</article>
+<article class="driver">
+<h3>Driver 3 — Animal Type Family</h3>
+<p><strong>Story:</strong> Which families rely most on foster care, and does that explain apparent Centre differences? (BQ5)</p>
+<p><strong>Views:</strong> Type volume &amp; utilization, Centre × Type intersection.</p>
+<p><span class="tag must">Kitagawa decomposition · Must</span></p>
+</article>
+</div>
+</section>
+
+<section id="open">
+<h2>05 · Open question — flagged, not decided here</h2>
+<div class="callout grey">
+BRD §06 has no business question resembling Phase 1's "is there seasonality" (Phase 1 Q3). Per non-negotiable rule 8 — never silently copy a prior report's content forward — a seasonal-utilization view (<code>CATU-SEASON-01</code>) has <strong>not</strong> been added by default. This needs a decision from the Foster Manager / Animal Flow Manager: was seasonality intentionally dropped from Phase 2's scope, or is it a BRD oversight that should be added back?
+</div>
+</section>
+
+<section id="summary">
+<h2>06 · Insight specification register — summary</h2>
+<table><thead><tr><th>ID</th><th>Business question</th><th>Diagnostic method</th><th>Status</th></tr></thead><tbody>
+<tr><td><code>CATU-BASE-01</code></td><td>BQ1–3 Provincial baseline — full history, Jan 2006–latest (revised)</td><td>— (descriptive baseline)</td><td>Draft</td></tr>
+<tr><td><code>CATU-CENTRE-TREND-01</code></td><td>Extends BQ4+BQ6 Centre long-term trajectory (filtered, single-centre)</td><td>— (annual aggregation); <span class="tag must">YoY · Must (5-yr zoom)</span></td><td>Draft — new</td></tr>
+<tr><td><code>CATU-TREND-01</code></td><td>BQ6 Recent trend</td><td><span class="tag must">YoY · Must</span></td><td>Draft</td></tr>
+<tr><td><code>CATU-SEASON-01</code></td><td>Not in BRD §06</td><td><span class="tag prefer">Seasonal baseline · Must/Prefer</span></td><td><span class="tag open">OPEN</span></td></tr>
+<tr><td><code>CATU-CENTRE-01</code></td><td>BQ1, BQ4 Centre volume &amp; utilization</td><td><span class="tag must">Top-N / Pareto · Must</span></td><td>Draft</td></tr>
+<tr><td><code>CATU-REGION-01</code></td><td>BQ4 Region volume &amp; utilization</td><td><span class="tag must">Top-N / Pareto · Must</span></td><td>Draft</td></tr>
+<tr><td><code>CATU-TYPE-01</code></td><td>BQ5 Animal Type volume &amp; utilization</td><td><span class="tag must">Top-N / Pareto · Must</span></td><td>Draft</td></tr>
+<tr><td><code>CATU-CENTRETYPE-01</code></td><td>BQ1, BQ4, BQ5 Centre × Type drivers</td><td><span class="tag must">Kitagawa · Must</span> <span class="tag prefer">Standardization · Prefer</span></td><td>Draft</td></tr>
+<tr><td><code>CATU-TRANSFER-01</code></td><td>BQ7 Multi-centre attribution</td><td>— (structural disclosure)</td><td>Draft</td></tr>
+<tr><td><code>CATU-CHANGE-01</code></td><td>BQ6 YoY decomposition, Centre/Type</td><td><span class="tag must">Kitagawa · Must</span> <span class="tag must">PVM bridge · Must</span></td><td>Draft</td></tr>
+<tr><td><code>CATU-DQ-01</code></td><td>BQ8 Completeness</td><td>— (rate vs. threshold)</td><td>Draft</td></tr>
+<tr><td><code>CATU-RESTATEMENT-01</code></td><td>§14.3 Historical corrections</td><td><span class="tag must">Leave-one-out robustness · Must</span></td><td>Draft</td></tr>
+</tbody></table>
+</section>
+
+<section id="detail">
+<h2>07 · Insight specification register — detail</h2>
+
+<div class="insight-card">
+<h4><span class="id">CATU-BASE-01</span> Provincial historical baseline</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">Animals in Care, Fostered Animals, % Animals in Care Fostered</div></div>
+<div class="field-row"><div class="fl">Comparison</div><div class="fv">None (baseline)</div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">Describe level/direction of org-wide change</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Imply performance, capacity, or target</div></div>
+<div class="field-row"><div class="fl">Min. volume</div><div class="fv">n/a (org-wide)</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-TREND-01</span> Recent monthly/quarterly trend</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">All three core KPIs, monthly grain</div></div>
+<div class="field-row"><div class="fl">Comparison</div><div class="fv">YoY, current-quarter vs. YTD</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv"><span class="tag must">YoY · Must</span></div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">Describe direction/magnitude of change</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Attribute cause without further decomposition</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-SEASON-01</span> Seasonal utilization <span class="tag open">OPEN</span></h4>
+<p class="small">Not drafted — not requested anywhere in BRD §06. Requires a confirm/reject decision from the Foster Manager / Animal Flow Manager before this entry is completed. See §05.</p>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-CENTRE-01</span> Centre volume &amp; utilization</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">3 core KPIs + Foster Days, by Centre</div></div>
+<div class="field-row"><div class="fl">Comparison</div><div class="fv">Prior year, top-N share</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv"><span class="tag must">Top-N / Pareto · Must</span></div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">Describe which centres show comparatively higher/lower volume &amp; rate, within volume safeguards</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Label a centre best/worst; infer capacity or performance (BRD §13.1)</div></div>
+<div class="field-row"><div class="fl">Min. volume</div><div class="fv">BRD §8.1 tiers — 30+ eligible, 10–29 low-volume, &lt;10 counts only</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-CENTRE-TREND-01</span> Centre long-term trajectory (filtered) <span class="tag open">NEW</span></h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">3 core KPIs, annual grain, one selected Centre</div></div>
+<div class="field-row"><div class="fl">Comparison</div><div class="fv">Full available history for that Centre, then a recent 5-year zoom</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv">n/a for the long view · <span class="tag must">YoY · Must (5-yr zoom)</span></div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">Describe how one centre's own trajectory moved over its available history and recent years</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Compare one centre's trajectory directly against another's (that's CATU-CENTRE-01's job); treat a centre's earliest years as representative if boundaries changed</div></div>
+<div class="field-row"><div class="fl">Data-quality req.</div><div class="fv">Each centre must show a "data available from [year]" indicator — the checkable answer to centre-identity stability, not a blanket assumption</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-REGION-01</span> Region volume &amp; utilization</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">Same 3 KPIs, rolled to Region</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv"><span class="tag must">Top-N / Pareto · Must</span></div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">Same as CATU-CENTRE-01, at Region grain</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Same as CATU-CENTRE-01</div></div>
+<div class="field-row"><div class="fl">Min. volume</div><div class="fv">BRD §8.1 tiers</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-TYPE-01</span> Animal Type Family volume &amp; utilization</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">3 core KPIs by Normalized Animal Type Family</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv"><span class="tag must">Top-N / Pareto · Must</span></div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">Describe which families show higher/lower utilization, within safeguards</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Infer a family is "harder to place"; imply outcome or capacity</div></div>
+<div class="field-row"><div class="fl">Min. volume</div><div class="fv">BRD §8.1 tiers</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-CENTRETYPE-01</span> Centre × Animal Type drivers</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">Centre × Type intersection</div></div>
+<div class="field-row"><div class="fl">Comparison</div><div class="fv">Mix-adjusted vs. raw</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv"><span class="tag must">Kitagawa / Das Gupta decomposition · Must</span> <span class="tag must">Direct standardization · Must (reliable cells)</span> <span class="tag prefer">Indirect / SMR · Prefer (sparse cells)</span></div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">State whether a Centre difference is mix-driven or a true within-type rate difference</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Conclude a centre is better/worse at fostering without mix-adjustment; apply direct standardization below the volume floor</div></div>
+<div class="field-row"><div class="fl">Min. volume</div><div class="fv">BRD §8.1 tiers, per Centre × Type cell</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-TRANSFER-01</span> Multiple-centre attribution</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">Animals attributed to &gt;1 Centre in the same month</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv">Structural disclosure — overlap count, not a statistical method</div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">Disclose overlap count/share with non-additivity warning</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Sum Centre-level distinct counts into a province-wide total</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-CHANGE-01</span> Year-over-year change decomposition</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">3 core KPIs, by Centre/Type</div></div>
+<div class="field-row"><div class="fl">Comparison</div><div class="fv">YoY, by Centre/Type</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv"><span class="tag must">Kitagawa decomposition · Must</span> <span class="tag must">Naive contribution ratio / PVM bridge with explicit residual · Must</span></div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">State which Centre/Type groups contributed most to a change, residual disclosed</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Treat the contribution split as a causal explanation</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-DQ-01</span> Centre &amp; Animal Type completeness</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">% records with resolved Centre + Type</div></div>
+<div class="field-row"><div class="fl">Comparison</div><div class="fv">vs. BRD §14.1's 99% floor</div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">State completeness rate and whether it meets the 99% floor</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Exclude Unmapped/Unknown from province-wide totals (BRD keeps them in)</div></div>
+</div>
+
+<div class="insight-card">
+<h4><span class="id">CATU-RESTATEMENT-01</span> Historical source corrections</h4>
+<div class="field-row"><div class="fl">Measure</div><div class="fv">Snapshot-vs-snapshot diff, by month/measure</div></div>
+<div class="field-row"><div class="fl">Comparison</div><div class="fv">Current reprocess vs. prior published snapshot</div></div>
+<div class="field-row"><div class="fl">Method</div><div class="fv"><span class="tag must">Leave-one-out / snapshot robustness check · Must</span></div></div>
+<div class="field-row"><div class="fl">Permitted</div><div class="fv permit">Disclose which months/measures changed and why</div></div>
+<div class="field-row"><div class="fl">Prohibited</div><div class="fv prohibit">Restate without logging</div></div>
+</div>
+
+</section>
+
+<section id="gate">
+<h2>08 · Handoff gate check — not met</h2>
+<ul class="checklist">
+<li class="yes">Every Driver traces to a BRD-confirmed in-scope dimension</li>
+<li class="yes">Every register entry answers a BRD-confirmed business question (except the flagged open item)</li>
+<li class="yes">Every diagnostic method is Must/Prefer tier</li>
+<li class="yes">Every entry states permitted/prohibited conclusions</li>
+<li class="yes">Every ranking/rate states its minimum-volume safeguard</li>
+<li class="yes">No Green/Yellow/Red threshold language used — BRD §13.1 bans it, rule 6 applied</li>
+<li class="no"><code>CATU-SEASON-01</code> is open, not resolved</li>
+<li class="no">Business/decision owner has not confirmed this Brief or Register — BRD itself is still Pending on 3 of 4 approvals</li>
+</ul>
+<div class="callout amber"><strong>Not ready to hand to <code>rdlc-coach-semantic-model</code>.</strong> Two blockers: the open seasonality question above, and actual sign-off — on this artifact, and on the BRD it's built from.</div>
+</section>
+
+<div class="footer-note">BC SPCA · Animal Flow · Foster Centre and Animal Type Utilization · Analysis Design v0.1 · Draft — demonstration run · Internal use only</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Why the Data Team offers two service models, their responsibilities and trade-offs, and a guide for choosing between them.">
+  <title>BC SPCA Data Team Service Model</title>
+  <style>
+    :root {
+      --navy: #18364a; --blue: #176b87; --teal: #2f7f78; --green: #3f7652;
+      --amber: #a56616; --red: #9b3d35; --ink: #24323b; --muted: #5d6c75;
+      --line: #d8e0e4; --soft: #f3f7f8; --blue-soft: #eaf4f7; --green-soft: #edf6ef;
+      --amber-soft: #fff6e8; --red-soft: #fbeeed; --grey-soft: #f5f6f7; --white: #ffffff;
+      --page-width: 920px;
+    }
+    * { box-sizing: border-box; }
+    html { background: #dfe5e8; }
+    body { margin: 0; color: var(--ink); background: var(--white); font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.47; }
+    a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+    .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+    .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+    h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+    h1 { font-size: 26pt; line-height: 1.1; margin: 8mm 0 3mm; }
+    h2 { font-size: 18pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+    h3 { font-size: 13.5pt; margin: 7mm 0 2.5mm; }
+    h4 { font-size: 11pt; margin: 4mm 0 1.5mm; color: var(--ink); }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin: 1.1mm 0; }
+    .cover { display: flex; flex-direction: column; }
+    .cover-main { margin-top: 12mm; }
+    .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+    .subtitle { color: var(--muted); font-size: 13pt; max-width: 700px; }
+    .cover-meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+    .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .value { font-weight: 650; color: var(--navy); }
+    .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+    .callout strong:first-child { color: var(--navy); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th, td { padding: 2.8mm 3.2mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--navy); color: var(--white); text-align: left; font-size: 9pt; letter-spacing: .02em; }
+    td.c, th.c { text-align: center; }
+    .small { font-size: 9pt; color: var(--muted); }
+    .toc a { border: 0; }
+    .toc ol { columns: 2; column-gap: 10mm; }
+    .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+
+    /* Service section accent */
+    .service { border: 1px solid var(--line); border-top: 5px solid var(--teal); border-radius: 10px; padding: 5mm 6mm; margin: 4mm 0 8mm; }
+    .service.model-2 { border-top-color: var(--blue); }
+    .service > h2 { border-top: none; margin-top: 0; padding-top: 0; }
+
+    /* Two-column compare layout, reused for Responsibilities / Benefits / Challenges */
+    .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 3mm 0 5mm; }
+    .split-col { border: 1px solid var(--line); border-radius: 8px; padding: 4mm 5mm; break-inside: avoid; }
+    .split-col.it { border-top: 3px solid var(--navy); }
+    .split-col.biz { border-top: 3px solid var(--teal); }
+    .split-col h4 { margin-top: 0; }
+
+    @page { size: Letter; margin: 15mm 14mm 17mm; @bottom-left { content: "Internal use only"; color: #6b7880; font-size: 8pt; } @bottom-right { content: "Page " counter(page) " of " counter(pages); color: #6b7880; font-size: 8pt; } }
+    @media print { html, body { background: var(--white); } .page { max-width: none; padding: 0; } .cover { min-height: 200mm; page-break-after: always; } .cover-main { margin-top: 28mm; } a { color: inherit; border-bottom: 0; } }
+    @media (max-width: 720px) { .page { padding: 8mm; } .cover-meta, .split-grid { grid-template-columns: 1fr; } .toc ol { columns: 1; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <section class="cover">
+    <div class="eyebrow">Data Team · Service Model</div>
+    <div class="cover-main">
+      <h1>BC SPCA Data Team Service Model</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">Why the Data Team offers two service models, what each one provides, and how to choose between them.</p>
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Owner</div><div class="value">BC SPCA Data Team</div></div>
+      <div><div class="label">Classification</div><div class="value">Internal use only</div></div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#why">Why we offer two services</a></li>
+      <li><a href="#service1">Service 1 — Self-Service Data Platform</a></li>
+      <li><a href="#service2">Service 2 — Managed Data Product (RDLC)</a></li>
+      <li><a href="#selection">Service selection guide</a></li>
+      <li><a href="#positioning">Recommended positioning</a></li>
+    </ol>
+  </nav>
+
+  <section id="why">
+    <h2>Why we offer two services</h2>
+    <p>Not all departments have the same needs, skills, or desired level of Data Team involvement. Some departments want to build and maintain their own analytics solutions. Other departments need the Data Team to build and operate trusted enterprise data products that can be shared across the organization. To support both scenarios, the Data Team offers two service models.</p>
+  </section>
+
+  <section id="service1" class="service">
+    <h2>Service 1 — Self-Service Data Platform</h2>
+
+    <h3>Purpose</h3>
+    <p>Provide a secure and governed Microsoft Fabric environment that enables departments to independently build, operate, and maintain their own analytics solutions.</p>
+
+    <h3>Responsibilities</h3>
+    <div class="split-grid">
+      <div class="split-col it">
+        <h4>IT / Data Team — provides and manages the platform</h4>
+        <p class="small" style="margin-top:-1mm"><strong>Platform Provisioning</strong></p>
+        <ul>
+          <li>Microsoft Fabric capacity</li>
+          <li>Shared or dedicated capacity assignment</li>
+          <li>Workspace creation</li>
+          <li>Workspace lifecycle management</li>
+        </ul>
+        <p class="small"><strong>Security &amp; Access</strong></p>
+        <ul>
+          <li>Entra security groups</li>
+          <li>Workspace role assignment</li>
+          <li>Access approval process</li>
+          <li>Periodic access reviews</li>
+        </ul>
+        <p class="small"><strong>Governance &amp; Compliance</strong></p>
+        <ul>
+          <li>Sensitive data classification requirements</li>
+          <li>Security requirements</li>
+          <li>Compliance requirements</li>
+          <li>Platform usage policies</li>
+        </ul>
+        <p class="small"><strong>Operations</strong></p>
+        <ul>
+          <li>Capacity monitoring</li>
+          <li>Cost monitoring and reporting</li>
+          <li>Capacity alerts</li>
+          <li>Platform health monitoring</li>
+          <li>Microsoft Fabric platform support</li>
+        </ul>
+      </div>
+      <div class="split-col biz">
+        <h4>Business — owns everything inside the workspace</h4>
+        <ul>
+          <li>Data ingestion</li>
+          <li>Pipelines</li>
+          <li>Notebooks</li>
+          <li>Lakehouses</li>
+          <li>Warehouses</li>
+          <li>Data models</li>
+          <li>Semantic models</li>
+          <li>Business rules</li>
+          <li>Data quality</li>
+          <li>Reports and dashboards</li>
+          <li>Testing and validation</li>
+          <li>Production support</li>
+          <li>Solution maintenance</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Outcome</h3>
+    <p>A governed Microsoft Fabric environment that enables departments to independently build and operate analytics solutions.</p>
+
+    <h3>What IT does not provide</h3>
+    <p>Under the Self-Service Data Platform model, the Data Team does not:</p>
+    <ul>
+      <li>Build pipelines</li>
+      <li>Build data models</li>
+      <li>Design solution architecture</li>
+      <li>Build semantic models</li>
+      <li>Build dashboards or reports</li>
+      <li>Manage data quality</li>
+      <li>Develop business logic</li>
+      <li>Support department-owned analytics solutions</li>
+    </ul>
+
+    <h3>Why Service 1 exists</h3>
+    <h4>Benefits</h4>
+    <div class="split-grid">
+      <div class="split-col biz">
+        <h4>For Business</h4>
+        <ul>
+          <li>Fast onboarding</li>
+          <li>Maximum flexibility</li>
+          <li>Full ownership</li>
+          <li>No dependency on Data Team delivery schedules</li>
+        </ul>
+      </div>
+      <div class="split-col it">
+        <h4>For IT</h4>
+        <ul>
+          <li>Low operational effort</li>
+          <li>Scalable model</li>
+          <li>Supports multiple departments</li>
+          <li>Clear ownership boundaries</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Challenges</h4>
+    <div class="split-grid">
+      <div class="split-col biz">
+        <h4>For Business</h4>
+        <ul>
+          <li>Requires technical resources</li>
+          <li>Requires Fabric expertise</li>
+          <li>Responsible for solution support</li>
+          <li>Responsible for data quality</li>
+        </ul>
+      </div>
+      <div class="split-col it">
+        <h4>For IT</h4>
+        <ul>
+          <li>Limited visibility into solutions</li>
+          <li>Potential duplication across departments</li>
+          <li>Less standardization across the organization</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="service2" class="service model-2">
+    <h2>Service 2 — Managed Data Product (RDLC)</h2>
+
+    <h3>Purpose</h3>
+    <p>Design, build, and maintain trusted enterprise data products that provide reusable, governed, and organization-wide data assets for Business Intelligence, analytics, and decision making.</p>
+
+    <h3>Responsibilities</h3>
+    <div class="split-grid">
+      <div class="split-col it">
+        <h4>IT / Data Team delivers</h4>
+        <ul>
+          <li>Source system integration</li>
+          <li>Data ingestion pipelines</li>
+          <li>Data quality controls</li>
+          <li>Identity matching</li>
+          <li>Business rules</li>
+          <li>Enterprise data modeling</li>
+          <li>Curated Gold datasets</li>
+          <li>Certified semantic models</li>
+          <li>Governance and security controls</li>
+          <li>Monitoring and operational support</li>
+          <li>Reusable enterprise data assets</li>
+        </ul>
+      </div>
+      <div class="split-col biz">
+        <h4>Business provides</h4>
+        <ul>
+          <li>Business ownership</li>
+          <li>Subject matter expertise</li>
+          <li>Business definitions</li>
+          <li>Validation and testing</li>
+          <li>Prioritization of requirements</li>
+          <li>Data product stewardship</li>
+          <li>Report development and consumption</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Outcome</h3>
+    <p>A trusted, governed, reusable enterprise data product that can be consumed by multiple teams across BC SPCA.</p>
+
+    <h3>Alignment with the RDLC framework</h3>
+    <p>Managed Data Products are intended to support BC SPCA's analytical maturity model:</p>
+    <table>
+      <thead><tr><th>Layer</th><th>Question</th></tr></thead>
+      <tbody>
+        <tr><td>Layer 1</td><td>What happened?</td></tr>
+        <tr><td>Layer 2</td><td>Did something unusual happen?</td></tr>
+        <tr><td>Layer 3</td><td>What is related?</td></tr>
+        <tr><td>Layer 4</td><td>What is driving it?</td></tr>
+        <tr><td>Layer 5</td><td>How much should we trust it?</td></tr>
+        <tr><td>Layer 6</td><td>What should we focus on?</td></tr>
+        <tr><td>Layer 7</td><td>What should we do?</td></tr>
+      </tbody>
+    </table>
+    <p class="small">The Data Team's primary focus is delivering the foundation required for Layers 1 through 5. Layers 6 and 7 are typically developed collaboratively with business stakeholders.</p>
+
+    <h3>Examples</h3>
+    <div class="split-grid">
+      <div class="split-col biz">
+        <h4>Supporter Engagement Data Product</h4>
+        <ul>
+          <li>MailChimp</li>
+          <li>Raiser's Edge</li>
+          <li>Identity matching</li>
+          <li>Supporter timeline</li>
+          <li>Engagement history</li>
+          <li>Donor journey model</li>
+          <li>Certified Gold dataset</li>
+        </ul>
+      </div>
+      <div class="split-col it">
+        <h4>Foster Analytics Data Product</h4>
+        <ul>
+          <li>ShelterBuddy</li>
+          <li>Foster applications</li>
+          <li>Foster placements</li>
+          <li>Capacity analytics</li>
+          <li>Operational reporting</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Benefits</h3>
+    <div class="split-grid">
+      <div class="split-col biz">
+        <h4>For the Business</h4>
+        <ul>
+          <li>Trusted data</li>
+          <li>Consistent definitions</li>
+          <li>Reduced technical complexity</li>
+          <li>Faster access to insights</li>
+          <li>Reusable data assets</li>
+        </ul>
+      </div>
+      <div class="split-col it">
+        <h4>For IT</h4>
+        <ul>
+          <li>Centralized governance</li>
+          <li>Standardized architecture</li>
+          <li>Reusable components</li>
+          <li>Better security and compliance</li>
+        </ul>
+      </div>
+    </div>
+    <div class="split-grid">
+      <div class="split-col biz" style="grid-column: 1 / -1;">
+        <h4>For BC SPCA</h4>
+        <ul>
+          <li>Single source of truth</li>
+          <li>Consistent KPIs</li>
+          <li>Reduced duplication</li>
+          <li>Cross-department analytics</li>
+          <li>Higher data quality</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Challenges</h3>
+    <div class="split-grid">
+      <div class="split-col biz">
+        <h4>For the Business</h4>
+        <ul>
+          <li>Longer delivery timelines</li>
+          <li>Prioritization required</li>
+          <li>Greater dependence on Data Team capacity</li>
+        </ul>
+      </div>
+      <div class="split-col it">
+        <h4>For IT</h4>
+        <ul>
+          <li>Higher development effort</li>
+          <li>Ongoing operational responsibility</li>
+          <li>Requires strong governance and ownership models</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="selection">
+    <h2>Service selection guide</h2>
+    <table>
+      <thead><tr><th>Question</th><th class="c">Self-Service Platform</th><th class="c">Managed Data Product</th></tr></thead>
+      <tbody>
+        <tr><td>Department has technical resources?</td><td class="c">✅</td><td class="c"></td></tr>
+        <tr><td>Department wants to build and maintain solution?</td><td class="c">✅</td><td class="c"></td></tr>
+        <tr><td>Solution only supports one department?</td><td class="c">✅</td><td class="c"></td></tr>
+        <tr><td>Cross-system integration required?</td><td class="c"></td><td class="c">✅</td></tr>
+        <tr><td>Shared enterprise dataset required?</td><td class="c"></td><td class="c">✅</td></tr>
+        <tr><td>Data quality and governance critical?</td><td class="c"></td><td class="c">✅</td></tr>
+        <tr><td>Reusable organizational asset desired?</td><td class="c"></td><td class="c">✅</td></tr>
+        <tr><td>Supports RDLC Layers 1–5?</td><td class="c">Limited</td><td class="c">✅</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="positioning">
+    <h2>Recommended positioning</h2>
+    <div class="callout">
+      <p>The Data Team's preferred strategic investment is the Managed Data Product model. While the Self-Service Data Platform enables departmental innovation, Managed Data Products create trusted, reusable, organization-wide data assets that maximize the value of BC SPCA's data and align with the RDLC framework.</p>
+    </div>
+  </section>
+
+  <div class="footer-note">BC SPCA Data Team · Internal use only · BC SPCA Data Team Service Model.</div>
+</main>
+</body>
+</html>

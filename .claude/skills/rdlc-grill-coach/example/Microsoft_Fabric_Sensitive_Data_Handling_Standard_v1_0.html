@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guidance for storing, protecting, and governing sensitive data within Microsoft Fabric.">
+  <title>Microsoft Fabric Sensitive Data Handling Standard</title>
+  <style>
+    :root {
+      --navy: #18364a; --blue: #176b87; --teal: #2f7f78; --green: #3f7652;
+      --amber: #a56616; --red: #9b3d35; --ink: #24323b; --muted: #5d6c75;
+      --line: #d8e0e4; --soft: #f3f7f8; --blue-soft: #eaf4f7; --green-soft: #edf6ef;
+      --amber-soft: #fff6e8; --red-soft: #fbeeed; --grey-soft: #f5f6f7; --white: #ffffff;
+      --page-width: 920px;
+    }
+    * { box-sizing: border-box; }
+    html { background: #dfe5e8; }
+    body { margin: 0; color: var(--ink); background: var(--white); font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.47; }
+    a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+    .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+    .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+    h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+    h1 { font-size: 28pt; line-height: 1.08; margin: 8mm 0 3mm; }
+    h2 { font-size: 18pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+    h3 { font-size: 13.5pt; margin: 7mm 0 2.5mm; }
+    h4 { font-size: 11.5pt; margin: 5mm 0 2mm; }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin: 1.1mm 0; }
+    .cover { min-height: 200mm; display: flex; flex-direction: column; }
+    .cover-main { margin-top: 28mm; }
+    .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+    .subtitle { color: var(--muted); font-size: 13pt; max-width: 700px; }
+    .status { display: inline-block; margin-top: 6mm; padding: 2mm 4mm; border-radius: 99px; background: var(--green-soft); color: #2a4d35; font-weight: 700; }
+    .cover-meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+    .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .value { font-weight: 650; color: var(--navy); }
+    .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+    .callout.approved, .callout.in-scope { border-color: var(--green); background: var(--green-soft); }
+    .callout.warning, .callout.deferred, .callout.limitation { border-color: var(--amber); background: var(--amber-soft); }
+    .callout.risk { border-color: var(--red); background: var(--red-soft); }
+    .callout.note { border-color: #7b8990; background: var(--grey-soft); }
+    .callout strong:first-child { color: var(--navy); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th, td { padding: 2.8mm 3.2mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--navy); color: var(--white); text-align: left; font-size: 9pt; letter-spacing: .02em; }
+    td.c, th.c { text-align: center; }
+    .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4mm; margin: 4mm 0 6mm; }
+    .class-card { border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: 8px; padding: 5mm; break-inside: avoid; }
+    .class-card.risk-low { border-top-color: var(--green); }
+    .class-card.risk-moderate { border-top-color: var(--blue); }
+    .class-card.risk-high { border-top-color: var(--amber); }
+    .class-card.risk-vhigh { border-top-color: var(--red); }
+    .class-card h3 { margin: 0 0 1mm; font-size: 13.5pt; }
+    .risk-pill { display: inline-block; padding: 0.8mm 2.5mm; border-radius: 99px; font-size: 8.3pt; font-weight: 700; margin-bottom: 2mm; }
+    .risk-pill.low { background: var(--green-soft); color: #2a4d35; }
+    .risk-pill.moderate { background: var(--blue-soft); color: var(--blue); }
+    .risk-pill.high { background: var(--amber-soft); color: #7b4a0c; }
+    .risk-pill.vhigh { background: var(--red-soft); color: var(--red); }
+    .small { font-size: 9pt; color: var(--muted); }
+    .tag { display: inline-block; padding: 1mm 2.5mm; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); font-size: 8.5pt; font-weight: 700; margin: .7mm 1mm .7mm 0; }
+    .toc a { border: 0; }
+    .toc ol { columns: 2; column-gap: 10mm; }
+    .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+    .rule-card { border: 1px solid var(--line); border-radius: 8px; padding: 4mm 5mm; margin: 3mm 0; break-inside: avoid; }
+    .rule-card h4 { margin: 0 0 1.5mm; }
+    .risk-card { border: 1px solid var(--line); border-left: 4px solid var(--red); border-radius: 0 8px 8px 0; padding: 4mm 5mm; margin: 3mm 0; break-inside: avoid; }
+    .risk-card h4 { margin: 0 0 1.5mm; color: var(--red); }
+    @page { size: Letter; margin: 15mm 14mm 17mm; @bottom-left { content: "Internal use only"; color: #6b7880; font-size: 8pt; } @bottom-right { content: "Page " counter(page) " of " counter(pages); color: #6b7880; font-size: 8pt; } }
+    @media print { html, body { background: var(--white); } .page { max-width: none; padding: 0; } .cover { page-break-after: always; } a { color: inherit; border-bottom: 0; } }
+    @media (max-width: 720px) { .page { padding: 8mm; } .card-grid, .cover-meta { grid-template-columns: 1fr; } .toc ol { columns: 1; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <section class="cover">
+    <div class="eyebrow">Data Governance Standard</div>
+    <div class="cover-main">
+      <h1>Microsoft Fabric Sensitive Data Handling Standard</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">Guidance for storing, protecting, and governing sensitive data within Microsoft Fabric.</p>
+      <span class="status">Version 1.0</span>
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Document type</div><div class="value">Data Governance Standard</div></div>
+      <div><div class="label">Platform</div><div class="value">Microsoft Fabric</div></div>
+      <div><div class="label">Applies to</div><div class="value">All sensitive data stored in Fabric (Bronze / Silver / Gold)</div></div>
+      <div><div class="label">Classification</div><div class="value">Internal use only</div></div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#summary">Executive summary</a></li>
+      <li><a href="#why">Why we store sensitive data</a></li>
+      <li><a href="#classification">Data classification</a></li>
+      <li><a href="#controls">Microsoft Fabric security controls</a></li>
+      <li><a href="#architecture">Data architecture standard</a></li>
+      <li><a href="#rules">Sensitive data handling rules</a></li>
+      <li><a href="#risks">Security risks</a></li>
+      <li><a href="#approach">Recommended BC SPCA approach</a></li>
+      <li><a href="#purview">Microsoft Purview and sensitive data governance</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ol>
+  </nav>
+
+  <section id="summary">
+    <h2>01 · Executive summary</h2>
+    <p>The organization uses Microsoft Fabric as its enterprise analytics platform to support reporting, business intelligence, operational decision-making, and data products.</p>
+    <p>Some source systems contain sensitive information such as:</p>
+    <ul>
+      <li>Volunteer names</li>
+      <li>Employee names</li>
+      <li>Email addresses</li>
+      <li>Phone numbers</li>
+      <li>Animal foster information</li>
+      <li>Operational records</li>
+    </ul>
+    <div class="callout approved">
+      <strong>Guiding principle</strong><br>
+      Sensitive data may be stored within Microsoft Fabric when there is a legitimate business requirement. The objective is not to eliminate all sensitive data, but to ensure it is protected through appropriate security, governance, and access controls.
+    </div>
+    <p>Microsoft Fabric provides built-in security capabilities including:</p>
+    <ul>
+      <li>Encryption at rest</li>
+      <li>Encryption in transit</li>
+      <li>Microsoft Entra ID authentication</li>
+      <li>Role-based access control (RBAC)</li>
+      <li>Data governance and auditing capabilities</li>
+    </ul>
+    <p class="small">These security features are enabled and managed by Microsoft as part of the Fabric platform.</p>
+  </section>
+
+  <section id="why">
+    <h2>02 · Why we store sensitive data</h2>
+    <p>Sensitive data is retained only when required for business operations, reporting, analytics, compliance, or data quality purposes.</p>
+    <h3>Examples</h3>
+    <ul>
+      <li><strong>Operational reporting</strong> — volunteer participation reporting, foster program reporting, employee activity reporting</li>
+      <li><strong>Data integration</strong> — matching records across systems, eliminating duplicate records, historical tracking</li>
+      <li><strong>Data quality</strong> — record validation, audit and reconciliation activities</li>
+    </ul>
+    <div class="callout note">
+      Without storing some identifying information, it may not be possible to: link records accurately, validate operational processes, or produce required business reports.
+    </div>
+  </section>
+
+  <section id="classification">
+    <h2>03 · Data classification</h2>
+    <p>The following classification model should be used.</p>
+    <div class="card-grid">
+      <div class="class-card risk-low">
+        <span class="risk-pill low">Risk: Low</span>
+        <h3>Public</h3>
+        <p class="small">Public website information, published statistics</p>
+      </div>
+      <div class="class-card risk-moderate">
+        <span class="risk-pill moderate">Risk: Moderate</span>
+        <h3>Internal</h3>
+        <p class="small">Operational metrics, centre statistics</p>
+      </div>
+      <div class="class-card risk-high">
+        <span class="risk-pill high">Risk: High</span>
+        <h3>Confidential</h3>
+        <p class="small">Volunteer names, employee names, email addresses, business contact information. Access should be restricted to authorized personnel only.</p>
+      </div>
+      <div class="class-card risk-vhigh">
+        <span class="risk-pill vhigh">Risk: Very High</span>
+        <h3>Restricted</h3>
+        <p class="small">Banking information, medical information, government identification numbers, background check information. Storage requires additional review and approval.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="controls">
+    <h2>04 · Microsoft Fabric security controls</h2>
+    <p>Microsoft Fabric includes several built-in security controls.</p>
+    <h3>Encryption</h3>
+    <p>Microsoft automatically encrypts data at rest and data in transit. This protects information from unauthorized access during storage and transmission.</p>
+    <h3>Authentication</h3>
+    <p>Microsoft Fabric uses Microsoft Entra ID (Azure Active Directory). Users must authenticate before accessing Fabric resources.</p>
+    <h3>Access control</h3>
+    <p>Fabric supports workspace permissions, item permissions, OneLake security, and role-based access control. Access can be restricted to specific users and groups.</p>
+    <h3>Auditing and governance</h3>
+    <p>Fabric provides activity monitoring, data lineage, security governance features, and sensitivity labels. These features support compliance and auditing requirements.</p>
+  </section>
+
+  <section id="architecture">
+    <h2>05 · Data architecture standard</h2>
+    <p>The organization follows a Medallion Architecture approach.</p>
+    <table>
+      <thead><tr><th>Layer</th><th>Purpose</th><th>Examples</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Bronze</strong></td><td>Raw copy of source system data</td><td>Volunteer Name, Volunteer ID, Email Address, Source Transaction Data</td><td>Data Team only</td></tr>
+        <tr><td><strong>Silver</strong></td><td>Validated and cleansed data</td><td>Standardized volunteer records, data quality corrections, business rule application</td><td>Data Team only</td></tr>
+        <tr><td><strong>Gold</strong></td><td>Business-ready reporting datasets</td><td>Volunteer Counts, Hours Contributed, Centre Metrics, Program KPIs</td><td>Report Developers, Authorized Business Users</td></tr>
+      </tbody>
+    </table>
+    <div class="callout warning">Sensitive fields should be removed whenever possible at the Gold layer.</div>
+  </section>
+
+  <section id="rules">
+    <h2>06 · Sensitive data handling rules</h2>
+    <div class="rule-card">
+      <h4>Rule 1 — Business need required</h4>
+      <p>Sensitive information must only be stored if there is a legitimate business purpose. Questions to ask: Why do we need this data? Who uses it? Can the decision be made without it?</p>
+    </div>
+    <div class="rule-card">
+      <h4>Rule 2 — Minimum necessary data</h4>
+      <p>Only collect and retain the minimum amount of sensitive information required.</p>
+      <p class="small"><strong>Preferred:</strong> Volunteer ID, Hours, Centre &nbsp;·&nbsp; <strong>Avoid</strong> (unless operationally required): Volunteer Name, Address, Phone</p>
+    </div>
+    <div class="rule-card">
+      <h4>Rule 3 — Restrict access</h4>
+      <p>Sensitive information should only be accessible to Data Developers, Data Analysts, and Approved Business Owners. General report users should not have direct Lakehouse access.</p>
+    </div>
+    <div class="rule-card">
+      <h4>Rule 4 — Remove sensitive data from Gold</h4>
+      <p>Where possible: replace names with IDs, aggregate metrics, remove unnecessary personal information. Gold datasets should be optimized for reporting rather than operational record storage.</p>
+    </div>
+    <div class="rule-card">
+      <h4>Rule 5 — Review regularly</h4>
+      <p>Data owners should periodically review sensitive fields, user access, and business requirements.</p>
+    </div>
+  </section>
+
+  <section id="risks">
+    <h2>07 · Security risks</h2>
+    <div class="risk-card">
+      <h4>Risk 1 — Unauthorized access</h4>
+      <p>An individual gains access to data they are not authorized to view.</p>
+      <p class="small"><strong>Mitigation:</strong> Entra ID authentication, workspace security, principle of least privilege</p>
+    </div>
+    <div class="risk-card">
+      <h4>Risk 2 — Overexposed reporting</h4>
+      <p>Sensitive fields accidentally appear in reports.</p>
+      <p class="small"><strong>Mitigation:</strong> Gold-layer curation, report review process, data model validation</p>
+    </div>
+    <div class="risk-card">
+      <h4>Risk 3 — Excessive permissions</h4>
+      <p>Too many users have Contributor or Member access.</p>
+      <p class="small"><strong>Mitigation:</strong> Limit workspace roles, use security groups, perform access reviews</p>
+    </div>
+    <div class="risk-card">
+      <h4>Risk 4 — Data export</h4>
+      <p>Authorized users export sensitive information outside Fabric.</p>
+      <p class="small"><strong>Mitigation:</strong> Restrict export permissions, apply governance controls, monitor usage</p>
+    </div>
+    <div class="risk-card">
+      <h4>Risk 5 — Human error</h4>
+      <p>Incorrect sharing or publishing of reports.</p>
+      <p class="small"><strong>Mitigation:</strong> User training, governance review, change management process</p>
+    </div>
+  </section>
+
+  <section id="approach">
+    <h2>08 · Recommended BC SPCA approach</h2>
+    <table>
+      <thead><tr><th>Data type</th><th class="c">Bronze</th><th class="c">Silver</th><th class="c">Gold</th></tr></thead>
+      <tbody>
+        <tr><td>Volunteer Name</td><td class="c">Yes</td><td class="c">Yes</td><td class="c">Only if Required</td></tr>
+        <tr><td>Volunteer Email</td><td class="c">Yes</td><td class="c">Yes</td><td class="c">Avoid</td></tr>
+        <tr><td>Employee Name</td><td class="c">Yes</td><td class="c">Yes</td><td class="c">Only if Required</td></tr>
+        <tr><td>Centre Metrics</td><td class="c">Yes</td><td class="c">Yes</td><td class="c">Yes</td></tr>
+        <tr><td>Aggregated KPIs</td><td class="c">Yes</td><td class="c">Yes</td><td class="c">Yes</td></tr>
+        <tr><td>Banking Information</td><td class="c">Avoid</td><td class="c">Avoid</td><td class="c">Avoid</td></tr>
+        <tr><td>SIN / Government ID</td><td class="c">Avoid</td><td class="c">Avoid</td><td class="c">Avoid</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="purview">
+    <h2>09 · Microsoft Purview and sensitive data governance</h2>
+    <p>The organization uses Microsoft Fabric together with Microsoft Purview capabilities to identify, classify, monitor, and protect sensitive information throughout the analytics platform.</p>
+    <p>The goal is to ensure that sensitive data is identified, properly classified, accessed only by authorized users, and governed according to organizational policies.</p>
+
+    <h3>How Purview helps</h3>
+    <h4>Sensitive data discovery</h4>
+    <p>Purview can help identify common sensitive information patterns such as names, email addresses, phone numbers, government identifiers, and financial information. This allows data teams to understand where sensitive information exists within the Fabric environment.</p>
+
+    <h4>Data classification</h4>
+    <p>Purview enables data classification through sensitivity labels.</p>
+    <table>
+      <thead><tr><th>Label</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Public</td><td>Approved for external sharing</td></tr>
+        <tr><td>Internal</td><td>Internal business use</td></tr>
+        <tr><td>Confidential</td><td>Contains personal information</td></tr>
+        <tr><td>Restricted</td><td>Highly sensitive information</td></tr>
+      </tbody>
+    </table>
+    <p class="small">Classification improves visibility and governance across the platform.</p>
+
+    <h4>Data lineage</h4>
+    <p>Purview and Fabric lineage capabilities help answer:</p>
+    <ul>
+      <li>Where did this data originate?</li>
+      <li>Which reports use this data?</li>
+      <li>Who owns the data?</li>
+      <li>What downstream systems are impacted?</li>
+    </ul>
+    <p class="small">This improves auditability and change management.</p>
+
+    <h3>Can Purview prevent users from seeing sensitive data?</h3>
+    <div class="callout warning">
+      <strong>Partially.</strong> Purview helps identify and classify sensitive data, but it is not the primary mechanism used to prevent access.
+    </div>
+    <p>Access prevention should be implemented using:</p>
+    <ul>
+      <li>Microsoft Entra ID security groups</li>
+      <li>Fabric workspace permissions</li>
+      <li>OneLake security</li>
+      <li>Item permissions</li>
+      <li>Row-Level Security (RLS)</li>
+      <li>Column-Level Security (CLS)</li>
+      <li>Report access controls</li>
+    </ul>
+    <p class="small">These technologies determine whether a user can view or access data.</p>
+
+    <h4>Data Loss Prevention (DLP)</h4>
+    <p>Purview supports Data Loss Prevention (DLP) capabilities that can help organizations identify and monitor the movement of sensitive information. Fabric also integrates with sensitivity labels and governance controls. Examples include:</p>
+    <ul>
+      <li>Flagging datasets containing personal information</li>
+      <li>Alerting administrators to policy violations</li>
+      <li>Applying sensitivity labels</li>
+      <li>Monitoring risky activities involving sensitive data</li>
+    </ul>
+    <p class="small">These controls help reduce the risk of accidental exposure.</p>
+
+    <h3>Recommended governance model</h3>
+    <div class="rule-card">
+      <h4>Layer 1 — Discovery</h4>
+      <p>Purview identifies sensitive fields such as Volunteer Name, Volunteer Email, Employee Name, and Personal Contact Information.</p>
+    </div>
+    <div class="rule-card">
+      <h4>Layer 2 — Classification</h4>
+      <p>Apply sensitivity labels: Internal, Confidential, Restricted.</p>
+    </div>
+    <div class="rule-card">
+      <h4>Layer 3 — Access control</h4>
+      <p>Use Fabric security to limit access: Bronze/Silver → Data Team; Gold → Report Developers; Reports → Business Users.</p>
+    </div>
+    <div class="rule-card">
+      <h4>Layer 4 — Monitoring</h4>
+      <p>Use audit logging and governance tools to periodically review access permissions, sensitive data usage, data exports, and policy compliance.</p>
+    </div>
+
+    <h3>Example: volunteer data</h3>
+    <div class="card-grid">
+      <div class="class-card risk-high">
+        <span class="risk-pill high">Purview classification: Confidential</span>
+        <h3>Bronze</h3>
+        <p class="small">Contains: Volunteer Name, Email, Volunteer ID</p>
+        <p class="small"><strong>Access:</strong> Data Team only</p>
+      </div>
+      <div class="class-card risk-moderate">
+        <span class="risk-pill moderate">Purview classification: Internal</span>
+        <h3>Gold</h3>
+        <p class="small">Contains: Volunteer ID, Volunteer Hours, Centre</p>
+        <p class="small"><strong>Access:</strong> Business Users</p>
+      </div>
+    </div>
+    <p class="small">In this approach, the sensitive fields remain protected while still enabling reporting and analytics.</p>
+  </section>
+
+  <section id="conclusion">
+    <h2>10 · Conclusion</h2>
+    <p>Sensitive data can be stored within Microsoft Fabric when required for legitimate business purposes. Microsoft Fabric provides enterprise-grade security through encryption, authentication, access control, governance, and auditing capabilities.</p>
+    <p>The primary objective is not to eliminate sensitive data entirely, but to:</p>
+    <ul>
+      <li>Store only what is necessary.</li>
+      <li>Restrict access appropriately.</li>
+      <li>Remove sensitive information from reporting layers whenever possible.</li>
+      <li>Maintain governance and accountability over data usage.</li>
+    </ul>
+    <p>Following these principles allows the organization to balance operational requirements, analytics needs, and privacy obligations while leveraging Microsoft Fabric as a secure enterprise analytics platform.</p>
+  </section>
+
+  <div class="footer-note">BC SPCA · Internal use only · Microsoft Fabric Sensitive Data Handling Standard, Version 1.0.</div>
+</main>
+</body>
+</html>

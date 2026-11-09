@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Diagnostic evidence BRD: how ShelterBuddy Source and Status values have actually been used over 20 years, to support the SB status/substatus consolidation and Operational Group SOP decision.">
+  <title>SB Status &amp; Source Operational Pathway Analysis | Business Requirements Document</title>
+  <style>
+    :root {
+      --navy: #18364a; --blue: #176b87; --teal: #2f7f78; --green: #3f7652;
+      --amber: #a56616; --red: #9b3d35; --ink: #24323b; --muted: #5d6c75;
+      --line: #d8e0e4; --soft: #f3f7f8; --blue-soft: #eaf4f7; --green-soft: #edf6ef;
+      --amber-soft: #fff6e8; --red-soft: #fbeeed; --grey-soft: #f5f6f7; --white: #ffffff;
+      --page-width: 920px;
+    }
+    * { box-sizing: border-box; }
+    html { background: #dfe5e8; }
+    body { margin: 0; color: var(--ink); background: var(--white); font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.47; }
+    a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+    .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+    .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+    h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+    h1 { font-size: 28pt; line-height: 1.08; margin: 8mm 0 3mm; }
+    h2 { font-size: 18pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+    h3 { font-size: 13.5pt; margin: 7mm 0 2.5mm; }
+    h4 { font-size: 11.5pt; margin: 5mm 0 2mm; }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin: 1.1mm 0; }
+    .cover { min-height: 235mm; display: flex; flex-direction: column; }
+    .cover-main { margin-top: 28mm; }
+    .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+    .subtitle { color: var(--muted); font-size: 13pt; max-width: 700px; }
+    .status { display: inline-block; margin-top: 6mm; padding: 2mm 4mm; border-radius: 99px; background: var(--amber-soft); color: #7b4a0c; font-weight: 700; }
+    .cover-meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+    .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .value { font-weight: 650; color: var(--navy); }
+    .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+    .callout.approved, .callout.in-scope { border-color: var(--green); background: var(--green-soft); }
+    .callout.warning, .callout.deferred, .callout.limitation { border-color: var(--amber); background: var(--amber-soft); }
+    .callout.risk { border-color: var(--red); background: var(--red-soft); }
+    .callout.note { border-color: #7b8990; background: var(--grey-soft); }
+    .callout strong:first-child { color: var(--navy); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th, td { padding: 2.8mm 3.2mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--navy); color: var(--white); text-align: left; font-size: 9pt; letter-spacing: .02em; }
+    .metadata th:first-child, .metadata td:first-child { width: 29%; }
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 4mm 0 6mm; }
+    .definition-card { border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: 8px; padding: 5mm; break-inside: avoid; }
+    .definition-card h3 { margin: 0 0 2mm; font-size: 14pt; }
+    .formula { font-family: Consolas, "Courier New", monospace; background: var(--soft); padding: 2.5mm 3mm; border-radius: 5px; margin: 2mm 0 3mm; }
+    .code { white-space: pre-wrap; font-family: Consolas, "Courier New", monospace; font-size: 8.7pt; background: #202a31; color: #eef5f7; padding: 4mm; border-radius: 7px; break-inside: avoid; }
+    .small { font-size: 9pt; color: var(--muted); }
+    .tag { display: inline-block; padding: 1mm 2.5mm; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); font-size: 8.5pt; font-weight: 700; margin: .7mm 1mm .7mm 0; }
+    .toc a { border: 0; }
+    .toc ol { columns: 2; column-gap: 10mm; }
+    .approval td { height: 15mm; }
+    .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+    .avoid-break { break-inside: avoid; }
+    .page-break { break-before: page; }
+    @page { size: Letter; margin: 15mm 14mm 17mm; @bottom-left { content: "Internal use only"; color: #6b7880; font-size: 8pt; } @bottom-right { content: "Page " counter(page) " of " counter(pages); color: #6b7880; font-size: 8pt; } }
+    @media print { html, body { background: var(--white); } .page { max-width: none; padding: 0; } .cover { page-break-after: always; } a { color: inherit; border-bottom: 0; } }
+    @media (max-width: 720px) { .page { padding: 8mm; } .card-grid, .cover-meta { grid-template-columns: 1fr; } .toc ol { columns: 1; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <section class="cover">
+    <div class="eyebrow">Animal Flow Operations · ShelterBuddy Data Governance</div>
+    <div class="cover-main">
+      <h1>SB Status &amp; Source Operational Pathway Analysis</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">Business Requirements Document — Diagnostic Evidence Deliverable<br>Foster Pathway Analytics · Supporting Workstream · RDLC OS Step 0 (rdlc-grill-coach)</p>
+      <span class="status">Draft for business review · Version 0.1</span>
+    </div>
+    <div class="callout approved">
+      <strong>Decision supported</strong><br>
+      How to finalize ShelterBuddy's status/substatus consolidation and define a governed Operational Group taxonomy for Centre Operation, formalized as SOP — grounded in 20 years of actual usage, not team review alone.
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Author</div><div class="value">Pending — not yet named</div></div>
+      <div><div class="label">Created</div><div class="value">November 2, 2026</div></div>
+      <div><div class="label">Business decision owner</div><div class="value">Pending — Parm named in prior review, scope of authority unconfirmed</div></div>
+      <div><div class="label">Business definition owner</div><div class="value">Pending</div></div>
+      <div><div class="label">Technical owner</div><div class="value">Pending</div></div>
+      <div><div class="label">Classification</div><div class="value">Internal use only</div></div>
+    </div>
+  </section>
+
+  <section id="metadata">
+    <h2>Document metadata</h2>
+    <table class="metadata">
+      <thead><tr><th>Field</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>RDLC document type</td><td>Business Requirements Document — Diagnostic Evidence Deliverable</td></tr>
+        <tr><td>RDLC phase</td><td>Foster Pathway Analytics · Supporting Workstream (not a numbered report phase)</td></tr>
+        <tr><td>RDLC stage</td><td>Step 0 — Intake / Diagnostic (rdlc-grill-coach), new candidate project</td></tr>
+        <tr><td>Capability name</td><td>SB Status &amp; Source Operational Pathway Analysis</td></tr>
+        <tr><td>Capability domain</td><td>ShelterBuddy configuration governance / Animal Flow Operations</td></tr>
+        <tr><td>Author</td><td>Pending — not yet named</td></tr>
+        <tr><td>Version</td><td>0.1</td></tr>
+        <tr><td>Status</td><td>Draft for business review</td></tr>
+        <tr><td>Created date</td><td>November 2, 2026</td></tr>
+        <tr><td>Last updated</td><td>November 2, 2026</td></tr>
+        <tr><td>Historical window</td><td>January 2006 to latest available ShelterBuddy extract</td></tr>
+        <tr><td>Refresh frequency</td><td>Not applicable — one-time diagnostic, not a recurring monitored report (see §15, Interpretation boundary)</td></tr>
+        <tr><td>Primary delivery</td><td>Static HTML analysis pack, matching this project's established mock/report pattern</td></tr>
+        <tr><td>Business decision owner</td><td>Pending — Parm named in Michelle &amp; Cynthia's prior review as having confirmed scope; whether Parm is sole owner or represents a broader management team is unconfirmed</td></tr>
+        <tr><td>Business definition owner</td><td>Pending</td></tr>
+        <tr><td>Technical owner</td><td>Pending</td></tr>
+        <tr><td>Source-system authority</td><td>Pending — presumed to be the SB Data Owner (Cynthia, per the forwarded email), not yet confirmed</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#summary">Executive summary</a></li>
+      <li><a href="#problem">Business problem</a></li>
+      <li><a href="#decision">Decision supported</a></li>
+      <li><a href="#current-state">Current state</a></li>
+      <li><a href="#desired-capability">Desired capability</a></li>
+      <li><a href="#business-questions">Business questions</a></li>
+      <li><a href="#analytical-approach">Analytical approach</a></li>
+      <li><a href="#definitions">Business definitions and KPI contracts</a></li>
+      <li><a href="#data-sources">Data sources</a></li>
+      <li><a href="#design-requirements">Data-design requirements</a></li>
+      <li><a href="#scope">Scope</a></li>
+      <li><a href="#constraints">Assumptions, constraints, dependencies, and limitations</a></li>
+      <li><a href="#report-requirements">Report and consumption requirements</a></li>
+      <li><a href="#data-quality">Data quality and validation</a></li>
+      <li><a href="#success-criteria">Success criteria</a></li>
+      <li><a href="#acceptance-criteria">Acceptance criteria</a></li>
+      <li><a href="#deliverables">Deliverables</a></li>
+      <li><a href="#governance">Governance and change control</a></li>
+      <li><a href="#approvals">Approvals</a></li>
+      <li><a href="#appendices">Appendices</a></li>
+    </ol>
+  </nav>
+
+  <section id="summary">
+    <h2>01 · Executive summary</h2>
+    <p>ShelterBuddy's Source and Status dropdown lists (58 source types, 120 statuses) have grown for 20 years with no governing structure. A stakeholder-led review (Michelle &amp; Cynthia, September 2026) has proposed consolidating 87 "active" statuses down to roughly 6 — built from manual team judgment, not from the system's own 20-year usage history.</p>
+    <p>This artifact proposes a diagnostic capability, not a consolidation plan: an evidence pack showing which Source types and Status values have actually been used, what real operational paths they follow, and where the current taxonomy is structurally incomplete. Two concrete findings already surfaced during intake: the proposed 6-bucket consolidation covers Centre Operation only — Outgoing (roughly a third of the full status taxonomy) and a distinct Vet/Medical path aren't represented at all — and at least three statuses (<code>Deceased</code>, <code>Returned Home</code>, <code>Privately Rehomed</code>) are inconsistently flagged against the system's own <code>IsOutgoing</code> logic, a setup gap independent of any consolidation decision.</p>
+    <p>This supports one decision: how ShelterBuddy's status/substatus taxonomy should be consolidated and formalized as an Operational Group SOP. It does not propose or finalize that taxonomy itself — that stays a management judgment, grounded in real operational need. Intended delivery is a static HTML analysis pack, reviewed once with the decision owner(s), not a recurring monitored report.</p>
+    <div class="callout note"><strong>Interpretation boundary</strong><br>This is diagnostic evidence, not a KPI or Signal artifact. It carries no ongoing threshold, no Red/Amber/Green rating, and does not itself define the target Operational Group structure.</div>
+  </section>
+
+  <section id="problem">
+    <h2>02 · Business problem</h2>
+    <p><strong>Current condition.</strong> Source and Status are flat ShelterBuddy dropdown lists with no grouping or category field on either table. Any status can be selected after any other, with nothing in the system documenting which transitions are operationally valid.</p>
+    <p><strong>Information gap.</strong> Michelle &amp; Cynthia's consolidation proposal was built from team review of the current list, not from what the data shows actually happens. It cannot show whether a status marked for deletion is genuinely unused, or whether a kept status actually represents an under-served operational need (e.g. Vet/Medical, which has no status of its own and is scattered as substatus entries under Hold and Available for Adoption).</p>
+    <p><strong>People/process affected.</strong> Centre operations staff who select statuses daily, the SB Data Owner who must approve any taxonomy change, and every downstream RDLC artifact (Phase 1 reporting, the Phase 2 Centre &amp; Animal Type Utilization BRD, and the Animal-in-Care data-quality work) that depends on Status History to determine in-care vs. outgoing and close care episodes.</p>
+    <p><strong>Consequence.</strong> A consolidation decided without this evidence risks deleting a status the data shows is load-bearing, merging two statuses that represent operationally distinct paths, or leaving the same ungoverned-growth conditions in place for the next 20 years. The <code>IsOutgoing</code> flag gaps found during intake (§12) are a concrete example of a defect that would persist either way unless surfaced here.</p>
+    <p><strong>Why existing work is insufficient.</strong> The existing <em>Intake Source Types and Care Pathways v0.1</em> draft already does this analysis at the Source level; nothing equivalent exists for Status, and no document currently compares Michelle &amp; Cynthia's proposal against either.</p>
+  </section>
+
+  <section id="decision">
+    <h2>03 · Decision supported</h2>
+    <p><strong>Decision to be made:</strong> how to finalize ShelterBuddy's status/substatus consolidation and define a governed Operational Group taxonomy for the Centre Operation stage, formalized as SOP.</p>
+    <p><strong>Intended business action:</strong> management reviews this evidence pack alongside Michelle &amp; Cynthia's proposal and either confirms, amends, or requests further investigation before any status is deleted, merged, or reconfigured in ShelterBuddy.</p>
+    <p><strong>Decision owner:</strong> Pending. Parm is named in the prior review as having already confirmed scope with Michelle and Cynthia; whether Parm is the sole decision owner or represents a broader management team is unconfirmed.</p>
+    <p><strong>Decision frequency:</strong> one-time for this consolidation effort; the resulting SOP is expected to govern status additions going forward, which is itself a future, separate governance decision.</p>
+    <div class="callout warning"><strong>What this artifact does not decide</strong><br>It does not propose or finalize the Operational Group taxonomy. It does not recommend which specific statuses to delete or merge. It does not establish an ongoing monitored metric — see §15.</div>
+  </section>
+
+  <section id="current-state">
+    <h2>04 · Current state</h2>
+    <p><strong>Existing process.</strong> Status/source taxonomy changes are currently proposed through manual stakeholder review (Michelle &amp; Cynthia's September 2026 document), organized by department consultation (Behaviour &amp; Welfare, APS, Wildlife, Home Beyond Ours, Foster Team, Vet Services), with no systematic check against historical usage.</p>
+    <p><strong>Existing trusted definitions.</strong> The Phase 1 and Phase 2 (Centre &amp; Animal Type Utilization) BRDs both describe Status History conceptually — "determines In Care versus Outgoing and closes care episodes" — but neither documents the granular status list, its groupings, or its valid transitions.</p>
+    <p><strong>Current sources.</strong> <code>source.csv</code> and <code>status.csv</code> (ShelterBuddy admin exports, reference/dimension lists only); the draft <em>Intake Source Types and Care Pathways v0.1</em> document (Source-level empirical analysis, already in progress); the <em>Care Timeline Data Quality Report v0.3</em> (a related but differently-scoped Status History diagnostic, built for care-episode normality rather than operational grouping).</p>
+    <p><strong>Known limitations.</strong> No event-level Status History extract (Animal ID + Status + timestamp) has been assembled yet for this specific purpose — see §9 and §12. The "87 active statuses" figure in the prior review does not reconcile to any single flag in <code>status.csv</code> (67 rows have <code>IsInCare=True</code>, not 87); the source of that count is unconfirmed.</p>
+    <p><strong>Manual effort and fragmentation.</strong> Status grouping currently exists only as a one-off document produced through meetings, not as a governed, re-checkable artifact.</p>
+    <p><strong>Must remain authoritative.</strong> Phase 1's delivered foster reconciliation figures and the Phase 2 CATU BRD's measure definitions are not in scope for revision here; this artifact must not propose a change to how Status History is used to determine In Care vs. Outgoing in either.</p>
+  </section>
+
+  <section id="desired-capability">
+    <h2>05 · Desired capability</h2>
+    <p>Not "reduce the number of statuses." The target capability is to show management, from 20 years of actual ShelterBuddy history, which Source types and Status values are genuinely used and which aren't, what the real operational paths look like today, and where the current taxonomy is structurally incomplete — so that any consolidation decision is checked against real usage, and the resulting SOP defines complete operational paths (Intake → Centre Operation → Outgoing, with named tracks within Centre Operation), not just a shorter list of atomic values.</p>
+    <ul>
+      <li>Source-type usage and care-pathway classification, reusing and extending the existing draft work.</li>
+      <li>Status-value usage frequency across the full 120-row list, not just the subset Michelle &amp; Cynthia's document covered.</li>
+      <li>An explicit 3-stage structural map (Intake / Centre Operation / Outgoing), grounded in the system's own <code>IsIncoming</code> / <code>IsInCare</code> / <code>IsOutgoing</code> flags.</li>
+      <li>A side-by-side comparison of the proposed 6-bucket consolidation against that full structural map, naming the gaps explicitly (Outgoing, Vet/Medical).</li>
+      <li>Disclosure of setup/flag inconsistencies found in the source data itself, independent of the consolidation question.</li>
+    </ul>
+  </section>
+
+  <section id="business-questions">
+    <h2>06 · Business questions</h2>
+    <table>
+      <thead><tr><th>#</th><th>Question</th><th>Intended measure / evidence</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Which Source types have actually been used historically, and which have zero or near-zero usage?</td><td>Intake counts by Source type, 2006–latest</td><td><span class="tag">Answered</span> already in the pathway document (5 incoming types with zero intakes since 2006)</td></tr>
+        <tr><td>2</td><td>For each Source type, what is the empirical care pathway — typical status sequence, median days, common outcomes?</td><td>Pathway document's "typical status path" column</td><td><span class="tag">Answered</span></td></tr>
+        <tr><td>3</td><td>Which of the 120 Status values are genuinely in use, and how often, versus never used?</td><td>Status usage frequency, full 120-row list</td><td><span class="tag">Partial</span> — Michelle &amp; Cynthia's "delete/hide" list names candidates; not checked against frequency for every row</td></tr>
+        <tr><td>4</td><td>What operational stages does the current taxonomy represent, and where does the proposed 6-bucket consolidation leave gaps?</td><td>Flag-based stage map vs. proposed buckets</td><td><span class="tag">Answered</span> — Outgoing and Vet/Medical gaps identified</td></tr>
+        <tr><td>5</td><td>What are the actual status-to-status transition patterns, and which look anomalous against expected stage ordering?</td><td>Status transition frequency map</td><td><span class="tag">Blocked</span> — needs the Status History event log, not yet built (§9, §12)</td></tr>
+        <tr><td>6</td><td>Where does the current Source/Status setup show configuration inconsistencies that should be corrected regardless of the consolidation decision?</td><td>Flag-consistency audit</td><td><span class="tag">Partial</span> — 3 <code>IsOutgoing</code> gaps found so far; not a complete audit of all 120 rows</td></tr>
+        <tr><td>7</td><td>How does Michelle &amp; Cynthia's proposed consolidation compare against the empirical evidence?</td><td>Side-by-side comparison, per status</td><td><span class="tag">Not started</span></td></tr>
+      </tbody>
+    </table>
+    <p class="small">Out of scope for this question set: which specific statuses should be deleted, merged, or kept — that is the decision this evidence supports, not a question it answers on management's behalf.</p>
+  </section>
+
+  <section id="analytical-approach">
+    <h2>07 · Analytical approach</h2>
+    <ul>
+      <li><strong>Reporting grain:</strong> Source type and Status value (reference-list grain); Animal-level care pathway matching where reused from the existing pathway document.</li>
+      <li><strong>Population:</strong> all incoming intakes, January 2006 to latest available extract (497,158 per the existing pathway document; to be refreshed against the latest extract date before publication).</li>
+      <li><strong>Entity/event identifiers:</strong> Animal ID, Source Type Id, Status Id.</li>
+      <li><strong>Time zone:</strong> Vancouver local, consistent with prior BRD precedent (Phase 1, Phase 2 CATU).</li>
+      <li><strong>Effective-dated treatment:</strong> status changes are effective-dated events; a transition is derived by ordering an animal's status records chronologically — same effective-dating discipline already established for Care Episode logic.</li>
+      <li><strong>Distinct-count keys / additive behaviour:</strong> not applicable — this artifact does not define a governed rate or ratio measure (see §8).</li>
+      <li><strong>Dimensional attribution:</strong> Source Type → Care Pathway group (6 proposed, from the existing draft); Status → Stage (Intake / Centre Operation / Outgoing) + Operational Group (pending management definition, out of scope for this artifact to assign).</li>
+      <li><strong>Current/open record treatment:</strong> an animal with no closing or outgoing status yet is treated as currently in care, consistent with the Rule 4 logic already established in the Animal-in-Care data-quality work — not redefined here.</li>
+      <li><strong>Historical restatement:</strong> not applicable — one-time diagnostic, not a recurring governed dataset.</li>
+    </ul>
+    <div class="callout note"><strong>Worked example</strong><br><code>Deceased</code> (status 110), <code>Returned Home</code> (93), and <code>Privately Rehomed – New Owner Unknown</code> (125) are all semantically terminal states — an animal reaching any of them has left care — yet none is flagged <code>IsOutgoing=True</code>, unlike comparable statuses such as <code>Euthanized</code> or <code>Unassisted Death</code>, which are. An animal landing on one of these three statuses today would not close its care episode the way a comparable status does.</div>
+  </section>
+
+  <section id="definitions">
+    <h2>08 · Business definitions and KPI contracts</h2>
+    <div class="callout note"><strong>Not applicable.</strong> This artifact is diagnostic evidence, not a KPI Contract. It does not define, redefine, or compute any governed rate, ratio, or ongoing Signal measure. Existing governed measures (Animals in Care, Fostered Animals, % Animals in Care Fostered, from Phase 1 and the Phase 2 CATU BRD) are referenced only as context and are not modified by this document.</div>
+  </section>
+
+  <section id="data-sources">
+    <h2>09 · Data sources</h2>
+    <table>
+      <thead><tr><th>Source</th><th>Business authority</th><th>Governed purpose</th><th>Keys / fields</th><th>Known concerns</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>source.csv</code></td><td>SB Data Owner (presumed Cynthia — unconfirmed)</td><td>Defines the 58 possible Source values and their <code>IsIncoming</code>/<code>IsDoa</code> flags</td><td>Id, Name, IsIncoming, IsDoa</td><td>Point-in-time export; not yet independently verified against live SB admin configuration</td><td>Available</td></tr>
+        <tr><td><code>status.csv</code></td><td>SB Data Owner (presumed — unconfirmed)</td><td>Defines the 120 possible Status values and their state flags</td><td>Id, Name, IsInCare, IsInFosterCare, IsOutgoing, IsAdoption, IsDeceased</td><td>No column indicates whether a status is admin-enabled/visible in the UI — likely explains the unreconciled "87 active statuses" figure (§4, §12)</td><td>Available</td></tr>
+        <tr><td><em>Intake Source Types and Care Pathways v0.1</em></td><td>Prior draft artifact, this project</td><td>Structural and factual reference for Source-level usage and pathways</td><td>n/a — document, not raw data</td><td>Draft, not yet confirmed by the SB Data Owner</td><td>Available</td></tr>
+        <tr><td>Status History event log</td><td>ShelterBuddy / SB Data Owner</td><td>Required to compute the status transition frequency map (Business Question 5)</td><td>Logical requirement only: Animal ID, Status Id, effective timestamp, ordered per animal. Physical table/column names not yet profiled.</td><td>Not yet obtained as a standalone extract for this purpose, though the same underlying source already produced 2,123,658 linked status records for the separate Care Timeline Data Quality Report</td><td><span class="tag">Dependency</span></td></tr>
+        <tr><td>Michelle &amp; Cynthia's status review document (Sept 2026)</td><td>Michelle, Cynthia; confirmed with Parm</td><td>Comparison baseline for Business Question 7 — not a data source</td><td>n/a</td><td>Built from manual review, not reconciled against usage data</td><td>Available</td></tr>
+      </tbody>
+    </table>
+    <p class="small">No physical ShelterBuddy table or column names are asserted beyond what the provided CSV exports and prior artifacts already document.</p>
+  </section>
+
+  <section id="design-requirements">
+    <h2>10 · Data-design requirements</h2>
+    <ul>
+      <li><strong>Required output grain:</strong> one row per status-change event, ordered per animal, once the Status History extract is available.</li>
+      <li><strong>Effective start/end semantics:</strong> reuse the Care Episode effective-dating convention already established in the Phase 1/Phase 2 BRDs — not redefined here.</li>
+      <li><strong>Event precedence / tie-breaking:</strong> same-day multiple status changes — ordering rule not yet defined. <span class="tag">Open</span></li>
+      <li><strong>Source identifiers retained for audit:</strong> Animal ID, Status Id, source record identifier (when available).</li>
+      <li><strong>Change detection:</strong> a transition is any pair of consecutive status records for the same animal where Status Id differs.</li>
+      <li><strong>Current-row handling:</strong> the most recent status before the extract date represents current state.</li>
+      <li><strong>Unknown/conflict handling:</strong> reuse the Rule 1–4 pattern already established in the Animal-in-Care data-quality work (no-status, backdated-status) rather than re-deriving new rules.</li>
+      <li><strong>Lineage/reconciliation:</strong> not applicable — this is a one-time diagnostic, not a governed recurring dataset.</li>
+    </ul>
+  </section>
+
+  <section id="scope">
+    <h2>11 · Scope</h2>
+    <div class="callout in-scope">
+      <strong>In scope</strong>
+      <ul>
+        <li>Source-type historical usage and care-pathway classification (extends existing draft work)</li>
+        <li>Status-value historical usage across the full 120-row list</li>
+        <li>3-stage structural mapping (Intake / Centre Operation / Outgoing), grounded in system flags</li>
+        <li>Side-by-side comparison of the proposed 6-bucket consolidation against the full structural map</li>
+        <li>Disclosure of setup/flag-consistency findings (e.g. the 3 <code>IsOutgoing</code> gaps)</li>
+      </ul>
+    </div>
+    <div class="callout deferred">
+      <strong>Deferred to a named future phase</strong>
+      <ul>
+        <li>Full status-to-status transition/path frequency map — pending the Status History event-level extract</li>
+        <li>Defining the Operational Group taxonomy itself — management's decision, to be formalized as a future SOP artifact</li>
+      </ul>
+    </div>
+    <div class="callout warning">
+      <strong>Out of scope</strong>
+      <ul>
+        <li>Redefining any Phase 1 or Phase 2 CATU KPI formula or Care Episode logic</li>
+        <li>Recommending which specific statuses to delete, merge, or keep</li>
+        <li>Establishing an ongoing monitored Signal or KPI from this work (see §15, Interpretation boundary)</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="constraints">
+    <h2>12 · Assumptions, constraints, dependencies, and accepted limitations</h2>
+    <table>
+      <thead><tr><th>Type</th><th>Item</th></tr></thead>
+      <tbody>
+        <tr><td>Assumption</td><td><code>source.csv</code> and <code>status.csv</code> reflect the current live SB configuration. Not yet independently verified against SB admin.</td></tr>
+        <tr><td>Constraint</td><td>ShelterBuddy's status/source lists are vendor-configured dropdowns; adding a native grouping field inside SB may not be feasible without vendor involvement. The recommended pattern is an external, governed mapping table (Status Id → Operational Group → Stage), maintained in the semantic/RDLC layer — the same approach already used for Normalized Animal Type Family.</td></tr>
+        <tr><td>Dependency</td><td>Status History event-level extract (Animal ID, Status, effective timestamp) — required for Business Question 5, not yet obtained as a standalone file for this purpose.</td></tr>
+        <tr><td>Dependency</td><td>Confirmation of decision owner — Parm individually, or a broader management team Parm represents.</td></tr>
+        <tr><td>Accepted limitation</td><td>The "87 active statuses" figure in the prior review does not reconcile to any single flag in <code>status.csv</code> (67 rows have <code>IsInCare=True</code>). Most likely explanation: a separate SB admin "enabled/visible" flag not present in this export. Unresolved pending access to SB's admin status-configuration screen.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="report-requirements">
+    <h2>13 · Report and consumption requirements</h2>
+    <ul>
+      <li><strong>Required views:</strong> Source usage summary; Status usage summary (full 120); 3-stage/path coverage comparison; setup-inconsistency findings.</li>
+      <li><strong>Filters/comparisons:</strong> by care-pathway group; by stage (Intake/Centre Operation/Outgoing).</li>
+      <li><strong>Narrative rules:</strong> descriptive only — no causal, performance, or capacity language, consistent with this project's standing interpretation-boundary convention.</li>
+      <li><strong>Zero/unknown presentation:</strong> sources or statuses with zero historical usage are named explicitly, not silently omitted.</li>
+      <li><strong>Delivery format:</strong> static HTML analysis pack, matching this project's established mock/report pattern.</li>
+      <li><strong>Publication frequency:</strong> one-time; republished only if explicitly re-requested, not on a refresh schedule.</li>
+      <li><strong>Accessibility:</strong> contrast, alt text, and no color-only signals, per this project's established accessibility standard.</li>
+    </ul>
+  </section>
+
+  <section id="data-quality">
+    <h2>14 · Data quality and validation</h2>
+    <ul>
+      <li><strong>Validity check:</strong> cross-check <code>source.csv</code>/<code>status.csv</code> row counts and flag values against SB's live admin configuration before publishing final figures.</li>
+      <li><strong>Source-to-output reconciliation:</strong> Source and Status usage totals must reconcile to the existing <em>Intake Source Types and Care Pathways</em> document's published totals (497,158 intakes) wherever the two overlap.</li>
+      <li><strong>Worked-example validation:</strong> the three <code>IsOutgoing</code> flag-inconsistency findings (§7 worked example) serve as the validation case for the flag-consistency audit.</li>
+      <li><strong>Exception handling:</strong> any Source or Status with zero historical usage is flagged explicitly, never silently dropped from the published list.</li>
+      <li><strong>Publication blocking criterion:</strong> final consolidated recommendations are not published until the Status History transition data is available, or its absence is explicitly accepted by the decision owner as a carried-forward limitation.</li>
+    </ul>
+  </section>
+
+  <section id="success-criteria">
+    <h2>15 · Success criteria</h2>
+    <ul>
+      <li>Management can see, for every Source type and Status value, its actual historical usage and path context.</li>
+      <li>The gap between the proposed 6-bucket consolidation and a complete 3-stage operational path is visible and explicit, not implied.</li>
+      <li>All identified setup/flag inconsistencies (minimum: the 3 <code>IsOutgoing</code> gaps) are raised to the SB Data Owner.</li>
+      <li>Management has the evidence needed to define the Operational Group taxonomy themselves — this artifact has not pre-decided it for them.</li>
+    </ul>
+    <div class="callout note"><strong>Interpretation boundary</strong><br>Success is measured by whether this evidence changes or confirms management's decision-making — not by any ongoing number, since this artifact establishes no Signal or threshold (§6/Q6 of the intake session, carried forward here).</div>
+  </section>
+
+  <section id="acceptance-criteria">
+    <h2>16 · Acceptance criteria</h2>
+    <ul>
+      <li><strong>Governance approval:</strong> the decision owner (Pending) confirms this diagnostic's findings are accurate and sufficient to proceed to a taxonomy-definition session.</li>
+      <li><strong>Definition approval:</strong> the SB Data Owner confirms <code>source.csv</code>/<code>status.csv</code> reflect the current live configuration.</li>
+      <li><strong>Data integrity:</strong> usage totals reconcile against the existing pathway document within an agreed tolerance.</li>
+      <li><strong>Known limitation acceptance:</strong> the absence of the full transition map (Business Question 5) is explicitly accepted as deferred, or escalated as a follow-on need, by the decision owner.</li>
+    </ul>
+  </section>
+
+  <section id="deliverables">
+    <h2>17 · Deliverables</h2>
+    <table>
+      <thead><tr><th>Deliverable</th><th>Purpose</th><th>Format</th><th>Owner</th><th>Location</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>This BRD</td><td>Govern scope and intent of the diagnostic</td><td>HTML</td><td>Pending</td><td><code>.claude/skills/rdlc-grill-coach/example/</code></td><td>Draft v0.1</td></tr>
+        <tr><td>SB Status &amp; Source Operational Pathway Analysis Pack</td><td>Evidence base for the consolidation decision</td><td>Static HTML</td><td>Pending</td><td><code>sandbox/foster_analysis_pack/</code> (companion to the existing Source pathway document)</td><td>Not started</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="governance">
+    <h2>18 · Governance and change control</h2>
+    <ul>
+      <li><strong>Business decision owner:</strong> Pending.</li>
+      <li><strong>Business definition owner:</strong> Pending.</li>
+      <li><strong>Technical owner:</strong> Pending.</li>
+      <li><strong>Source-system authority:</strong> Pending — presumed SB Data Owner.</li>
+      <li><strong>Change-approval requirement:</strong> any revision to the Business Questions (§6) or Scope (§11) requires decision-owner sign-off.</li>
+      <li><strong>Historical restatement:</strong> not applicable — one-time diagnostic.</li>
+      <li><strong>Disclosure:</strong> internal use only; not for external or public distribution.</li>
+    </ul>
+  </section>
+
+  <section id="approvals">
+    <h2>19 · Approvals</h2>
+    <table class="approval">
+      <thead><tr><th>Role</th><th>Name</th><th>Decision</th><th>Date</th></tr></thead>
+      <tbody>
+        <tr><td>Business decision owner</td><td>Pending</td><td>Pending</td><td></td></tr>
+        <tr><td>Business definition owner</td><td>Pending</td><td>Pending</td><td></td></tr>
+        <tr><td>Technical owner</td><td>Pending</td><td>Pending</td><td></td></tr>
+        <tr><td>Source-system authority</td><td>Pending</td><td>Pending</td><td></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="appendices">
+    <h2>20 · Appendices</h2>
+    <h3>A. Reference counts, as reviewed during intake</h3>
+    <ul>
+      <li><code>source.csv</code>: 58 source types — 42–43 <code>IsIncoming=True</code>, 16 <code>IsIncoming=False</code> (matches the existing pathway document's "43 incoming · 16 not").</li>
+      <li><code>status.csv</code>: 120 statuses — 67 <code>IsInCare=True</code> (not 87 — see §12 accepted limitation); approximately 41 <code>IsOutgoing=True</code>; approximately 10 rows with both flags False (administrative/ambiguous — <code>Found</code>, <code>Matched</code>, <code>Information</code>, <code>Lost</code>, <code>Boarding Client</code>, <code>Returned Home</code>, <code>Deceased</code>, <code>Privately Rehomed – New Owner Unknown</code>, <code>Possible Match</code>, <code>Entered Care</code>).</li>
+    </ul>
+    <h3>B. Flag-inconsistency findings (detail)</h3>
+    <table>
+      <thead><tr><th>Status Id</th><th>Name</th><th>IsInCare</th><th>IsOutgoing</th><th>Concern</th></tr></thead>
+      <tbody>
+        <tr><td>110</td><td>Deceased</td><td>False</td><td>False</td><td>Semantically terminal; comparable statuses (Euthanized, Unassisted Death) are flagged IsOutgoing=True, this is not</td></tr>
+        <tr><td>93</td><td>Returned Home</td><td>False</td><td>False</td><td>Semantically terminal; not flagged outgoing</td></tr>
+        <tr><td>125</td><td>Privately Rehomed – New Owner Unknown</td><td>False</td><td>False</td><td>Represents an ownership change leaving SPCA care; not flagged outgoing</td></tr>
+        <tr><td>146</td><td>Adopted – Awaiting Pickup</td><td>True</td><td>False</td><td>Contrast case, correctly modeled — still in care since the animal hasn't physically left</td></tr>
+      </tbody>
+    </table>
+    <h3>C. Reference artifacts</h3>
+    <ul>
+      <li><em>Intake Source Types and Care Pathways v0.1</em> — <code>sandbox/foster_analysis_pack/Analysis Pack/Intake Source Types and Care Pathways.html</code></li>
+      <li><em>Care Timeline Data Quality Report v0.3</em> — <code>sandbox/foster_analysis_pack/Analysis Pack/Care_Timeline_Data_Quality_Report_v0_3.html</code> (related Status History diagnostic, different scope)</li>
+      <li>Michelle &amp; Cynthia's status review, September 2026 — <code>sandbox/SB_StatusRvw_MH_Sept2026 - MH COMMENTS.docx</code></li>
+      <li><code>sandbox/source.csv</code>, <code>sandbox/status.csv</code></li>
+    </ul>
+    <h3>D. Glossary</h3>
+    <ul>
+      <li><strong>Stage</strong> — one of Intake, Centre Operation, or Outgoing; derived from <code>IsIncoming</code>/<code>IsInCare</code>/<code>IsOutgoing</code>.</li>
+      <li><strong>Operational Group</strong> — a department-level grouping within Centre Operation (e.g. Behaviour, Vet/Medical, APS/Legal, Foster) — not yet formally defined; management's decision.</li>
+      <li><strong>Path</strong> — an ordered sequence of statuses an animal actually moves through, as opposed to an isolated atomic status value.</li>
+    </ul>
+  </section>
+
+  <div class="footer-note">BC SPCA · Internal use only · This document is a working draft produced through an RDLC OS <code>rdlc-grill-coach</code> intake session. Every "Pending" field above is an open item, not an invented value — see §12 and §19 before treating any content here as confirmed.</div>
+</main>
+</body>
+</html>

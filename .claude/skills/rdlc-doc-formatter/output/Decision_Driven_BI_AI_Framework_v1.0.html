@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision-Driven BI &amp; AI Framework</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif;
+    color:var(--ink); background:var(--paper); line-height:1.55;
+    font-size:15.5px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 28px 80px;}
+
+  /* ---------- Cover ---------- */
+  .cover{
+    background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%);
+    color:#fff; padding:64px 48px 48px; margin-bottom:48px;
+  }
+  .cover-eyebrow{
+    text-transform:uppercase; letter-spacing:.12em; font-size:12.5px;
+    color:#9db9c9; font-weight:600;
+  }
+  .cover-main{margin-top:18px;}
+  .cover h1{font-size:34px; margin:0 0 10px; line-height:1.2;}
+  .cover .subtitle{font-size:17px; color:#cfe1ea; margin:0 0 22px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:22px 0;}
+  .status{
+    display:inline-block; padding:4px 12px; border-radius:20px;
+    font-size:12.5px; font-weight:700; letter-spacing:.03em;
+    background:var(--amber); color:#fff; text-transform:uppercase;
+  }
+  .cover-meta{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px 28px;
+    margin-top:22px; font-size:13.5px; color:#cfe1ea;
+  }
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+
+  /* ---------- Headings ---------- */
+  h2{
+    color:var(--navy); font-size:22px; margin:52px 0 6px;
+    padding-bottom:8px; border-bottom:2px solid var(--line);
+  }
+  h2 .num{color:var(--teal); margin-right:8px;}
+  h3{color:var(--blue); font-size:16.5px; margin:26px 0 8px;}
+  p{margin:10px 0;}
+  .lede{font-size:16px; color:var(--grey); margin-top:4px;}
+
+  /* ---------- Callouts ---------- */
+  .callout{border-radius:8px; padding:16px 18px; margin:18px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:13px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.insight{background:var(--teal-soft); border-left:4px solid var(--teal); color:#1d4e49;}
+
+  /* ---------- Flow chain (vertical) ---------- */
+  .chain{display:flex; flex-direction:column; align-items:center; margin:22px 0;}
+  .chain .step{
+    background:var(--navy-soft); border:1px solid var(--line); border-radius:8px;
+    padding:10px 20px; font-weight:600; color:var(--navy); font-size:14.5px;
+    text-align:center; min-width:220px;
+  }
+  .chain .arrow{color:var(--teal); font-size:18px; line-height:1; margin:2px 0;}
+  .chain.tight .step{padding:8px 16px; font-size:13.5px; min-width:180px;}
+
+  /* ---------- Horizontal flow row ---------- */
+  .flowrow{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin:18px 0;}
+  .flowrow .step{
+    background:var(--teal-soft); border:1px solid var(--teal); color:var(--teal);
+    border-radius:8px; padding:8px 16px; font-weight:700; font-size:13.5px;
+  }
+  .flowrow .arrow{color:var(--grey); font-size:16px;}
+
+  /* ---------- Compare grid (2 col) ---------- */
+  .compare-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:20px 0;}
+  .compare-col{border-radius:8px; padding:18px; border:1px solid var(--line);}
+  .compare-col.old{background:var(--grey-soft);}
+  .compare-col.new{background:var(--teal-soft); border-color:var(--teal);}
+  .compare-col h4{margin:0 0 10px; font-size:14px; text-transform:uppercase; letter-spacing:.03em;}
+  .compare-col.old h4{color:var(--grey);}
+  .compare-col.new h4{color:var(--teal);}
+  .compare-col ul{margin:0; padding-left:20px;}
+  .compare-col li{margin:6px 0; font-size:14.5px;}
+
+  /* ---------- Layer table ---------- */
+  .layer-card{
+    border:1px solid var(--line); border-radius:8px; margin:14px 0;
+    overflow:hidden;
+  }
+  .layer-head{
+    display:flex; align-items:center; gap:12px; padding:12px 16px;
+    background:var(--navy-soft);
+  }
+  .layer-badge{
+    background:var(--navy); color:#fff; font-weight:700; font-size:13px;
+    border-radius:6px; padding:4px 10px; flex-shrink:0;
+  }
+  .layer-q{font-weight:600; color:var(--navy); font-size:15px;}
+  .layer-body{padding:12px 16px; font-size:14px;}
+  .layer-body .row{display:grid; grid-template-columns:140px 1fr; gap:8px; margin:6px 0;}
+  .layer-body .row b{color:var(--grey); font-size:12.5px; text-transform:uppercase; letter-spacing:.03em;}
+  .pill-row{display:flex; gap:6px; flex-wrap:wrap;}
+  .pill{background:var(--blue-soft); color:var(--blue); border-radius:14px; padding:2px 10px; font-size:12.5px; font-weight:600;}
+  .pill.type{background:var(--amber-soft); color:var(--amber);}
+
+  /* ---------- Data Product definition ---------- */
+  .dp-formula{
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    flex-wrap:wrap; margin:20px 0; font-weight:700;
+  }
+  .dp-formula .box{
+    background:var(--navy-soft); border:1px solid var(--line); border-radius:8px;
+    padding:10px 16px; color:var(--navy); font-size:14px;
+  }
+  .dp-formula .box.lead{background:var(--grey-soft); color:var(--grey);}
+  .dp-formula .plus{color:var(--teal); font-size:18px;}
+
+  /* ---------- Case study cards ---------- */
+  .case{border:1px solid var(--line); border-radius:10px; padding:22px; margin:20px 0; background:#fbfcfc;}
+  .case h3.case-title{margin-top:0; color:var(--navy); font-size:18px; border-bottom:none;}
+  .case .field{margin:12px 0;}
+  .case .field b{display:block; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--grey); margin-bottom:3px;}
+  .layer-status{display:flex; flex-direction:column; gap:6px; margin:10px 0;}
+  .layer-status .item{display:flex; align-items:center; gap:10px; font-size:14px;}
+  .layer-status .dot{width:20px; text-align:center; font-size:13px;}
+  .layer-status .done .dot{color:var(--green);}
+  .layer-status .future .dot{color:var(--amber);}
+  .layer-status .future{color:var(--grey);}
+
+  .formula-box{
+    display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;
+    background:var(--teal-soft); border:1px solid var(--teal); border-radius:8px;
+    padding:14px 18px; margin:14px 0; font-weight:700; color:#1d4e49; font-size:15px;
+  }
+  .formula-box .op{color:var(--teal); font-size:17px;}
+  .baseline-badge{
+    display:inline-block; background:var(--amber-soft); color:var(--amber);
+    border-radius:6px; padding:4px 12px; font-weight:700; font-size:14px;
+  }
+
+  /* ---------- Checklist (do / don't) ---------- */
+  .check-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:20px 0;}
+  .check-col{border-radius:8px; padding:18px; border:1px solid var(--line);}
+  .check-col.no{background:var(--red-soft);}
+  .check-col.yes{background:var(--green-soft);}
+  .check-col h4{margin:0 0 10px; font-size:14px;}
+  .check-col.no h4{color:var(--red);}
+  .check-col.yes h4{color:var(--green);}
+  .check-col ul{margin:0; padding-left:0; list-style:none;}
+  .check-col li{margin:8px 0; font-size:14.5px; padding-left:24px; position:relative;}
+  .check-col.no li:before{content:"✕"; position:absolute; left:0; color:var(--red); font-weight:700;}
+  .check-col.yes li:before{content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700;}
+
+  /* ---------- Positioning statement ---------- */
+  .statement{
+    background:var(--navy); color:#fff; border-radius:10px; padding:30px 32px;
+    margin:24px 0; font-size:17px; font-weight:500; line-height:1.5;
+  }
+  .statement .label{
+    text-transform:uppercase; letter-spacing:.08em; font-size:12px; color:#9db9c9;
+    font-weight:700; margin-bottom:10px;
+  }
+  .closing-triplet{display:flex; gap:14px; flex-wrap:wrap; margin:20px 0;}
+  .closing-triplet .chip{
+    flex:1; min-width:180px; text-align:center; border-radius:8px; padding:14px;
+    border:1px solid var(--line); font-weight:600; font-size:14px; color:var(--navy);
+  }
+  .closing-triplet .chip.goal{background:var(--teal); color:#fff; border-color:var(--teal);}
+
+  footer{
+    margin-top:60px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--grey);
+  }
+
+  @media (max-width:640px){
+    .compare-grid, .check-grid{grid-template-columns:1fr;}
+    .cover{padding:44px 24px 36px;}
+    .cover h1{font-size:26px;}
+    .cover-meta{grid-template-columns:1fr;}
+    .layer-body .row{grid-template-columns:1fr;}
+  }
+
+  @media print{
+    .cover{min-height:200mm; display:flex; flex-direction:column; page-break-after:always;}
+    .cover-main{margin-top:12mm;}
+    .cover-meta{margin-top:auto;}
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Data &amp; Analytics</div>
+  <div class="cover-main">
+    <h1>Decision-Driven BI &amp; AI Framework</h1>
+    <p class="subtitle">A framework for moving from business problems to measurable outcomes &mdash; not from technology to dashboards.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft &mdash; Positioning Document</span>
+    <div class="cover-meta">
+      <div><b>Document Type</b>Framework / Positioning Statement</div>
+      <div><b>Audience</b>Internal leadership &amp; external partners evaluating BI + AI delivery approaches</div>
+      <div><b>Related Work</b>RDLC OS, Live Capacity, Foster Analytics</div>
+      <div><b>Status</b>Draft &mdash; not yet an approved corporate standard</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<h2><span class="num">01</span>The Problem We Are Solving</h2>
+<p>Most organizations have:</p>
+<div class="chain tight">
+  <div class="step">Data</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Dashboard</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Report</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">More Reports</div>
+</div>
+
+<h3>Result</h3>
+<div class="check-grid">
+  <div class="check-col no">
+    <h4>What this produces</h4>
+    <ul>
+      <li>Hundreds of dashboards</li>
+      <li>Multiple KPI definitions</li>
+      <li>Low adoption</li>
+      <li>No clear actions</li>
+      <li>Decisions still made by intuition</li>
+    </ul>
+  </div>
+  <div class="check-col yes" style="background:var(--navy-soft); border-color:var(--line);">
+    <h4 style="color:var(--navy);">The real problem</h4>
+    <p style="margin:0; font-size:15px; font-weight:600; color:var(--navy);">The problem is not a lack of reports.</p>
+    <p style="margin-top:10px; font-size:15px;">Organizations struggle to convert information into decisions and actions.</p>
+  </div>
+</div>
+
+<h2><span class="num">02</span>Our Philosophy</h2>
+<div class="compare-grid">
+  <div class="compare-col old">
+    <h4>Traditional BI asks</h4>
+    <ul>
+      <li>What charts?</li>
+      <li>What KPIs?</li>
+      <li>What filters?</li>
+    </ul>
+  </div>
+  <div class="compare-col new">
+    <h4>Decision-Driven BI asks</h4>
+    <ul>
+      <li>What decision needs to be made?</li>
+      <li>Who owns the decision?</li>
+      <li>What outcome are we trying to achieve?</li>
+    </ul>
+  </div>
+</div>
+<p style="text-align:center; font-weight:700; color:var(--navy); font-size:16px;">Technology comes later.</p>
+
+<h2><span class="num">03</span>One Chain: From Problem to Outcome</h2>
+<p class="lede">This is the core chain. Everything else supports it.</p>
+<div class="chain">
+  <div class="step">Business Objective</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Business Question</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Outcome Metric</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Signal Detection</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Diagnostic Analysis</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Driver Discovery</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Residual Investigation</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">Decision Insight</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step" style="background:var(--teal); color:#fff; border-color:var(--teal);">Recommended Action</div>
+</div>
+
+<h2><span class="num">04</span>The 7 Analytical Layers</h2>
+
+<div class="layer-card">
+  <div class="layer-head"><span class="layer-badge">Layer 1</span><span class="layer-q">What happened?</span></div>
+  <div class="layer-body">
+    <div class="row"><b>Examples</b><span>Intake count, Foster count, Capacity count</span></div>
+    <div class="row"><b>Analysis Type</b><span class="pill-row"><span class="pill type">Descriptive</span></span></div>
+  </div>
+</div>
+
+<div class="layer-card">
+  <div class="layer-head"><span class="layer-badge">Layer 2</span><span class="layer-q">Did something unusual happen?</span></div>
+  <div class="layer-body">
+    <div class="row"><b>Examples</b><span>Capacity spike, Foster decline, Intake surge</span></div>
+    <div class="row"><b>Analysis Type</b><span class="pill-row"><span class="pill type">Descriptive + Statistical Monitoring</span></span></div>
+    <div class="row"><b>Possible Methods</b><span class="pill-row"><span class="pill">Normal Approximation</span><span class="pill">Control Limits</span><span class="pill">Anomaly Detection</span></span></div>
+  </div>
+</div>
+
+<div class="layer-card">
+  <div class="layer-head"><span class="layer-badge">Layer 3</span><span class="layer-q">What is related?</span></div>
+  <div class="layer-body">
+    <div class="row"><b>Examples</b><span>Foster rate vs. intake, Capacity vs. transfers</span></div>
+    <div class="row"><b>Analysis Type</b><span class="pill-row"><span class="pill type">Diagnostic</span></span></div>
+    <div class="row"><b>Possible Methods</b><span class="pill-row"><span class="pill">Correlation</span><span class="pill">Segmentation</span><span class="pill">Drill-through</span></span></div>
+  </div>
+</div>
+
+<div class="layer-card">
+  <div class="layer-head"><span class="layer-badge">Layer 4</span><span class="layer-q">What is driving it?</span></div>
+  <div class="layer-body">
+    <div class="row"><b>Examples</b><span>Why is capacity increasing? Why do animals remain longer?</span></div>
+    <div class="row"><b>Analysis Type</b><span class="pill-row"><span class="pill type">Predictive</span></span></div>
+    <div class="row"><b>Possible Methods</b><span class="pill-row"><span class="pill">Regression</span><span class="pill">Feature Importance</span><span class="pill">Trend Analysis</span></span></div>
+  </div>
+</div>
+
+<div class="layer-card">
+  <div class="layer-head"><span class="layer-badge">Layer 5</span><span class="layer-q">What should we focus on?</span></div>
+  <div class="layer-body">
+    <div class="row"><b>Examples</b><span>Centre requiring intervention, Program requiring attention</span></div>
+    <div class="row"><b>Analysis Type</b><span class="pill-row"><span class="pill type">Decision Support</span></span></div>
+    <div class="row"><b>Output</b><span>Prioritized opportunities, Recommended focus areas</span></div>
+  </div>
+</div>
+
+<div class="layer-card">
+  <div class="layer-head"><span class="layer-badge">Layer 6</span><span class="layer-q">What should we do?</span></div>
+  <div class="layer-body">
+    <div class="row"><b>Examples</b><span>Increase transfers, Recruit foster homes, Escalate Animal Flow review</span></div>
+    <div class="row"><b>Analysis Type</b><span class="pill-row"><span class="pill type">Prescriptive</span></span></div>
+    <div class="row"><b>Output</b><span>Recommended actions</span></div>
+  </div>
+</div>
+
+<div class="layer-card">
+  <div class="layer-head"><span class="layer-badge">Layer 7</span><span class="layer-q">Did it work?</span></div>
+  <div class="layer-body">
+    <div class="row"><b>Examples</b><span>Capacity reduced, Foster participation increased, Placement time decreased</span></div>
+    <div class="row"><b>Analysis Type</b><span class="pill-row"><span class="pill type">Outcome Measurement</span></span></div>
+  </div>
+</div>
+
+<h2><span class="num">05</span>Data Product Model</h2>
+<div class="compare-grid">
+  <div class="compare-col old">
+    <h4>Most BI teams deliver</h4>
+    <div class="chain tight" style="margin:4px 0;"><div class="step">Dashboard</div></div>
+  </div>
+  <div class="compare-col new">
+    <h4>We deliver</h4>
+    <div class="chain tight" style="margin:4px 0;">
+      <div class="step">Problem</div><div class="arrow">&#8595;</div>
+      <div class="step">Decision</div><div class="arrow">&#8595;</div>
+      <div class="step">Business Rules</div><div class="arrow">&#8595;</div>
+      <div class="step">Data Product</div><div class="arrow">&#8595;</div>
+      <div class="step">Action</div><div class="arrow">&#8595;</div>
+      <div class="step" style="background:var(--teal); color:#fff; border-color:var(--teal);">Outcome</div>
+    </div>
+  </div>
+</div>
+
+<h3>What Is a Data Product?</h3>
+<div class="dp-formula">
+  <div class="box lead">Dashboard = Information</div>
+</div>
+<div class="dp-formula">
+  <div class="box">Information</div><span class="plus">+</span>
+  <div class="box">Business Rules</div><span class="plus">+</span>
+  <div class="box">Operational Workflow</div><span class="plus">+</span>
+  <div class="box">Decision Support</div><span class="plus">+</span>
+  <div class="box">Outcome Measurement</div>
+</div>
+<p style="text-align:center; font-weight:700; color:var(--teal);">= A Data Product</p>
+
+<h2><span class="num">06</span>Example 1: Live Capacity</h2>
+<div class="case">
+  <div class="field"><b>Business Problem</b>No trusted view of usable capacity across centres.</div>
+  <div class="field"><b>Decision</b>Can this centre safely take this animal?</div>
+  <div class="field"><b>Data Product</b>Live Capacity</div>
+  <div class="field">
+    <b>Current Layers</b>
+    <div class="layer-status">
+      <div class="item done"><span class="dot">&#10003;</span>Layer 1: Data</div>
+      <div class="item done"><span class="dot">&#10003;</span>Layer 2: Signals</div>
+      <div class="item done"><span class="dot">&#10003;</span>Layer 3: Relationships</div>
+      <div class="item done"><span class="dot">&#10003;</span>Layer 4: Drivers</div>
+      <div class="item done"><span class="dot">&#10003;</span>Layer 5: Decision Insights</div>
+      <div class="item future"><span class="dot">&#8635;</span>Layer 6: Recommended Actions (future)</div>
+      <div class="item future"><span class="dot">&#8635;</span>Layer 7: Outcome Measurement (future)</div>
+    </div>
+  </div>
+  <div class="field"><b>Outcome</b>Operational adoption across centres. Daily support for animal placement decisions.</div>
+</div>
+
+<h2><span class="num">07</span>Example 2: Foster Analytics</h2>
+<div class="case">
+  <div class="field"><b>Business Problem</b>No consistent understanding of foster utilization.</div>
+  <div class="field"><b>Decision</b>How do we increase foster placement?</div>
+  <div class="field">
+    <b>Outcome Metric</b>
+    <div class="formula-box">
+      <span>% Animals in Foster</span><span class="op">=</span><span>Foster Animals</span><span class="op">/</span><span>Intake Animals</span>
+    </div>
+    <p style="margin:6px 0;">Current baseline: <span class="baseline-badge">~30%</span></p>
+  </div>
+  <div class="field"><b>Current Product</b>Historical analysis, Trend analysis, Foster KPIs</div>
+  <div class="field">
+    <b>Future Product</b>
+    <div class="flowrow" style="justify-content:flex-start;">
+      <span class="step">ShelterBuddy</span><span class="arrow">+</span><span class="step">Better Impact</span><span class="arrow">&#8594;</span><span class="step" style="background:var(--teal); color:#fff; border-color:var(--teal);">Foster Matching</span>
+    </div>
+  </div>
+  <div class="field"><b>Goal</b>Reduce days animals remain in centres before foster placement.</div>
+</div>
+
+<h2><span class="num">08</span>The Role of AI</h2>
+<p class="lede" style="text-align:center;"><strong>AI is not the decision maker. AI is the accelerator.</strong></p>
+<div class="chain tight">
+  <div class="step" style="background:var(--navy); color:#fff; border-color:var(--navy);">Human Owns Decision</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">AI Assists Discovery</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">AI Assists Analysis</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">AI Assists Documentation</div>
+  <div class="arrow">&#8595;</div>
+  <div class="step">AI Assists Recommendation</div>
+</div>
+
+<h2><span class="num">09</span>Managed Data Product Service</h2>
+<p class="lede">The outcome of the framework is not technology. It is operational decision support.</p>
+<div class="check-grid">
+  <div class="check-col no">
+    <h4>The outcome is not</h4>
+    <ul>
+      <li>Dashboard</li>
+      <li>Power BI Report</li>
+      <li>Power App</li>
+    </ul>
+  </div>
+  <div class="check-col yes">
+    <h4>The outcome is</h4>
+    <ul>
+      <li>Operational Decision Support</li>
+      <li>Process Improvement</li>
+      <li>Data Product Adoption</li>
+      <li>Measurable Business Outcomes</li>
+    </ul>
+  </div>
+</div>
+
+<h2><span class="num">10</span>Framework Statement</h2>
+<div class="statement">
+  <div class="label">Official Positioning</div>
+  Decision-Driven BI &amp; AI is a framework for helping organizations move from business problems to measurable outcomes by combining analytics, data products, governance, and AI-assisted delivery.
+  <br><br>
+  Rather than focusing on reports, dashboards, or technology, the framework focuses on decisions, actions, and outcomes.
+</div>
+<div class="closing-triplet">
+  <div class="chip">Reports are outputs.</div>
+  <div class="chip">Data Products are capabilities.</div>
+  <div class="chip goal">Outcomes are the goal.</div>
+</div>
+
+</div>
+</body>
+</html>

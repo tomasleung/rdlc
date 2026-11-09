@@ -1,0 +1,247 @@
+<title>MVP Pipeline Review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Lato:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: vertical narrative — a sequential process rail at top converging into a status table and a decisions checklist below */
+:root{
+  --bg:#F1F5F9; --surface:#FFFFFF; --surface-2:#F8FAFC;
+  --navy:#0D2F6B; --indigo:#4F46E5; --green:#059669;
+  --amber-text:#B45309; --amber-bg:#FFFBEB; --amber-border:#FDE68A;
+  --ink:#1E293B; --muted:#64748B; --border:#E2E8F0;
+  --font-display:'Poppins','Segoe UI',sans-serif;
+  --font-body:'Lato','Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono','Consolas',monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1220; --surface:#141B2D; --surface-2:#0F1626;
+    --navy:#1D3F7A; --indigo:#818CF8; --green:#34D399;
+    --amber-text:#FBBF24; --amber-bg:#241B09; --amber-border:#92650F;
+    --ink:#E6EAF2; --muted:#94A3B8; --border:#263247;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1220; --surface:#141B2D; --surface-2:#0F1626;
+  --navy:#1D3F7A; --indigo:#818CF8; --green:#34D399;
+  --amber-text:#FBBF24; --amber-bg:#241B09; --amber-border:#92650F;
+  --ink:#E6EAF2; --muted:#94A3B8; --border:#263247;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font-body);
+  font-size:16px; line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:860px; margin:0 auto; padding-block:32px 64px;}
+h1,h2,h3{font-family:var(--font-display); color:var(--ink); text-wrap:balance; margin:0;}
+h2{font-size:1.4rem; font-weight:700; margin-bottom:4px;}
+h3{font-size:1.05rem; font-weight:600;}
+p{margin:10px 0; max-width:65ch;}
+.muted{color:var(--muted);}
+.mono{font-family:var(--font-mono); font-size:0.85em;}
+code{font-family:var(--font-mono); font-size:0.85em; background:var(--surface-2); padding:1px 6px; border-radius:4px; border:1px solid var(--border);}
+
+/* Header band */
+.hero{
+  background:var(--navy); color:#fff; border-radius:14px;
+  padding:28px clamp(20px,5vw,36px); margin-bottom:28px;
+}
+.hero .eyebrow{font-size:0.75rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#AEC2EE; margin-bottom:10px;}
+.hero h1{font-size:clamp(1.6rem,4vw,2.1rem); font-weight:700; color:#fff;}
+.hero p{color:#DCE6F5; max-width:60ch; margin-top:10px;}
+.hero .meta{display:flex; gap:18px; flex-wrap:wrap; margin-top:16px; font-size:0.85rem; color:#C3D4F0;}
+.hero .meta b{color:#fff;}
+
+/* Pipeline rail */
+.pipeline{display:flex; align-items:stretch; gap:0; margin:22px 0 8px; overflow-x:auto;}
+.stage{
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:16px; flex:1 1 0; min-width:190px; display:flex; flex-direction:column; gap:6px;
+}
+.stage .num{font-family:var(--font-mono); font-size:0.75rem; color:var(--muted);}
+.stage .agent{font-family:var(--font-mono); font-size:0.8rem; color:var(--indigo); font-weight:600;}
+.stage .artifact{font-size:0.9rem; font-weight:700;}
+.arrow{display:flex; align-items:center; justify-content:center; width:34px; flex:0 0 auto; color:var(--muted); font-size:1.3rem;}
+.mvp-node{
+  background:var(--indigo); color:#fff; border-radius:10px; padding:16px;
+  flex:1 1 0; min-width:150px; display:flex; flex-direction:column; gap:6px; justify-content:center;
+}
+.mvp-node .tag{font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase; opacity:0.85;}
+.mvp-node .title{font-family:var(--font-display); font-weight:700; font-size:1.05rem;}
+@media (max-width:700px){
+  .pipeline{flex-direction:column;}
+  .arrow{width:auto; height:24px; transform:rotate(90deg);}
+}
+
+.chip{display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.02em; padding:2px 9px; border-radius:999px; margin-top:4px;}
+.chip.draft{background:var(--surface-2); color:var(--muted); border:1px solid var(--border);}
+.chip.open{background:var(--amber-bg); color:var(--amber-text); border:1px solid var(--amber-border);}
+.chip.ready{background:#ECFDF5; color:var(--green); border:1px solid #A7F3D0;}
+:root[data-theme="dark"] .chip.ready, @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .chip.ready{background:#062B20;} }
+
+section{margin-top:40px;}
+.lede{font-size:1.05rem; color:var(--ink);}
+
+.rule-card{
+  background:var(--surface-2); border:1px solid var(--border); border-left:4px solid var(--navy);
+  border-radius:0 8px 8px 0; padding:14px 16px; margin-top:16px;
+}
+.rule-card strong{color:var(--navy);}
+:root[data-theme="dark"] .rule-card strong, @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .rule-card strong{color:#9FC0F0;} }
+
+.cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px;}
+@media (max-width:700px){ .cards{grid-template-columns:1fr;} }
+.card{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; min-width:0;}
+.card h3{margin-bottom:6px;}
+.card p{font-size:0.92rem; margin:6px 0;}
+
+table{width:100%; border-collapse:collapse; margin-top:14px; font-size:0.92rem;}
+caption{text-align:left; font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.03em; margin-bottom:8px;}
+th,td{border:1px solid var(--border); padding:9px 11px; text-align:left; vertical-align:top;}
+th{background:var(--surface-2); font-weight:700; font-size:0.85rem;}
+td.id{font-family:var(--font-mono); font-size:0.82rem; color:var(--indigo); white-space:nowrap;}
+.tablewrap{overflow-x:auto;}
+
+.status-open td:first-child{border-left:3px solid var(--amber-text);}
+.status-pending td:first-child{border-left:3px solid var(--muted);}
+
+.callout{border-radius:8px; padding:14px 16px; margin-top:16px; font-size:0.92rem;}
+.callout.open{background:var(--amber-bg); border:1px solid var(--amber-border); color:var(--amber-text);}
+.callout.open strong{color:var(--amber-text);}
+
+ol.decisions{margin:16px 0 0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:10px;}
+ol.decisions li{
+  background:var(--surface); border:1px solid var(--border); border-radius:8px;
+  padding:12px 14px 12px 42px; position:relative; font-size:0.94rem;
+}
+ol.decisions li::before{
+  content:counter(dec); counter-increment:dec;
+  position:absolute; left:12px; top:12px; width:20px; height:20px; border-radius:50%;
+  background:var(--indigo); color:#fff; font-size:0.72rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center; font-family:var(--font-mono);
+}
+ol.decisions{counter-reset:dec;}
+ol.decisions li b{display:block; margin-bottom:2px;}
+
+footer{margin-top:48px; padding-top:16px; border-top:1px solid var(--border); font-size:0.78rem; color:var(--muted);}
+</style>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">Phase 2 · Centre &amp; Animal Type Utilization</div>
+    <h1>From interview to MVP</h1>
+    <p>Three governed agents turned a scoping conversation into the mock you're about to review. This walks through how each one decided what to build, what's actually settled versus still open, and the three things worth talking through together today.</p>
+    <div class="meta">
+      <span><b>Prepared for:</b> Data Owner review</span>
+      <span><b>Pipeline stage:</b> 3 of 7 complete</span>
+      <span><b>Confirmed so far:</b> none — all three draft</span>
+    </div>
+  </div>
+
+  <section style="margin-top:0">
+    <h2>How we got here</h2>
+    <p class="lede muted">Each agent only works from what the one before it confirmed. None of them is allowed to invent a KPI, a dimension, or a chart choice on its own.</p>
+
+    <div class="pipeline">
+      <div class="stage">
+        <span class="num">Stage 1</span>
+        <span class="agent">rdlc-grill-coach</span>
+        <span class="artifact">BRD v0.2</span>
+        <p class="muted" style="font-size:0.85rem; margin:4px 0 0">Decision-first interview: scope, KPI contracts, in/out-of-scope dimensions, interpretation boundary.</p>
+        <span class="chip draft">Draft — 1 of 4 approvals signed</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <span class="num">Stage 2</span>
+        <span class="agent">rdlc-data-analysis</span>
+        <span class="artifact">Insight Spec Register v0.1</span>
+        <p class="muted" style="font-size:0.85rem; margin:4px 0 0">17 entries, each with a tiered diagnostic method and a stated permitted/prohibited conclusion.</p>
+        <span class="chip open">Draft — 1 entry open</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="stage">
+        <span class="num">Stage 3</span>
+        <span class="agent">rdlc-mock-report-design</span>
+        <span class="artifact">Report mock v0.6</span>
+        <p class="muted" style="font-size:0.85rem; margin:4px 0 0">6 pages, illustrative numbers only, same visual language as the real reports.</p>
+        <span class="chip draft">Draft — ready to review</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="mvp-node">
+        <span class="tag">You are here</span>
+        <span class="title">First MVP</span>
+        <span style="font-size:0.85rem; opacity:0.9">Reviewable story, nothing built yet</span>
+      </div>
+    </div>
+
+    <div class="rule-card">
+      <strong>The rule every stage carries forward:</strong> No Decision → No Artifact. No Confirmation → No Action. A missing or thin-looking view is a question back to you, never something an agent fills in quietly — which is exactly why two items below are flagged open instead of resolved.
+    </div>
+  </section>
+
+  <section>
+    <h2>What's confirmed, what's open</h2>
+    <div class="tablewrap">
+    <table>
+      <caption>Status snapshot, as of this review</caption>
+      <thead><tr><th>Item</th><th>Status</th><th>What's needed</th></tr></thead>
+      <tbody>
+        <tr class="status-pending"><td>BRD approvals</td><td><span class="chip draft">3 of 4 pending</span></td><td>Sign-off from Business decision owner, Business definition owner, Source-system authority</td></tr>
+        <tr class="status-open"><td><span class="mono">CATU-SEASON-01</span> — seasonal utilization</td><td><span class="chip open">Open</span></td><td>Your call: dropped on purpose for Phase 2, or missing from the BRD?</td></tr>
+        <tr class="status-open"><td><span class="mono">CATU-TRANSFER-DIR-01</span> — directional transfer flow</td><td><span class="chip open">New, Draft</span></td><td>Confirm it's in scope — the data path is already confirmed, it just hasn't been signed off</td></tr>
+        <tr><td>Remaining 15 register entries</td><td><span class="chip draft">Draft</span></td><td>Review alongside the mock, confirm together</td></tr>
+        <tr><td>Report mock, 6 pages</td><td><span class="chip draft">Draft</span></td><td>Today's review</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>The three things to walk through</h2>
+    <p class="lede muted">This is the actual MVP conversation — not whether the charts look right, but whether we own the right problem and whether the data genuinely answers it.</p>
+
+    <h3 style="margin-top:22px">1. What data problem do we own?</h3>
+    <p><b>In scope:</b> Animals in Care, Fostered Animals, % Animals in Care Fostered, and Foster Days — by effective Centre, Region, and three Animal Type families (Cat, Dog, Small Animal) — month by month, January 2006 to the latest complete quarter.</p>
+    <p><b>Out of scope or deferred:</b> Municipality-level geography (no source data yet), Age Group, any Animal Type beyond the three confirmed families, and — pending your answer above — seasonality and directional transfer.</p>
+
+    <h3 style="margin-top:28px">2. How does the data answer those questions?</h3>
+    <div class="tablewrap">
+    <table>
+      <caption>Business question → what answers it → in plain language</caption>
+      <thead><tr><th>Business question</th><th>Register entry</th><th>In plain language</th></tr></thead>
+      <tbody>
+        <tr><td>In-care &amp; fostered volumes, by month/Centre/Region/Type</td><td class="id">CATU-BASE-01</td><td>The full 2006–latest history, not just this year — so a reader sees the real baseline before judging anything recent.</td></tr>
+        <tr><td>Which centres/regions use foster most</td><td class="id">CATU-CENTRE-01 / CATU-REGION-01</td><td>Ranked, with a minimum-volume floor so a centre with 3 animals can't out-rank one with 300.</td></tr>
+        <tr><td>Which animal types use foster most</td><td class="id">CATU-TYPE-01</td><td>Same ranking logic, by Cat/Dog/Small Animal instead of Centre.</td></tr>
+        <tr><td>Is a Centre difference real, or just its animal mix</td><td class="id">CATU-CENTRETYPE-01</td><td>Splits a Centre's gap into "it has more cats" (mix) versus "it fosters cats at a genuinely higher rate" (rate) — the two have very different implications.</td></tr>
+        <tr><td>Where are changes occurring over time</td><td class="id">CATU-TREND-01 / CATU-CHANGE-01</td><td>Year-over-year, with the change broken down by which Centre/Type groups actually drove it.</td></tr>
+        <tr><td>How often animals relate to multiple centres</td><td class="id">CATU-TRANSFER-01 / CATU-TRANSFER-DIR-01</td><td>First, a disclosure that Centre totals won't add up perfectly. Second (new, open), which centres send to which.</td></tr>
+        <tr><td>What data-quality gaps affect interpretation</td><td class="id">CATU-DQ-01</td><td>A plain completeness rate against the 99% floor the BRD set, not hidden inside the other numbers.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="margin-top:28px">3. How does this support data-driven analysis going forward?</h3>
+    <p>The same handful of methods now answers several different cross-cuts, instead of a new one-off chart being invented for each: mix-adjustment separates "fosters more animals" from "just has more cats," decomposition attributes a change to the groups that actually drove it, and a minimum-volume floor is applied everywhere a ranking appears — including the new directional-transfer view, which reused the same effective-dated history already built for Effective Centre rather than needing new source data. That's a reusable framework the next Driver or Phase can draw on, not a one-time report.</p>
+  </section>
+
+  <section>
+    <h2>What we need from you</h2>
+    <ol class="decisions">
+      <li><b>Route the 3 pending BRD approvals.</b> Business decision owner, Business definition owner, and Source-system authority each need to sign off before anything downstream can be called confirmed.</li>
+      <li><b>Decide <span class="mono">CATU-SEASON-01</span>.</b> In scope for Phase 2, or intentionally out?</li>
+      <li><b>Decide <span class="mono">CATU-TRANSFER-DIR-01</span>.</b> The From→To transfer view is new since the last review — confirm whether it should go in the mock for real, or stay out.</li>
+      <li><b>React to the mock itself.</b> Does the story on each page match what you'd actually tell your own stakeholders — not just whether the charts look right?</li>
+    </ol>
+  </section>
+
+  <footer>
+    Source: BRD_Foster_Centre_Animal_Type_Utilization v0.2 (Draft) · Analysis Design v0.1 (Draft) · Report mock v0.6 (Draft). Produced by the RDLC OS agent chain — <code>rdlc-grill-coach</code> → <code>rdlc-data-analysis</code> → <code>rdlc-mock-report-design</code>. BC SPCA · Internal use only.
+  </footer>
+
+</div>

@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Animals in Care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
+<style>
+  /* Same layout as Intake Animal Count: rule, where the dates come from, worked examples, comparison, reference */
+  :root {
+    --paper: #fbfcfd;
+    --panel: #f1f4f8;
+    --ink: #1c2530;
+    --muted: #586676;
+    --rule: #d9e0e8;
+    --sb: #2f5f8f;
+    --sb-soft: #e3ecf5;
+    --intake: #1d6b5a;
+    --intake-soft: #e0f1ec;
+    --care-soft: #e9eef4;
+    --no: #a3302f;
+    --no-soft: #f8e6e6;
+    --font-display: "Source Serif 4", Georgia, serif;
+    --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #12171d; --panel: #1a2129; --ink: #e4e9ef; --muted: #9aa8b7; --rule: #2b3541;
+      --sb: #7fb0e0; --sb-soft: #1d2a38; --intake: #5cc4a6; --intake-soft: #17302a; --care-soft: #1e2833;
+      --no: #e88282; --no-soft: #2d1a1a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #12171d; --panel: #1a2129; --ink: #e4e9ef; --muted: #9aa8b7; --rule: #2b3541;
+    --sb: #7fb0e0; --sb-soft: #1d2a38; --intake: #5cc4a6; --intake-soft: #17302a; --care-soft: #1e2833;
+    --no: #e88282; --no-soft: #2d1a1a;
+  }
+
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--font-body); padding-inline: 20px; padding-block: 40px 72px; }
+  .page { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
+  section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  header { display: flex; flex-direction: column; gap: 10px; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.25; }
+  h1 { font-size: 2.1rem; font-weight: 700; }
+  h2 { font-size: 1.45rem; font-weight: 700; border-top: 1px solid var(--rule); padding-top: 22px; }
+  h3 { font-size: 1.1rem; font-weight: 600; }
+  p { margin: 0; max-width: 68ch; }
+  ul, ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; max-width: 68ch; }
+  .eyebrow { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--sb); font-weight: 600; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .88rem; color: var(--muted); }
+  .lede { font-size: 1.08rem; }
+  .muted { color: var(--muted); }
+  code { font-family: var(--font-mono); font-size: .86em; background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+
+  .rule-box { border: 1px solid var(--rule); border-left: 4px solid var(--intake); border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .rule-box .statement { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { background: var(--panel); font-weight: 600; font-size: .83rem; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.t { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.yes td { background: var(--intake-soft); }
+  tr.no td { color: var(--muted); }
+  tr.total td { background: var(--panel); font-weight: 600; }
+
+  .sbscreen { border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+  .sbscreen .bar { background: var(--sb); color: #fff; font-size: .8rem; font-weight: 600; padding: 6px 12px; }
+  :root[data-theme="dark"] .sbscreen .bar { color: #0e1720; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sbscreen .bar { color: #0e1720; } }
+  .sbscreen .tablewrap { border: 0; border-radius: 0; }
+  .sbscreen th { background: var(--sb-soft); }
+
+  .tag { display: inline-block; font-size: .76rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+  .tag.yes, .tag.outcome { background: var(--intake); color: var(--paper); }
+  .tag.incare { background: var(--sb-soft); color: var(--sb); }
+  .tag.no { background: var(--no-soft); color: var(--no); }
+  .tag.out, .tag.other { background: var(--panel); color: var(--muted); }
+
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .src { border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .src h3 { font-size: 1rem; }
+  .src.yes { border-top: 4px solid var(--intake); }
+  .src.sb { border-top: 4px solid var(--sb); }
+  .src p { font-size: .92rem; }
+
+  .example { display: flex; flex-direction: column; gap: 12px; }
+  .example + .example { border-top: 1px dashed var(--rule); padding-top: 22px; }
+  .verdict { background: var(--panel); border-radius: 8px; padding: 10px 14px; font-size: .95rem; }
+
+  /* month strips */
+  .years { display: flex; flex-direction: column; gap: 10px; }
+  .year { display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: center; }
+  .year .y { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+  .m { text-align: center; font-size: .72rem; padding: 6px 0; border-radius: 4px; background: var(--panel); color: var(--muted); }
+  .m.on { background: var(--intake); color: var(--paper); font-weight: 600; }
+  .m.pre { background: var(--care-soft); color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule); }
+  .key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .85rem; color: var(--muted); }
+  .key span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+  /* reference tables */
+  details summary { cursor: pointer; font-weight: 600; color: var(--sb); }
+  details .tablewrap { margin-top: 10px; }
+  .ref table { font-size: .84rem; }
+  .ref th, .ref td { padding: 5px 10px; }
+  .ref td.c, .ref th.c { text-align: center; }
+  .tick { color: var(--intake); font-weight: 700; }
+
+  footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; }
+  @media (max-width: 520px) { h1 { font-size: 1.7rem; } body { padding-block: 24px 56px; } .m { font-size: .62rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="eyebrow">Foster Pathway Analytics · Animals in Care definition</div>
+    <h1>How we count animals in care</h1>
+    <div class="meta"><span>Version 0.1</span><span>Draft for Data Owner review</span><span>October 2026</span></div>
+    <p class="lede">The <b>Intake Animal Count</b> looks only at the day an animal came in. <b>Animals in Care</b> counts the animal in every month it was in our care, from the day it came in until the day it left. ShelterBuddy has no single "in care from – to" record, so we build each stay from two histories: the <b>Source History</b> gives the day the animal came in, and the <b>Status History</b> gives the day it left.</p>
+  </header>
+
+  <section>
+    <h2>The rule in one sentence</h2>
+    <div class="rule-box">
+      <div class="statement">An animal counts as in care in a period if at least one of its stays overlaps that period. It counts once per period.</div>
+      <ul>
+        <li><b>Stay:</b> the time from a real intake to the day the animal left our care.</li>
+        <li><b>Start:</b> the intake date (Date Animal Came In) of a Source History record whose source ShelterBuddy marks as <b>Incoming</b>, as in the Intake Animal Count.</li>
+        <li><b>End:</b> the date of the first <b>outcome</b> status linked to that intake (Adopted, Redeemed, Transfer Out…). An animal with no outcome yet is still in care.</li>
+        <li><b>Overlaps the period:</b> in care for at least one day of the month or year, in Vancouver time.</li>
+        <li><b>Once per period:</b> an animal with several stays in the same month counts as one animal.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where the dates come from</h2>
+    <p>Every status change in ShelterBuddy is linked to the intake it belongs to. So each intake can be followed from the day the animal came in to its outcome.</p>
+    <div class="two">
+      <div class="src yes">
+        <h3>Start: Source History</h3>
+        <p>One record each time an animal comes in. Only <b>Incoming</b> sources start a stay (Owner Surrender, Stray, Transfer In, Returns…). Service records such as Lost, Dispatch Information or License do not.</p>
+      </div>
+      <div class="src sb">
+        <h3>End: Status History</h3>
+        <p>One record each time the animal's status changes, linked to its intake. ShelterBuddy's status settings mark each status as <b>Outgoing</b> (an outcome), <b>In Care</b>, or neither.</p>
+      </div>
+    </div>
+    <p>The rules depend entirely on how ShelterBuddy's settings classify each source type and each status type. These settings are owned in ShelterBuddy, not by the report: if a type is reclassified there, the stays change with it.</p>
+    <h3>Source types (ShelterBuddy setting: Incoming)</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Source type</th><th class="n">Types</th><th>What it means for the stay</th><th>Examples</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag yes">Incoming</span></td><td class="n">43</td><td>The animal came into our care: <b>the stay starts</b></td><td>Owner Surrender, Stray, Transfer In, Returns, Humane Officer Seized, Emergency Boarding, Foster Offspring, DOA - Stray</td></tr>
+        <tr><td><span class="tag other">Not incoming</span></td><td class="n">16</td><td>A service or report: <b>no stay</b>; the record is ignored</td><td>Lost, Found, Dispatch Information, License, Microchip, Clinic, Boarding, Identification &amp; Services</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Status types (ShelterBuddy settings: Outgoing, In Care)</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Status type</th><th class="n">Types</th><th>What it means for the stay</th><th>Examples</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag outcome">Outcome</span></td><td class="n">45</td><td>The animal left our care: <b>the stay ends</b></td><td>Adopted Altered, Redeemed, Transfer Out, Euthanized, DOA</td></tr>
+        <tr><td><span class="tag incare">In Care</span></td><td class="n">72</td><td>The animal is still with us</td><td>Stray Hold, Available For Adoption, In Foster, Internal Transfer</td></tr>
+        <tr><td><span class="tag other">Other</span></td><td class="n">10</td><td>A note; it does not end or extend a stay</td><td>Information, Deceased, Returned Home, Privately Rehomed, Lost, Matched</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Set by hand, as in Phase 1: one source missing from ShelterBuddy's source list ("Owner Surrender - Good Samaritan", 9 records in 2012) is treated as Incoming, and seven retired statuses still used in old history (e.g. Internal Transfer Out / In, Adopted) are given a type. The full lists are in <a href="#ref-source">Reference A</a> and <a href="#ref-status">Reference B</a> at the end.</p>
+  </section>
+
+  <section>
+    <h2>How the end of each stay is found</h2>
+    <p>In order, for each intake:</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Step</th><th>What the records show</th><th>End of the stay</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>An <b>outcome</b> status is linked to the intake</td><td>The date of the <b>first</b> outcome</td></tr>
+        <tr><td>2</td><td>No outcome, and the animal has a <b>later intake</b></td><td>The date of the later intake. An animal is never in two stays at once</td></tr>
+        <tr><td>3</td><td>No outcome, the latest status is <b>In Care</b>, and the intake is <b>365 days old or less</b></td><td><b>Still in care:</b> counted up to the report date</td></tr>
+        <tr><td>4</td><td>No outcome, and none of the above (an old intake left open, or the latest status is a note)</td><td>The date of the <b>last status</b>. Never "intake + 365 days", which would invent care time</td></tr>
+      </tbody>
+    </table></div>
+    <p>A later intake also ends an earlier stay whose outcome was recorded after it, so stays never overlap.</p>
+  </section>
+
+  <section>
+    <h2>When the records are not clean</h2>
+    <p>96.4% of intakes are recorded exactly as expected: one intake, one outcome. For the rest, these rules decide the stay. The full analysis, with examples, is in the <i>Care Timeline Data Quality Report v0.3</i>.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>What the records show</th><th class="n">Intakes</th><th>What we do</th></tr></thead>
+      <tbody>
+        <tr class="yes"><td>One intake, one outcome, nothing after it</td><td class="n">506,123</td><td>Used as entered</td></tr>
+        <tr><td>A status dated before its intake</td><td class="n">7,143</td><td>The intake date is the start. More than 30 days early is flagged</td></tr>
+        <tr><td>A note after the outcome (e.g. Deceased reported by the adopter)</td><td class="n">1,756</td><td>Ignored; the stay ends at the outcome</td></tr>
+        <tr><td>An In Care status after the outcome that never gets its own outcome</td><td class="n">4,801</td><td>Ignored; the stay ends at the outcome. Mostly before 2013</td></tr>
+        <tr><td>Two outcomes in a row (mostly the same outcome keyed twice)</td><td class="n">1,170</td><td>The first outcome ends the stay. For you to confirm</td></tr>
+        <tr><td>Outcome → In Care → outcome on the same intake: a return recorded on the old intake</td><td class="n">292</td><td>Each return is its own stay</td></tr>
+        <tr><td>No outcome, still in care (step 3)</td><td class="n">1,332</td><td>Counted up to the report date</td></tr>
+        <tr><td>No outcome, closed by rule (steps 2 and 4)</td><td class="n">2,036</td><td>Closed at the next intake or the last status. For you to confirm</td></tr>
+        <tr class="no"><td>No status records at all (almost always a duplicate intake)</td><td class="n">424</td><td>Not used; no stay</td></tr>
+        <tr class="total"><td>All incoming intakes</td><td class="n">525,077</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Counts from the Fabric build of 29 October 2026 (ShelterBuddy data to 8 October 2026).</p>
+  </section>
+
+  <section>
+    <h2>Report period</h2>
+    <ul>
+      <li><b>From 1 January 2006</b>, the same start as the foster and intake reports. A stay that started before 2006 counts from January 2006 if the animal was still in care.</li>
+      <li><b>To the end of the last complete month.</b> An animal still in care is counted up to that date.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Worked examples</h2>
+
+    <div class="example">
+      <h3>Tilly (Animal 360493): two intakes ten years apart</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History · Animal 360493</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Source</th><th>Date Animal Came In</th><th>Incoming?</th></tr></thead>
+          <tbody>
+            <tr class="yes"><td>Owner Surrender</td><td class="t">13-Feb-2015 16:18</td><td><span class="tag yes">Yes</span></td></tr>
+            <tr class="yes"><td>Owner Surrender</td><td class="t">5-Dec-2025 16:03</td><td><span class="tag yes">Yes</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="sbscreen">
+        <div class="bar">Status History · Animal 360493 (first and last status of each intake)</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Status date</th><th>Status</th><th>Type</th><th>Intake</th></tr></thead>
+          <tbody>
+            <tr><td class="t">13-Feb-2015 16:18</td><td>Awaiting Vet Exam / Health Check</td><td><span class="tag incare">In Care</span></td><td>13-Feb-2015</td></tr>
+            <tr class="no"><td class="t">…</td><td>4 more In Care statuses</td><td></td><td></td></tr>
+            <tr class="yes"><td class="t">9-Sep-2015 14:57</td><td>Adopted Altered</td><td><span class="tag outcome">Outcome</span></td><td>13-Feb-2015</td></tr>
+            <tr><td class="t">5-Dec-2025 16:03</td><td>Awaiting Sort</td><td><span class="tag incare">In Care</span></td><td>5-Dec-2025</td></tr>
+            <tr class="no"><td class="t">…</td><td>9 more In Care statuses, incl. In Foster</td><td></td><td></td></tr>
+            <tr class="yes"><td class="t">13-Mar-2026 15:22</td><td>Adopted Altered</td><td><span class="tag outcome">Outcome</span></td><td>5-Dec-2025</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="years">
+        <div class="year"><span class="y">2015</span><div class="months"><span class="m">Jan</span><span class="m on">Feb</span><span class="m on">Mar</span><span class="m on">Apr</span><span class="m on">May</span><span class="m on">Jun</span><span class="m on">Jul</span><span class="m on">Aug</span><span class="m on">Sep</span><span class="m">Oct</span><span class="m">Nov</span><span class="m">Dec</span></div></div>
+        <div class="year"><span class="y">2025</span><div class="months"><span class="m">Jan</span><span class="m">Feb</span><span class="m">Mar</span><span class="m">Apr</span><span class="m">May</span><span class="m">Jun</span><span class="m">Jul</span><span class="m">Aug</span><span class="m">Sep</span><span class="m">Oct</span><span class="m">Nov</span><span class="m on">Dec</span></div></div>
+        <div class="year"><span class="y">2026</span><div class="months"><span class="m on">Jan</span><span class="m on">Feb</span><span class="m on">Mar</span><span class="m">Apr</span><span class="m">May</span><span class="m">Jun</span><span class="m">Jul</span><span class="m">Aug</span><span class="m">Sep</span><span class="m">Oct</span><span class="m">Nov</span><span class="m">Dec</span></div></div>
+        <div class="key"><span><i class="sw" style="background:var(--intake)"></i>Counted as an animal in care</span></div>
+      </div>
+      <div class="verdict">Two stays: <b>13 Feb – 9 Sep 2015</b> and <b>5 Dec 2025 – 13 Mar 2026</b>, each ended by its adoption (step 1). Counted in care in February to September 2015 and December 2025 to March 2026. The Intake Animal Count counts her only in February 2015 and December 2025.</div>
+    </div>
+
+    <div class="example">
+      <h3>Will (Animal 472844): three intake records on the same morning</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History and Status History · Animal 472844, January 2022</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Date</th><th>Record</th><th>Type</th><th>Intake</th></tr></thead>
+          <tbody>
+            <tr><td class="t">25-Jan-2022 10:04</td><td>Intake: Emergency Boarding</td><td><span class="tag yes">Incoming</span></td><td>A</td></tr>
+            <tr><td class="t">25-Jan-2022 10:04</td><td>Emergency Boarding</td><td><span class="tag incare">In Care</span></td><td>A</td></tr>
+            <tr><td class="t">25-Jan-2022 10:04</td><td>Intake: Emergency Boarding</td><td><span class="tag yes">Incoming</span></td><td>B</td></tr>
+            <tr><td class="t">25-Jan-2022 10:04</td><td>Adopted Altered</td><td><span class="tag outcome">Outcome</span></td><td>B</td></tr>
+            <tr class="yes"><td class="t">25-Jan-2022 10:15</td><td>Intake: Emergency Boarding</td><td><span class="tag yes">Incoming</span></td><td>C</td></tr>
+            <tr class="no"><td class="t">…</td><td>3 In Care statuses, incl. Hold In Foster</td><td></td><td>C</td></tr>
+            <tr class="yes"><td class="t">27-Apr-2022 11:42</td><td>Emergency Boarding Returned To Owner</td><td><span class="tag outcome">Outcome</span></td><td>C</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="verdict">Intake A has no outcome and is closed when intake B starts, the same minute (step 2). Intake B ends at its outcome the same minute (step 1). Intake C is the real stay: <b>25 Jan – 27 Apr 2022</b>. Will counts <b>once</b> in each of January to April 2022: the two extra records add nothing, because stays never overlap and each animal counts once per month.</div>
+    </div>
+
+    <div class="example">
+      <h3>Animal 5379: a return recorded on the same intake</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History and Status History · Animal 5379 (rabbit)</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Date</th><th>Record</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr class="yes"><td class="t">17-Jan-2005 15:58</td><td>Intake: Owner Surrender</td><td><span class="tag yes">Incoming</span></td></tr>
+            <tr><td class="t">17-Jan-2005</td><td>Available For Adoption</td><td><span class="tag incare">In Care</span></td></tr>
+            <tr class="yes"><td class="t">21-Jul-2005</td><td>Transfer Out</td><td><span class="tag outcome">Outcome</span></td></tr>
+            <tr class="yes"><td class="t">9-Aug-2006</td><td>Available For Adoption <span class="muted">(same intake)</span></td><td><span class="tag incare">In Care</span></td></tr>
+            <tr class="yes"><td class="t">27-May-2008</td><td>Adopted Altered <span class="muted">(same intake)</span></td><td><span class="tag outcome">Outcome</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="verdict">The rabbit came back a year later, and the return was recorded by changing the status on the <b>old intake</b>, not with a new Returns intake (common before 2013). Because the return ends with its own outcome, it is a <b>second stay</b>: 17 Jan – 21 Jul 2005 and <b>9 Aug 2006 – 27 May 2008</b>. It is counted in care from August 2006 to May 2008 (2005 is before the report period), and <b>not</b> while it was away.</div>
+    </div>
+
+    <div class="example">
+      <h3>Animal 477530: an intake whose only status is a note</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History and Status History · Animal 477530, December 2018</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Date</th><th>Record</th><th>Type</th><th>Intake</th></tr></thead>
+          <tbody>
+            <tr class="yes"><td class="t">14-Dec-2018 09:45</td><td>Intake: Stray</td><td><span class="tag yes">Incoming</span></td><td>A</td></tr>
+            <tr><td class="t">14-Dec-2018 09:45</td><td>Stray Hold</td><td><span class="tag incare">In Care</span></td><td>A</td></tr>
+            <tr class="yes"><td class="t">14-Dec-2018 12:41</td><td>Redeemed</td><td><span class="tag outcome">Outcome</span></td><td>A</td></tr>
+            <tr><td class="t">20-Dec-2018 10:34</td><td>Intake: Stray</td><td><span class="tag yes">Incoming</span></td><td>B</td></tr>
+            <tr><td class="t">20-Dec-2018 10:34</td><td>Information</td><td><span class="tag other">Other</span></td><td>B</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="verdict">Intake A ends when the owner redeems the animal (step 1). Intake B has no outcome and its only status is a note, so it is closed at that status, the same day (step 4). Counted in care in <b>December 2018</b> only. Left open, intake B would count this animal in care every month since.</div>
+    </div>
+
+    <div class="example">
+      <h3>Animal 631544: still in care</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History and Status History · Animal 631544</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Date</th><th>Record</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr class="yes"><td class="t">22-Sep-2026 15:04</td><td>Intake: Stray</td><td><span class="tag yes">Incoming</span></td></tr>
+            <tr><td class="t">22-Sep-2026 15:04</td><td>Stray Hold</td><td><span class="tag incare">In Care</span></td></tr>
+            <tr><td class="t">22-Sep-2026 15:10</td><td>Stray - In Foster</td><td><span class="tag incare">In Care</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="verdict">No outcome yet, latest status In Care, intake a few days old: <b>still in care</b> (step 3). Counted in September 2026 and every month after, until an outcome is recorded.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What these animals add to the count</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Animal</th><th>Intake records</th><th>Stays</th><th>Counted in care</th></tr></thead>
+      <tbody>
+        <tr><td>Tilly (360493)</td><td>2</td><td>2</td><td>Feb–Sep 2015 · Dec 2025–Mar 2026</td></tr>
+        <tr><td>Will (472844), 2022</td><td>3</td><td>1 real stay, 2 of a few minutes</td><td>Jan–Apr 2022, once a month</td></tr>
+        <tr><td>5379</td><td>1</td><td>2</td><td>Aug 2006–May 2008</td></tr>
+        <tr><td>477530</td><td>2</td><td>2, both the same day</td><td>Dec 2018</td></tr>
+        <tr><td>631544</td><td>1</td><td>1, still open</td><td>Sep 2026 onwards</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>How this differs from the Intake Animal Count and Fostered Animals</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th></th><th>Intake Animal Count</th><th>Animals in Care</th><th>Fostered Animals</th></tr></thead>
+      <tbody>
+        <tr><td><b>Counted in</b></td><td>Only the month the animal came in</td><td>Every month from intake to outcome</td><td>Every month the animal was in foster</td></tr>
+        <tr><td><b>Start</b></td><td>Source History</td><td>Source History</td><td>Location (kennel) history</td></tr>
+        <tr><td><b>Needs an end date</b></td><td>No</td><td>Yes, from Status History</td><td>Yes, from location or status history</td></tr>
+        <tr><td><b>Tilly, 2015</b></td><td>Yes (came in February)</td><td>Yes (February to September)</td><td>Yes (in foster March to May)</td></tr>
+        <tr><td><b>Tilly, 2025</b></td><td>Yes (came in December)</td><td>Yes (December)</td><td>No</td></tr>
+        <tr><td><b>Tilly, 2026</b></td><td>No</td><td>Yes (January to March)</td><td>Yes (in foster January and February)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Measure: % Animals in Care Fostered</h2>
+    <div class="rule-box">
+      <div class="statement">% Animals in Care Fostered = Fostered Animals ÷ Animals in Care, for the same month or year.</div>
+      <ul>
+        <li><b>Fostered Animals:</b> distinct animals in foster for at least one day in the period (Foster Animal Definition).</li>
+        <li><b>Animals in Care:</b> distinct animals in care for at least one day in the period (this document).</li>
+      </ul>
+    </div>
+    <p>This is the "same population" option in the Intake Animal Count document. Both counts look at the period the same way, so the measure means <b>"the share of animals in our care who were in foster"</b>. In 2026 Tilly is in both the top and the bottom of the fraction; with the Intake Animal Count she would be in the top only.</p>
+    <p>Every fostered animal is also counted as in care: a foster stay that falls outside every stay built from these rules still counts as a care period. So the measure can never go above 100%.</p>
+  </section>
+
+  <section>
+    <h2>What changed from the earlier proposal</h2>
+    <p>The Intake Animal Count document proposed this measure in outline. Testing the rules against 20 years of records changed some of them:</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Topic</th><th>Proposal</th><th>Now</th></tr></thead>
+      <tbody>
+        <tr><td>No outcome, latest status a note (e.g. Returned Home)</td><td>Cannot be resolved; listed for review</td><td>Closed at that status (step 4). Excluding these would lose real stays; open, they would count the animal in care for ever</td></tr>
+        <tr><td>No outcome, latest status In Care</td><td>Still in care</td><td>Still in care only if the intake is 365 days old or less and the animal has no later intake (steps 2 and 3)</td></tr>
+        <tr><td>Several intake records at once, like Will's</td><td>Merge them into one stay</td><td>A later intake closes the earlier one. The same result: the animal counts once, with no overlap</td></tr>
+        <tr><td>Very long stays</td><td>Decide separately</td><td>No limit on a stay with an outcome. Still open</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Known limitations</h2>
+    <ul>
+      <li><b>Some end dates are estimated.</b> 2,036 intakes (0.4%) have no outcome and are closed by rule; most are from before 2013.</li>
+      <li><b>Before 2013, status dates have no time.</b> A stay may start or end a few hours off, which can move it into a neighbouring day, but rarely a different month.</li>
+      <li><b>Records are not corrected in ShelterBuddy.</b> Duplicate intakes and second outcomes stay as they are; the rules decide how they are counted.</li>
+      <li><b>Returns recorded on the old intake</b> count as a stay only when they end with their own outcome (292 intakes).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Decisions needed</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>#</th><th>Question</th><th>Suggestion</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Is "intake to first outcome" the right definition of a stay in care?</td><td>Yes</td></tr>
+        <tr><td>2</td><td>Is 365 days the right limit for an intake with no outcome to count as still in care?</td><td>Yes, 365 days from the intake</td></tr>
+        <tr><td>3</td><td>Two outcomes in a row: is the first one right? Is <i>Unresolved File</i> a real outcome?</td><td>The first; list of 1,170 intakes provided</td></tr>
+        <tr><td>4</td><td>Should <i>Returned Home</i>, <i>Matched</i> and <i>Lost</i> count as outcomes? Today ShelterBuddy marks them as neither In Care nor Outgoing</td><td>For you to decide; if yes, change the setting in ShelterBuddy so every report follows</td></tr>
+        <tr><td>5</td><td>DOA intakes (in and out the same day): count them as in care for that day?</td><td>Yes, as the Intake Animal Count does; can be excluded in reporting</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Technical reference</h2>
+    <div class="tablewrap"><table>
+      <tbody>
+        <tr><td>Table</td><td><code>slv.sb_intake_status</code>: one row per incoming intake × status, with the stay rules applied. One row per stay where <code>IsStayRow = 1</code></td></tr>
+        <tr><td>Stay</td><td><code>StayStartUtc</code> to <code>StayEndUtc</code> (<code>NULL</code> = still in care); <code>StayNo</code> 2, 3… for returns on the same intake; <code>EndReason</code> = Outcome, NextIntake, LastStatus or StillInCare</td></tr>
+        <tr><td>Source</td><td><code>brz.sb_api_source_history_YYYY</code> (<code>IsIncoming</code> sources) and <code>brz.sb_api_status_history_YYYY</code>, linked on <code>IntakeExtendedDetailsId</code> = source history <code>Id</code></td></tr>
+        <tr><td>Period</td><td>Vancouver dates from 1 January 2006 to <code>EOMONTH(GETDATE(), -1)</code></td></tr>
+        <tr><td>Measure</td><td>Animals in Care = <code>DISTINCTCOUNT(AnimalId)</code> over stays with <code>IsStayRow = 1</code>, <code>IsExcluded = 0</code>, <code>StayStart</code> ≤ period end and <code>COALESCE(StayEnd, report date)</code> ≥ period start</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+<!-- appendix start -->
+  <section id="ref-source">
+    <h2>Reference A: ShelterBuddy source settings</h2>
+    <p>Every source type in ShelterBuddy, as configured there (Settings › Source). <b>Is Incoming</b> decides whether a Source History record starts a stay. <b>Is DOA</b> marks dead-on-arrival sources; they still start a stay (in and out the same day).</p>
+    <p class="muted">59 source types: 43 start a stay, 16 are service records. ✓ = True in ShelterBuddy.</p>
+    <details><summary>Show all 59 source types</summary>
+    <div class="tablewrap ref"><table>
+      <thead><tr><th class="n">Id</th><th>Source</th><th class="c">Is Incoming</th><th class="c">Is DOA</th><th>Used as</th></tr></thead>
+      <tbody><tr><td class="n">88</td><td>ACO - Euthanasia Request</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">32</td><td>ACO - Impound</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">85</td><td>ACO - Owner Surrender</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">97</td><td>Abandoned</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">13</td><td>Agency / Shelter</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">11</td><td>Ambulance</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">86</td><td>Ambulance - Euthanasia Request</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">40</td><td>Ambulance - Owner Surrender</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">99</td><td>Ambulance - Seized</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">92</td><td>Ambulance - Wildlife</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">82</td><td>Bequest In Shelter</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">102</td><td>Community Animal - Field Services</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">101</td><td>Community Animal - General Public</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">10</td><td>Cruelty Case Offspring</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">75</td><td>DOA - ACO</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">28</td><td>DOA - Agency</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">77</td><td>DOA - Ambulance</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">76</td><td>DOA - Humane Officer</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">93</td><td>DOA - Humane Officer Seized</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">94</td><td>DOA - Humane Officer Surrendered</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">24</td><td>DOA - Owner Surrender</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">78</td><td>DOA - Routine Inspection</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">20</td><td>DOA - Stray</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">38</td><td>DOA - Wildlife</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">83</td><td>Emergency Boarding</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">3</td><td>Euthanasia Request</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">96</td><td>Euthanasia Request w/ Consent to Rehome</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">26</td><td>Evacuation</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">27</td><td>Evacuation Outgoing</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">1</td><td>Foster Offspring</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">6</td><td>Humane Officer</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">87</td><td>Humane Officer - Euthanasia Request</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">30</td><td>Humane Officer Seized</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">29</td><td>Humane Officer Surrendered</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">2</td><td>Owner Surrender</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">89</td><td>Owner Surrender - Good Samaritan <span class="muted">(set by hand)</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">81</td><td>Pending Medical Evaluation</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">23</td><td>Returns</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">35</td><td>Routine Inspection</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">21</td><td>Shelter Offspring</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">14</td><td>Stray</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">18</td><td>Transfer In</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">15</td><td>Wildlife</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag yes">Starts a stay</span></td></tr><tr><td class="n">31</td><td>ACO - Citation</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">98</td><td>API Entry</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">7</td><td>Bequest</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">9</td><td>Boarding</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">17</td><td>Clinic</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">84</td><td>Data Import</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">39</td><td>Dispatch Information</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">8</td><td>Dog Obedience</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">42</td><td>External Rabies</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">22</td><td>Found</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">79</td><td>Identification &amp; Services</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">16</td><td>License</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">4</td><td>Lost</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">25</td><td>Microchip</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">5</td><td>SPCA Tag</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr><tr><td class="n">19</td><td>Staff</td><td class="c"></td><td class="c"></td><td><span class="tag other">Ignored (service record)</span></td></tr></tbody>
+    </table></div></details>
+  </section>
+
+  <section id="ref-status">
+    <h2>Reference B: ShelterBuddy status settings</h2>
+    <p>Every status type in ShelterBuddy, as configured there (Settings › Status). Only two settings decide the stay: <b>Is Outgoing</b> ends it, and <b>Is In Care</b> keeps it open; a status with neither is a note. <b>Is In Foster Care</b>, <b>Is Adoption</b> and <b>Is Deceased</b> describe the status further and are not used for the stay.</p>
+    <p class="muted">127 status types: 45 outcomes, 72 in care, 10 other. ✓ = True in ShelterBuddy. Statuses set by hand are retired statuses still used in old history; only their In Care and Outgoing type was assigned.</p>
+    <details><summary>Show all 127 status types</summary>
+    <div class="tablewrap ref"><table>
+      <thead><tr><th class="n">Id</th><th>Status</th><th class="c">Is In Care</th><th class="c">Is In Foster Care</th><th class="c">Is Outgoing</th><th class="c">Is Adoption</th><th class="c">Is Deceased</th><th>Used as</th></tr></thead>
+      <tbody><tr><td class="n">13</td><td>Adopted <span class="muted">(set by hand)</span></td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">50</td><td>Adopted Altered</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">115</td><td>Adopted Offsite</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">52</td><td>Adopted Offsite(Altered)</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">51</td><td>Adopted Offsite(Unaltered)</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">152</td><td>Adopted to Finder</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">56</td><td>Adopted Unaltered</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">101</td><td>Bite Quarantine (Home)</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">43</td><td>Cremated</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">60</td><td>Cremation - Communal</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">59</td><td>Cremation - Private</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">61</td><td>DOA</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">75</td><td>DOA - Final Disposition</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">145</td><td>DOA - Released to Owner</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">123</td><td>DOA Transfer</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">137</td><td>Emergency Boarding Returned To Owner</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">77</td><td>Emergency Evacuation - Permanent</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">76</td><td>Emergency Evacuation - Released</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">67</td><td>EOA - Euthanized on Arrival</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">27</td><td>Escaped</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">48</td><td>Euthanasia - RTO</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">88</td><td>Euthanasia In Field</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">2</td><td>Euthanized</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">86</td><td>Euthanized by Offsite Vet</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">46</td><td>Interred</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">126</td><td>Post-operative Death</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">16</td><td>Redeemed</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">100</td><td>Redemption (Offsite)</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">15</td><td>Released <span class="muted">(set by hand)</span></td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">156</td><td>Released by Agency</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">87</td><td>Released to Owner at Vet</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">64</td><td>Released To Rescue</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">80</td><td>Released to Wildlife Rehabilitator</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">157</td><td>Return to Habitat</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">32</td><td>Returned Protective Custody Animal</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">71</td><td>Returned Surrender</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">24</td><td>Returned To Owner</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">102</td><td>Seized Release</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">81</td><td>Stolen</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">22</td><td>Transfer Out</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">23</td><td>Unassisted Death</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">133</td><td>Unassisted Death - In Foster</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">160</td><td>Unassisted Death - In Transit</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">90</td><td>Unresolved File</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">57</td><td>Wildlife Released</td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td><span class="tag outcome">Outcome</span></td></tr><tr><td class="n">146</td><td>Adopted - Awaiting Pickup</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">37</td><td>Adoption Pending / Hold On Property Check</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">3</td><td>Available For Adoption</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">124</td><td>Available for Adoption - Awaiting Spay/Neuter</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">92</td><td>Available for Adoption - In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">149</td><td>Available For Adoption - No Web Presence</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">118</td><td>Available for Adoption - Offsite</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">129</td><td>Available for Adoption - Waiting Space <span class="muted">(set by hand)</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">55</td><td>Awaiting Behavioral Assessment</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">85</td><td>Awaiting Behaviour Completion</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">84</td><td>Awaiting Behaviour Retest</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">42</td><td>Awaiting Euthanasia</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">79</td><td>Awaiting Final Disposition</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">8</td><td>Awaiting Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">9</td><td>Awaiting Sort</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">114</td><td>Awaiting Spay Check</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">6</td><td>Awaiting Spay/Neuter</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">130</td><td>Awaiting Spay/Neuter - In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">111</td><td>Awaiting Surgery - Not Spay/Neuter</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">91</td><td>Awaiting Transfer</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">113</td><td>Awaiting Triage</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">122</td><td>Awaiting Triage Completion</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">142</td><td>Awaiting Vet Approval - In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">112</td><td>Awaiting Vet Exam / Health Check</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">104</td><td>Bequest Animal Off Site</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">103</td><td>Bequest Animal On Site</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">44</td><td>Bite Quarantine</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">158</td><td>Bite Quarantine - In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">148</td><td>Bite Quarantine/RTO</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">54</td><td>Court Hold</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">117</td><td>Disposition Under Final Review</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">30</td><td>Due For Release</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">49</td><td>Emergency Boarding</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">143</td><td>Emergency Evacuation - In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">78</td><td>Emergency Evacuation - Temporary</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">1</td><td>Euthanasia / Cremation Request</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">144</td><td>Euthanised During Stray Hold Time</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">20</td><td>Hold</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">63</td><td>Hold Agency Transfer</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">53</td><td>Hold Euthanasia</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">25</td><td>Hold Finder</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">31</td><td>Hold For Possible Match</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">35</td><td>Hold In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">38</td><td>Hold In Vet Care</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">33</td><td>Hold Intervention</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">40</td><td>Hold Quarantine</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">119</td><td>Hospitalised</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">147</td><td>ID Trace</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">4</td><td>In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">154</td><td>Internal Transfer In <span class="muted">(set by hand)</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">153</td><td>Internal Transfer Out <span class="muted">(set by hand)</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">65</td><td>Owner Relinquishment</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">116</td><td>PAT</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">39</td><td>Police Hold</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">140</td><td>Protective Custody - Awaiting Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">107</td><td>Protective Custody Hold Quarantine</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">36</td><td>Protective Custody In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">28</td><td>Protective Custody/Hold</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">29</td><td>Protective Custody/Transferred Ownership</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">68</td><td>Rehabilitating</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">105</td><td>Released/Forfeited to Shelter</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">131</td><td>Sanctuary/Life Resident</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">120</td><td>Species Management</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">127</td><td>Stray - In Foster</td><td class="c"><span class="tick">✓</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">72</td><td>Stray Hold</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">151</td><td>Stray Hold - Awaiting transfer</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">150</td><td>Stray Hold - In Vet Care</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">11</td><td>Temp Lost File <span class="muted">(set by hand)</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">161</td><td>Transfer Out - Awaiting Pickup</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">74</td><td>Trial Adoption <span class="muted">(set by hand)</span></td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">121</td><td>Under Behavior Modification</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">7</td><td>Under Vet Care</td><td class="c"><span class="tick">✓</span></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag incare">In Care</span></td></tr><tr><td class="n">89</td><td>Boarding Client</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">110</td><td>Deceased</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><span class="tick">✓</span></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">159</td><td>Entered Care</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">12</td><td>Found</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">45</td><td>Information</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">47</td><td>Lost</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">19</td><td>Matched</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">155</td><td>Possible Match</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">125</td><td>Privately Rehomed - New Owner Unknown</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr><tr><td class="n">93</td><td>Returned Home</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td><span class="tag other">Other</span></td></tr></tbody>
+    </table></div></details>
+  </section>
+<!-- appendix end -->
+
+  <footer>Examples from the local ShelterBuddy extract to 30 Sep 2026; counts from the Fabric build of 29 Oct 2026. Companion to the Intake Animal Count and the Care Timeline Data Quality Report v0.3.</footer>
+</div>
+</body>
+</html>

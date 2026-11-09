@@ -1,0 +1,59 @@
+Id,Name,IsIncoming,IsDoa
+1,Foster Offspring,True,False
+2,Owner Surrender,True,False
+3,Euthanasia Request,True,False
+4,Lost,False,False
+5,SPCA Tag,False,False
+6,Humane Officer,True,False
+7,Bequest,False,False
+8,Dog Obedience,False,False
+9,Boarding,False,False
+10,Cruelty Case Offspring,True,False
+11,Ambulance,True,False
+13,Agency / Shelter,True,False
+14,Stray,True,False
+15,Wildlife,True,False
+16,License,False,False
+17,Clinic,False,False
+18,Transfer In,True,False
+19,Staff,False,False
+20,DOA - Stray,True,True
+21,Shelter Offspring,True,False
+22,Found,False,False
+23,Returns,True,False
+24,DOA - Owner Surrender,True,True
+25,Microchip,False,False
+26,Evacuation,True,False
+27,Evacuation Outgoing,True,False
+28,DOA - Agency,True,True
+29,Humane Officer Surrendered,True,False
+30,Humane Officer Seized,True,False
+31,ACO - Citation,False,False
+32,ACO - Impound,True,False
+35,Routine Inspection,True,False
+38,DOA - Wildlife,True,True
+39,Dispatch Information,False,False
+40,Ambulance - Owner Surrender,True,False
+42,External Rabies,False,False
+75,DOA - ACO,True,True
+76,DOA - Humane Officer,True,True
+77,DOA - Ambulance,True,True
+78,DOA - Routine Inspection,True,True
+79,Identification & Services,False,False
+81,Pending Medical Evaluation,True,False
+82,Bequest In Shelter,True,False
+83,Emergency Boarding,True,False
+84,Data Import,False,False
+85,ACO - Owner Surrender,True,False
+86,Ambulance - Euthanasia Request,True,False
+87,Humane Officer - Euthanasia Request,True,False
+88,ACO - Euthanasia Request,True,False
+92,Ambulance - Wildlife,True,False
+93,DOA - Humane Officer Seized,True,True
+94,DOA - Humane Officer Surrendered,True,True
+96,Euthanasia Request w/ Consent to Rehome,True,False
+97,Abandoned,True,False
+98,API Entry,False,False
+99,Ambulance - Seized,True,False
+101,Community Animal - General Public,True,False
+102,Community Animal - Field Services,True,False

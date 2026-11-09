@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRD | Foster Centre and Animal Type Utilization</title>
+<style>
+  :root {
+    --navy:#18364a; --blue:#176b87; --teal:#2f7f78; --green:#3f7652;
+    --amber:#a56616; --red:#9b3d35; --ink:#24323b; --muted:#5d6c75;
+    --line:#d8e0e4; --soft:#f3f7f8; --blue-soft:#eaf4f7; --green-soft:#edf6ef;
+    --amber-soft:#fff6e8; --grey-soft:#f5f6f7; --white:#fff;
+  }
+  * { box-sizing:border-box; }
+  html { background:#dfe5e8; }
+  body { margin:0; color:var(--ink); background:#fff; font-family:"Segoe UI", Arial, sans-serif; font-size:10.5pt; line-height:1.47; }
+  a { color:var(--blue); text-decoration:none; border-bottom:1px solid #9fc4d1; }
+  .page { max-width:920px; margin:0 auto; padding:18mm 17mm 20mm; background:#fff; }
+  .eyebrow { color:var(--blue); font-weight:800; letter-spacing:.14em; text-transform:uppercase; font-size:9pt; }
+  h1,h2,h3,h4 { font-family:Georgia,"Times New Roman",serif; color:var(--navy); page-break-after:avoid; }
+  h1 { font-size:28pt; line-height:1.08; margin:8mm 0 3mm; }
+  h2 { font-size:18pt; margin:11mm 0 4mm; padding-top:2mm; border-top:2px solid var(--navy); }
+  h3 { font-size:13.5pt; margin:7mm 0 2.5mm; }
+  h4 { font-size:11.5pt; margin:5mm 0 2mm; }
+  p { margin:0 0 3mm; }
+  ul,ol { margin:2mm 0 4mm 6mm; padding-left:5mm; }
+  li { margin:1.1mm 0; }
+  .subtitle { color:var(--muted); font-size:13pt; max-width:700px; }
+  .status { display:inline-block; margin-top:6mm; padding:2mm 4mm; border-radius:99px; background:var(--amber-soft); color:#7b4a0c; font-weight:700; }
+  .cover { min-height:235mm; display:flex; flex-direction:column; }
+  .cover-main { margin-top:28mm; }
+  .cover-rule { width:55mm; height:4px; background:var(--teal); margin:7mm 0; }
+  .cover-meta { margin-top:auto; display:grid; grid-template-columns:1fr 1fr; gap:5mm; border-top:1px solid var(--line); padding-top:6mm; }
+  .label { color:var(--muted); font-size:8.5pt; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+  .value { font-weight:650; color:var(--navy); }
+  .callout { margin:4mm 0; padding:4mm 5mm; border-left:4px solid var(--blue); background:var(--blue-soft); border-radius:0 8px 8px 0; break-inside:avoid; }
+  .callout.green { border-color:var(--green); background:var(--green-soft); }
+  .callout.amber { border-color:var(--amber); background:var(--amber-soft); }
+  .callout.grey { border-color:#7b8990; background:var(--grey-soft); }
+  .callout strong:first-child { color:var(--navy); }
+  table { width:100%; border-collapse:separate; border-spacing:0; margin:3mm 0 5mm; border:1px solid var(--line); border-radius:8px; overflow:hidden; break-inside:auto; }
+  thead { display:table-header-group; }
+  tr { break-inside:avoid; }
+  th,td { padding:2.8mm 3.2mm; vertical-align:top; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+  th:last-child,td:last-child { border-right:0; }
+  tr:last-child td { border-bottom:0; }
+  th { background:var(--navy); color:#fff; text-align:left; font-size:9pt; letter-spacing:.02em; }
+  .meta th { width:29%; }
+  .metric-grid { display:grid; grid-template-columns:1fr 1fr; gap:4mm; margin:4mm 0 6mm; }
+  .metric { border:1px solid var(--line); border-top:4px solid var(--teal); border-radius:8px; padding:5mm; break-inside:avoid; }
+  .metric h3 { margin:0 0 2mm; font-size:14pt; }
+  .formula { font-family:Consolas,"Courier New",monospace; background:var(--soft); padding:2.5mm 3mm; border-radius:5px; margin:2mm 0 3mm; }
+  .small { font-size:9pt; color:var(--muted); }
+  .tag { display:inline-block; padding:1mm 2.5mm; border-radius:99px; background:var(--soft); border:1px solid var(--line); font-size:8.5pt; font-weight:700; margin:.7mm 1mm .7mm 0; }
+  .toc a { border:0; }
+  .toc ol { columns:2; column-gap:10mm; }
+  .code { white-space:pre-wrap; font-family:Consolas,"Courier New",monospace; font-size:8.7pt; background:#202a31; color:#eef5f7; padding:4mm; border-radius:7px; break-inside:avoid; }
+  .approval td { height:15mm; }
+  .footer-note { margin-top:10mm; padding-top:3mm; border-top:1px solid var(--line); font-size:8.5pt; color:var(--muted); }
+  .avoid { break-inside:avoid; }
+  @page { size:Letter; margin:15mm 14mm 17mm; @bottom-left { content:"BC SPCA · Internal Use Only"; color:#6b7880; font-size:8pt; } @bottom-right { content:"Page " counter(page) " of " counter(pages); color:#6b7880; font-size:8pt; } }
+  @media print {
+    html, body { background:#fff; }
+    .page { max-width:none; padding:0; }
+    .cover { page-break-after:always; }
+    h2 { break-before:auto; }
+    a { color:inherit; border-bottom:0; }
+  }
+  @media (max-width:720px) {
+    .page { padding:8mm; }
+    .metric-grid,.cover-meta { grid-template-columns:1fr; }
+    .toc ol { columns:1; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+<section class="cover">
+  <div class="eyebrow">Animal Flow · Foster Analysis</div>
+  <div class="cover-main">
+    <h1>Centre and Animal Type Foster Utilization</h1>
+    <div class="cover-rule"></div>
+    <p class="subtitle">Business Requirements Document<br>Phase 1 Continued · Driver Analysis</p>
+    <span class="status">Draft for business review · Version 0.2</span>
+  </div>
+  <div class="callout green">
+    <strong>Decision supported</strong><br>
+    Identify which centres, regions, and animal-type families show greater or lower foster utilization among Animals in Care, so Animal Flow leadership can prioritize investigation and future foster planning.
+  </div>
+  <div class="cover-meta">
+    <div><div class="label">Author</div><div class="value">Tomas Leung</div></div>
+    <div><div class="label">Created</div><div class="value">26 October 2026</div></div>
+    <div><div class="label">Business decision owner</div><div class="value">Foster Manager</div></div>
+    <div><div class="label">Business definition owner</div><div class="value">Animal Flow Manager</div></div>
+    <div><div class="label">Technical owner</div><div class="value">Business Intelligence / Data Developer</div></div>
+    <div><div class="label">Classification</div><div class="value">Internal use only</div></div>
+  </div>
+</section>
+
+<section id="metadata">
+<h2>Document metadata</h2>
+<table class="meta"><tbody>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>RDLC document type</td><td>Business Requirements Document (BRD)</td></tr>
+<tr><td>RDLC phase</td><td>Phase 1 Continued · Driver Analysis</td></tr>
+<tr><td>RDLC stage</td><td>Design</td></tr>
+<tr><td>Capability name</td><td>Animal Flow · Foster Centre and Animal Type Utilization</td></tr>
+<tr><td>Capability domain</td><td>Operations / Animal Flow</td></tr>
+<tr><td>Author</td><td>Tomas Leung</td></tr>
+<tr><td>Version</td><td>0.2</td></tr>
+<tr><td>Status</td><td>Draft for business review</td></tr>
+<tr><td>Created date</td><td>2026-10-26</td></tr>
+<tr><td>Last revised</td><td>2026-10-26 — see Change log below</td></tr>
+<tr><td>Historical window</td><td>January 2006 through the latest complete quarter</td></tr>
+<tr><td>Refresh frequency</td><td>Quarterly</td></tr>
+<tr><td>Primary delivery</td><td>Quarterly aggregate PDF supported by a governed monthly Microsoft Fabric dataset</td></tr>
+<tr><td>Business decision owner</td><td>Foster Manager</td></tr>
+<tr><td>Business definition owner</td><td>Animal Flow Manager</td></tr>
+<tr><td>Technical owner</td><td>Business Intelligence / Data Developer</td></tr>
+<tr><td>Source-system authority</td><td>ShelterBuddy operational owner</td></tr>
+</tbody></table>
+<div class="callout amber">
+<strong>Change from v0.1</strong>
+<p class="small" style="margin-top:2mm;">Identified during a cross-document consistency review against the approved Foster Phase 1 BRD, Version 2.0.</p>
+<ol>
+<li><strong>Renamed the utilization-rate measure.</strong> v0.1 named it <em>% Animals in Foster</em> — identical to a Phase 1 measure that divides by a different denominator (Intake Animals, new arrivals that month, rather than Animals in Care, the full active population that month). Reusing the name would have produced two different numbers for the same calendar month across the two reports with no way to tell them apart. Renamed throughout to <strong>% Animals in Care Fostered</strong>, with an explicit disambiguation note added in Section 08.</li>
+<li><strong>Reframed Section 10</strong> from binding BRD requirements to indicative, non-binding input for the Semantic Model Design stage. The literal SCD row shape and event-ordering tie-breakers are implementation-level decisions that stage is meant to settle collaboratively with the Data Architect against actual source profiling — not something this BRD should pre-decide unilaterally.</li>
+</ol>
+</div>
+</section>
+
+<section class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#summary">Executive summary</a></li><li><a href="#problem">Business problem</a></li>
+<li><a href="#decision">Decision supported</a></li><li><a href="#current">Current state</a></li>
+<li><a href="#future">Desired capability</a></li><li><a href="#questions">Business questions</a></li>
+<li><a href="#approach">Analytical approach</a></li><li><a href="#kpis">Business definitions and KPI contracts</a></li>
+<li><a href="#sources">Data sources</a></li><li><a href="#scd">Indicative data design considerations</a></li>
+<li><a href="#scope">Scope</a></li><li><a href="#constraints">Assumptions, constraints, limitations</a></li>
+<li><a href="#report">Report requirements</a></li><li><a href="#quality">Data quality and validation</a></li>
+<li><a href="#success">Success criteria</a></li><li><a href="#acceptance">Acceptance criteria</a></li>
+<li><a href="#deliverables">Deliverables</a></li><li><a href="#governance">Governance and change control</a></li>
+<li><a href="#approvals">Approvals</a></li><li><a href="#appendix">Appendices</a></li>
+</ol>
+</section>
+
+<section id="summary">
+<h2>01 · Executive summary</h2>
+<p>Phase 1 established a trusted historical baseline for foster utilization across BC SPCA. This continuation adds the dimensions required to understand <strong>where</strong> foster care is used and <strong>which animal-type families</strong> use it, without changing the approved foster-stay logic.</p>
+<p>The solution reconstructs an effective-dated history from ShelterBuddy source, status, location, kennel or foster-location, and animal-type histories. It produces monthly measures of <strong>Animals in Care</strong>, <strong>Distinct Fostered Animals</strong>, <strong>% Animals in Care Fostered</strong>, and <strong>Foster Days</strong> by effective Centre, Region, and normalized Animal Type Family.</p>
+<div class="callout amber"><strong>Interpretation boundary.</strong> Higher foster utilization is descriptive. It does not establish good or poor performance, capacity sufficiency, unmet demand, better outcomes, or an operational target.</div>
+<div class="callout grey"><strong>Naming note.</strong> <strong>% Animals in Care Fostered</strong> is a distinct statistic from Phase 1's <strong>% Animals in Foster</strong> — same intent, different denominator. See Section 08 for the exact distinction before comparing the two reports.</div>
+</section>
+
+<section id="problem">
+<h2>02 · Business problem</h2>
+<p>The existing organization-wide foster baseline explains historical foster use over time but does not identify the centres, regions, and animal-type families associated with that use. Animal Flow leadership therefore cannot consistently compare foster reliance across operational locations and animal populations using governed, reproducible definitions.</p>
+<p>The underlying history is time-dependent. An animal can enter care at one location, move to another centre, change source animal type, experience more than one foster stay, and leave care later. A static current-state join would overwrite historical context and could assign foster activity to the wrong centre or animal type.</p>
+<p>Without an effective-dated analysis:</p>
+<ul>
+<li>centre and animal-type differences cannot be compared reliably;</li>
+<li>transfers can misattribute foster activity;</li>
+<li>multiple foster stays can duplicate distinct animals;</li>
+<li>current animal attributes can rewrite historical months;</li>
+<li>centre subtotals can be incorrectly added to derive provincial totals; and</li>
+<li>data-quality gaps can be confused with true zero utilization.</li>
+</ul>
+</section>
+
+<section id="decision">
+<h2>03 · Decision supported</h2>
+<table><thead><tr><th>Decision element</th><th>Requirement</th></tr></thead><tbody>
+<tr><td>Decision to be made</td><td>Which centres, regions, and normalized animal-type families show comparatively higher or lower foster utilization among Animals in Care, and which patterns require further operational investigation?</td></tr>
+<tr><td>Intended action</td><td>Identify locations and populations with comparatively high foster reliance, investigate operational reasons, and prioritize future foster planning or capacity assessment.</td></tr>
+<tr><td>Decision owner</td><td>Foster Manager</td></tr>
+<tr><td>Review frequency</td><td>Quarterly, with monthly historical results.</td></tr>
+<tr><td>What this report does not decide</td><td>Whether foster capacity is sufficient, whether demand is unmet, whether outcomes are optimized, whether one centre performs better than another, or how resources must be allocated.</td></tr>
+</tbody></table>
+</section>
+
+<section id="current">
+<h2>04 · Current state</h2>
+<p>The delivered Phase 1 baseline provides monthly and annual Fostered Animals and a historical utilization view from January 2006. It also establishes the approved foster-location and foster-end-date rules, data-quality treatment, quarterly refresh, and reproducibility controls.</p>
+<p>The current baseline does not yet provide:</p>
+<ul><li>effective Centre and Region during each month;</li><li>effective animal type during each month;</li><li>Animals in Care as the aligned monthly denominator;</li><li>centre-by-animal-type comparisons;</li><li>effective-dated transfer and type-change treatment; or</li><li>dimensional completeness monitoring for Centre and Animal Type.</li></ul>
+</section>
+
+<section id="future">
+<h2>05 · Desired capability</h2>
+<p>The future state provides a governed monthly dataset and quarterly aggregate report that:</p>
+<ul>
+<li>reconstructs valid incoming-to-outgoing care episodes;</li>
+<li>uses the approved Phase 1 foster-stay logic unchanged;</li>
+<li>derives effective operational Centre and Region from location history;</li>
+<li>derives source animal type from effective history and normalizes it to a reporting family;</li>
+<li>counts distinct Animals in Care and Fostered Animals at the aligned monthly dimensional grain;</li>
+<li>allocates Foster Days to the effective Centre and Animal Type;</li>
+<li>deduplicates provincial totals independently from dimensional subtotals;</li>
+<li>reprocesses full history quarterly and records any historical restatement; and</li>
+<li>exposes unresolved mappings and source conflicts instead of guessing.</li>
+</ul>
+</section>
+
+<section id="questions">
+<h2>06 · Business questions</h2>
+<table><thead><tr><th>Business question</th><th>How answered</th></tr></thead><tbody>
+<tr><td>How many animals are in care by month, Centre, Region, and Animal Type?</td><td>Distinct Animals in Care.</td></tr>
+<tr><td>How many of those animals experience qualifying foster care?</td><td>Distinct Fostered Animals.</td></tr>
+<tr><td>What share of Animals in Care experience foster care?</td><td>% Animals in Care Fostered.</td></tr>
+<tr><td>Which centres and regions use foster most?</td><td>Fostered Animals, % Animals in Care Fostered, and Foster Days, interpreted with volume and completeness indicators.</td></tr>
+<tr><td>Which animal-type families use foster most?</td><td>The same monthly measures by normalized Animal Type Family.</td></tr>
+<tr><td>Where are changes occurring over time?</td><td>Monthly trend, year-over-year percentage-point change, volume change, current-quarter, and year-to-date comparisons.</td></tr>
+<tr><td>How often do animals relate to multiple centres in one month?</td><td>Multiple-centre attribution view and non-additivity warning.</td></tr>
+<tr><td>What data-quality gaps affect interpretation?</td><td>Unmapped Centre, Unknown Animal Type, Data Conflict, and reconciliation results.</td></tr>
+</tbody></table>
+</section>
+
+<section id="approach">
+<h2>07 · Analytical approach</h2>
+<h3>7.1 Monthly analytical grain</h3>
+<div class="code">Reporting Month
+Animal ID
+Care Episode ID
+Effective Centre
+Effective Region
+Source Animal Type ID and Label
+Normalized Animal Type Family
+Is Animal in Care
+Is Fostered Animal
+Foster Days</div>
+<p>Within a dimensional group, the distinct-count key is:</p>
+<div class="formula">Reporting Month + Animal ID + Effective Centre + Normalized Animal Type Family</div>
+<p>For organization-wide monthly totals, the distinct-count key is:</p>
+<div class="formula">Reporting Month + Animal ID</div>
+<div class="callout"><strong>Non-additivity control.</strong> Centre, Region, and Animal Type subtotals must not be added to derive the organization-wide distinct total. An animal can validly appear in more than one subgroup during a month.</div>
+
+<h3>7.2 Care episodes</h3>
+<ul>
+<li>A valid Incoming Source History event opens a care episode.</li>
+<li>Status History determines whether the animal is In Care or Outgoing.</li>
+<li>The applicable Outgoing event closes the episode.</li>
+<li>A later valid Incoming event opens a new care episode.</li>
+<li>An open episode continues through the reporting cutoff.</li>
+</ul>
+
+<h3>7.3 Foster stays</h3>
+<ul>
+<li>Use the approved Phase 1 foster definition without modification.</li>
+<li>Each Shelter Location History row begins at its change timestamp and ends at the next location change.</li>
+<li>A location containing "foster" qualifies, excluding Foster to Adopt.</li>
+<li>A foster end timestamp is exclusive. The day the animal leaves foster is not a foster day.</li>
+<li>A qualifying same-day foster stay still counts.</li>
+<li>Existing Phase 1 resolver rules remain authoritative for latest foster locations without a recorded end.</li>
+</ul>
+
+<h3>7.4 Effective centre and animal type</h3>
+<ul>
+<li>Operational Location History determines effective Centre.</li>
+<li>Region is derived from effective Centre.</li>
+<li>Animal Type History supplies the effective source animal type.</li>
+<li>Kitten and Cat normalize to Cat; Puppy and Dog normalize to Dog.</li>
+<li>Other values map to approved reporting families.</li>
+<li>Unresolved Centre is Unmapped. Unresolved animal type is Unknown.</li>
+<li>Historical months are not overwritten with the latest Centre or Animal Type.</li>
+</ul>
+
+<h3>7.5 Monthly overlap</h3>
+<p>Use Vancouver local time and interval-overlap logic. Count an animal as in care when the care episode overlaps at least one calendar day of the month. Count a Fostered Animal when a qualifying foster stay overlaps at least one day of the month.</p>
+</section>
+
+<section id="kpis">
+<h2>08 · Business definitions and KPI contracts</h2>
+<div class="metric-grid">
+<article class="metric"><h3>Animals in Care</h3><p><strong>Definition:</strong> Distinct animals whose valid incoming-to-outgoing care episode overlaps at least one day of the reporting month.</p><div class="formula">DISTINCTCOUNT(Animal ID)</div><p><strong>Grain:</strong> Month + Centre + Animal Type Family.</p><p><strong>Owner:</strong> Animal Flow Manager.</p><p><strong>Unknown treatment:</strong> Preserve Unmapped and Unknown groups.</p></article>
+<article class="metric"><h3>Fostered Animals</h3><p><strong>Definition:</strong> Distinct Animals in Care that overlap a qualifying foster stay for at least one day in the reporting month.</p><div class="formula">DISTINCTCOUNT(Animal ID where Is Fostered Animal = true)</div><p><strong>Grain:</strong> Month + Centre + Animal Type Family.</p><p><strong>Owner:</strong> Animal Flow Manager.</p><p><strong>Reconciliation:</strong> Provincial monthly totals must equal Phase 1.</p></article>
+<article class="metric"><h3>% Animals in Care Fostered</h3><p><strong>Definition:</strong> The percentage of distinct Animals in Care that experience qualifying foster care in the aligned month and dimensional group.</p><div class="formula">Fostered Animals ÷ Animals in Care × 100</div><p><strong>Type:</strong> Descriptive utilization measure.</p><p><strong>Interpretation:</strong> Not a performance, capacity, demand, outcome, or target measure.</p><p><strong>Owner:</strong> Animal Flow Manager.</p></article>
+<article class="metric"><h3>Foster Days</h3><p><strong>Definition:</strong> Calendar days of qualifying foster care allocated to the Centre and Animal Type effective during each dated segment.</p><div class="formula">SUM(Qualifying foster-day overlap)</div><p><strong>Grain:</strong> Effective-dated segment rolled to month.</p><p><strong>Owner:</strong> Animal Flow Manager.</p><p><strong>Control:</strong> Segment days must not overlap or duplicate.</p></article>
+</div>
+<div class="callout amber">
+<strong>Distinct from Phase 1's "% Animals in Foster."</strong>
+<p style="margin-top:2mm;">Phase 1 defines <em>% Animals in Foster</em> as Fostered Animals ÷ <strong>Intake Animals</strong> — the distinct animals with a new intake dated in the period. This measure, <strong>% Animals in Care Fostered</strong>, divides by <strong>Animals in Care</strong> instead — the full population active at any point in the month, including animals that arrived in an earlier period. Animals in Care is always equal to or larger than Intake Animals for the same month, so the two percentages will not match even though the numerator (Fostered Animals) reconciles exactly between the two reports. Treat them as two different statistics describing two different denominators, not as the same measure recomputed at finer grain.</p>
+</div>
+<h3>8.1 Low-volume safeguards</h3>
+<table><thead><tr><th>Eligible observations in filtered group</th><th>Treatment</th></tr></thead><tbody>
+<tr><td>30 or more</td><td>Eligible for comparative ranking.</td></tr>
+<tr><td>10–29</td><td>Display as Low volume; exclude from headline rankings.</td></tr>
+<tr><td>Fewer than 10</td><td>Show counts; suppress comparative rate.</td></tr>
+</tbody></table>
+<p class="small">Safeguards apply after filters. Low-volume records remain included in aggregate totals.</p>
+</section>
+
+<section id="sources">
+<h2>09 · Data sources</h2>
+<table><thead><tr><th>Source history</th><th>Governed purpose</th><th>Required evidence</th></tr></thead><tbody>
+<tr><td>Source History and source list</td><td>Open valid care episodes and identify landing context.</td><td>Animal ID, event timestamp, source type, Incoming classification, source record ID.</td></tr>
+<tr><td>Status History and status terms</td><td>Determine In Care versus Outgoing and close care episodes.</td><td>Animal ID, effective timestamp, status, governed status type, source record ID.</td></tr>
+<tr><td>Location History</td><td>Determine operational location, effective Centre, Region, and foster-stay boundaries under approved logic.</td><td>Animal ID, location ID and label, effective timestamp, source record ID.</td></tr>
+<tr><td>Kennel or approved foster-location history</td><td>Support qualifying foster-state evidence and validation.</td><td>Animal ID, kennel/location ID, effective timestamp, foster indicator, source record ID.</td></tr>
+<tr><td>Animal Type History</td><td>Determine effective source animal type and normalized family.</td><td>Animal ID, Animal Type ID and label, effective timestamp, source record ID.</td></tr>
+<tr><td>Centre and Region reference</td><td>Derive reporting Centre and Region from effective operational location.</td><td>Location key, Centre, Region, effective dates, mapping status.</td></tr>
+</tbody></table>
+<div class="callout grey"><strong>Physical profiling dependency.</strong> Physical table names, keys, event sequence fields, duplicate behavior, timestamp precision, and completeness remain subject to technical profiling before implementation.</div>
+</section>
+
+<section id="scd">
+<h2>10 · Indicative data design considerations</h2>
+<div class="callout grey">
+<strong>Non-binding — input to the Semantic Model Design stage, not a settled BRD requirement.</strong>
+<p style="margin-top:2mm;">The row shape, event-ordering tie-breakers, and change-behavior rules below describe how this problem could be modeled, so the next RDLC stage (Semantic Model Design, run with a Data Architect) starts from informed context rather than a blank page. They are carried forward as useful starting material only. The literal schema and SCD mechanics should be re-derived and confirmed collaboratively during that stage, against actual source-system profiling — this BRD does not pre-decide them.</p>
+</div>
+<h3>10.1 Illustrative row shape</h3>
+<div class="code">Animal ID
+Care Episode ID
+SCD Effective Start DateTime
+SCD Effective End DateTime
+Is Current
+Source / Intake Event
+Care Status
+Is In Care
+Operational Location ID and Label
+Effective Centre
+Effective Region
+Kennel / Foster Indicator
+Is In Foster
+Source Animal Type ID and Label
+Normalized Animal Type Family
+Source Record IDs
+Data Conflict Indicator</div>
+<h3>10.2 Event ordering</h3>
+<ul>
+<li>Use Vancouver local timestamps.</li>
+<li>Retain source record identifiers and sequence fields for audit.</li>
+<li>Apply all cross-history changes sharing a timestamp before generating the next effective segment.</li>
+<li>When records within the same history share a timestamp, use the source sequence or unique record ID as deterministic tie-breaker.</li>
+<li>An Outgoing event closes the care episode. Later location, kennel, or type records cannot create in-care or foster activity unless a new valid Incoming event opens another episode.</li>
+<li>When no reliable order exists and alternatives materially change results, classify the interval as Data Conflict.</li>
+</ul>
+<h3>10.3 Change behavior</h3>
+<table><thead><tr><th>Change</th><th>SCD action</th><th>Monthly count effect</th></tr></thead><tbody>
+<tr><td>Centre changes</td><td>Open a new effective segment.</td><td>Animal may count once in each applicable Centre during the month.</td></tr>
+<tr><td>Kitten to Cat or Puppy to Dog</td><td>Retain source-type change; normalized family remains unchanged.</td><td>No additional normalized-family distinct count.</td></tr>
+<tr><td>Different normalized animal family</td><td>Open a new effective segment.</td><td>Animal may count in each applicable family; provincial total remains one.</td></tr>
+<tr><td>Additional foster stay with same monthly group</td><td>Preserve stay evidence.</td><td>No duplicate Fostered Animal count.</td></tr>
+<tr><td>Outgoing status</td><td>Close care episode.</td><td>No later in-care month unless a new episode opens.</td></tr>
+</tbody></table>
+</section>
+
+<section id="scope">
+<h2>11 · Scope</h2>
+<div class="metric-grid">
+<div class="callout green"><strong>In scope</strong><ul><li>Monthly Animals in Care</li><li>Monthly Distinct Fostered Animals</li><li>% Animals in Care Fostered</li><li>Foster Days</li><li>Effective Centre and Region</li><li>Normalized Animal Type Family</li><li>Centre × Animal Type analysis</li><li>January 2006 to latest complete quarter</li><li>Quarterly PDF and governed Fabric dataset</li><li>Full-history refresh and restatement controls</li></ul></div>
+<div class="callout amber"><strong>Out of scope or deferred</strong><ul><li>Age group and life stage</li><li>Foster caregiver and household analysis</li><li>Foster capacity and unmet demand</li><li>Animal outcomes</li><li>Foster duration as a performance measure</li><li>Foster to Adopt</li><li>Performance ratings and targets</li><li>Prescriptive resource allocation</li><li>Intake-cohort Foster Placement Rate</li><li>Automated Material change threshold</li><li>Changes to approved foster-start or end logic</li><li>Animal-level detail in published PDF</li></ul></div>
+</div>
+</section>
+
+<section id="constraints">
+<h2>12 · Assumptions, constraints, and accepted limitations</h2>
+<h3>12.1 Assumptions</h3>
+<ul>
+<li>ShelterBuddy histories remain the authoritative operational evidence.</li>
+<li>The approved Phase 1 foster-stay and end-date resolver rules remain valid.</li>
+<li>Centre and Region can be derived from effective operational location with governed reference data.</li>
+<li>Quarterly source extracts contain stable unique record identifiers or deterministic sequence fields.</li>
+</ul>
+<h3>12.2 Constraints</h3>
+<ul>
+<li>Distinct counts across Centre and Animal Type are non-additive.</li>
+<li>Historical source corrections can restate previously published months.</li>
+<li>Current-quarter delivery depends on successful source refresh, full-history processing, and validation.</li>
+<li>Low-volume filters can make otherwise reportable groups ineligible for comparative ranking.</li>
+</ul>
+<h3>12.3 Accepted limitations</h3>
+<ul>
+<li>Up to 1% Unmapped or Unknown dimensional records may be carried with explicit business-owner acceptance.</li>
+<li>Data Conflict intervals remain visible and are not resolved by unsupported assumptions.</li>
+<li>Whether true Centre × Animal Type zero-utilization combinations exist remains a source-profiling fact.</li>
+<li>Age-stage distinctions are intentionally normalized and are not analyzed in this phase.</li>
+</ul>
+</section>
+
+<section id="report">
+<h2>13 · Report requirements</h2>
+<table><thead><tr><th>View</th><th>Required content</th></tr></thead><tbody>
+<tr><td>Executive summary</td><td>Current quarter and year-to-date Animals in Care, Fostered Animals, % Animals in Care Fostered, important year-over-year changes, and data-completeness status.</td></tr>
+<tr><td>Centre and Region analysis</td><td>Monthly measures, Foster Days, prior-year comparison, low-volume labels, and Unmapped indicator.</td></tr>
+<tr><td>Animal Type analysis</td><td>Measures by normalized family, source-type context for validation, and low-volume safeguards.</td></tr>
+<tr><td>Centre × Animal Type</td><td>Monthly intersection, current period, comparison, and recent trend without best/worst labels.</td></tr>
+<tr><td>Multiple-centre attribution</td><td>Animals associated with more than one Centre in a month and clear non-additivity guidance.</td></tr>
+<tr><td>Methodology and data quality</td><td>Definitions, monthly grain, effective-date rules, Unknown/Unmapped/Data Conflict percentages, and Phase 1 reconciliation.</td></tr>
+</tbody></table>
+<h3>13.1 Presentation rules</h3>
+<ul>
+<li>Use neutral labels such as Higher utilization, Lower utilization, and business-reviewed Material change.</li>
+<li>Do not use On Target, Action Required, performance scores, or resource-allocation recommendations.</li>
+<li>Always show relevant counts with rates.</li>
+<li>Distinguish 0%, Not applicable, and Unavailable.</li>
+<li>Do not generate artificial zero combinations.</li>
+<li>Apply low-volume safeguards after filters.</li>
+</ul>
+<h3>13.2 Access</h3>
+<p>The published PDF contains aggregate results only. Restricted validation detail may include Animal ID, Care Episode ID, monthly dimensions, event dates, foster-rule outcome, and unresolved-reason fields for authorized Animal Flow and data-quality users.</p>
+</section>
+
+<section id="quality">
+<h2>14 · Data quality and validation</h2>
+<h3>14.1 Completeness threshold</h3>
+<p>At least <strong>99%</strong> of monthly Animals in Care records and Fostered Animal records must have both an effective Centre and a normalized Animal Type Family.</p>
+<ul>
+<li>Unmapped Centre and Unknown Animal Type remain in province-wide totals when underlying care and foster state are reliable.</li>
+<li>Unresolved dimensions are excluded from named-category rankings.</li>
+<li>Publication below 99% requires explicit business-owner acceptance.</li>
+</ul>
+<h3>14.2 Required validation</h3>
+<ol>
+<li>Reconcile province-wide monthly Fostered Animals exactly to the approved Phase 1 output.</li>
+<li>Validate incoming-to-outgoing care episodes and open-episode cutoff behavior.</li>
+<li>Validate foster-state results against approved worked examples and resolver rules.</li>
+<li>Validate Centre transfer, mid-month Centre change, and multiple-centre attribution.</li>
+<li>Validate Kitten/Cat and Puppy/Dog normalization.</li>
+<li>Validate multiple foster stays with no duplicate monthly distinct animal.</li>
+<li>Validate same-day foster stays and exclusive foster end timestamps.</li>
+<li>Validate Unmapped, Unknown, and Data Conflict treatment.</li>
+<li>Validate true zero-utilization groups, if present, from Animals in Care rather than a foster-only dataset.</li>
+<li>Repeat a quarterly run against unchanged source data and reproduce the same result.</li>
+</ol>
+<h3>14.3 Restatement controls</h3>
+<ul>
+<li>Reprocess complete history from January 2006 each quarter.</li>
+<li>Compare current results with the previously published snapshot by month and measure.</li>
+<li>Log affected months, measures, source records, and reason for every historical change.</li>
+<li>Disclose material restatements in the next quarterly report.</li>
+<li>Retain prior published snapshots for audit.</li>
+<li>Do not preserve a known incorrect result merely to match a prior PDF.</li>
+</ul>
+</section>
+
+<section id="success">
+<h2>15 · Success criteria</h2>
+<table><thead><tr><th>Criterion</th><th>How checked</th><th>Target</th></tr></thead><tbody>
+<tr><td>Monthly centre and animal-type analysis is available from January 2006.</td><td>First/last-period validation and report window.</td><td>Met before publication.</td></tr>
+<tr><td>Phase 1 foster totals remain authoritative.</td><td>Independent province-wide monthly reconciliation.</td><td>Exact match.</td></tr>
+<tr><td>Centre and animal-type assignment is sufficiently complete.</td><td>Monthly dimensional completeness checks.</td><td>At least 99% for both dimensions.</td></tr>
+<tr><td>Distinct counts are reproducible and non-additivity is controlled.</td><td>Automated grouping and deduplication tests.</td><td>No unexplained duplicate or loss.</td></tr>
+<tr><td>Historical changes are traceable.</td><td>Snapshot comparison and restatement log.</td><td>100% of changes explained.</td></tr>
+<tr><td>Quarterly refresh requires no manual record-level correction.</td><td>Runbook execution and repeatability test.</td><td>Successful.</td></tr>
+<tr><td>Business users can explain results without treating utilization as performance.</td><td>Business acceptance of methodology and interpretation text.</td><td>Approved.</td></tr>
+</tbody></table>
+</section>
+
+<section id="acceptance">
+<h2>16 · Acceptance criteria</h2>
+<h3>Governance and accountability</h3>
+<ul><li>Business decision owner approves the decision framing and interpretation boundary.</li><li>Business definition owner approves the four metric definitions and dimensional rules.</li><li>Technical owner confirms the implementation conforms to this BRD.</li><li>Source-system authority confirms source-history interpretation.</li></ul>
+<h3>Data integrity</h3>
+<ul><li>Organization-wide monthly Fostered Animals reconcile exactly to Phase 1.</li><li>Animals in Care and foster overlap rules pass approved test cases.</li><li>Centre and Animal Type completeness is at least 99%, or the limitation is explicitly accepted.</li><li>Low-volume and non-additivity rules are implemented.</li><li>Data Conflict, Unmapped, and Unknown records are visible and traceable.</li></ul>
+<h3>Operational readiness</h3>
+<ul><li>Full-history quarterly refresh completes successfully.</li><li>Published and prior snapshots are retained.</li><li>Restatement log is generated.</li><li>Quarterly PDF includes all required views and methodology.</li><li>Restricted validation detail is access-controlled.</li></ul>
+</section>
+
+<section id="deliverables">
+<h2>17 · Deliverables</h2>
+<table><thead><tr><th>Deliverable</th><th>Description</th><th>Format</th></tr></thead><tbody>
+<tr><td>BRD</td><td>This governed business-requirements artifact.</td><td>Maintainable HTML and approved PDF.</td></tr>
+<tr><td>Governed monthly dataset</td><td>Monthly Animals in Care, Fostered Animals, Foster Days, effective Centre/Region, and normalized Animal Type.</td><td>Microsoft Fabric table or semantic-model layer.</td></tr>
+<tr><td>Quarterly foster-utilization report</td><td>Aggregate centre, region, animal-type, and intersection analysis.</td><td>PDF.</td></tr>
+<tr><td>Validation dataset</td><td>Restricted animal-level traceability for quality investigation.</td><td>Governed Fabric table or controlled extract.</td></tr>
+<tr><td>Validation evidence</td><td>Reconciliation, completeness, duplicate, boundary, transfer, normalization, and zero-utilization tests.</td><td>Published validation record.</td></tr>
+<tr><td>Quarterly runbook</td><td>Refresh, validation, snapshot, restatement, approval, and publication steps.</td><td>Controlled operational document.</td></tr>
+<tr><td>Restatement log</td><td>Historical result changes and source-record basis.</td><td>Governed table or register.</td></tr>
+</tbody></table>
+</section>
+
+<section id="governance">
+<h2>18 · Governance and change control</h2>
+<table><thead><tr><th>Accountability</th><th>Role</th></tr></thead><tbody>
+<tr><td>Business decision owner</td><td>Foster Manager</td></tr>
+<tr><td>Business definition owner</td><td>Animal Flow Manager</td></tr>
+<tr><td>Technical owner</td><td>Business Intelligence / Data Developer</td></tr>
+<tr><td>Source-system authority</td><td>ShelterBuddy operational owner</td></tr>
+<tr><td>Quarterly publication approval</td><td>Business decision owner after validation review.</td></tr>
+</tbody></table>
+<p>Changes to Animals in Care, Fostered Animals, % Animals in Care Fostered, Foster Days, effective Centre, normalized Animal Type Family, event ordering, or distinct-count grain require documented business-owner approval and regression testing.</p>
+<p>Source corrections and governed mapping changes may proceed through the quarterly process. Any change that restates published history must be recorded and disclosed.</p>
+</section>
+
+<section id="approvals">
+<h2>19 · Approvals</h2>
+<table class="approval"><thead><tr><th>Role</th><th>Name</th><th>Decision</th><th>Date</th></tr></thead><tbody>
+<tr><td>Business decision owner · Foster Manager</td><td></td><td>Pending</td><td></td></tr>
+<tr><td>Business definition owner · Animal Flow Manager</td><td></td><td>Pending</td><td></td></tr>
+<tr><td>Technical owner · BI / Data Developer</td><td>Tomas Leung</td><td>Draft prepared</td><td>2026-10-26</td></tr>
+<tr><td>Source-system authority</td><td></td><td>Pending</td><td></td></tr>
+</tbody></table>
+</section>
+
+<section id="appendix">
+<h2>20 · Appendices</h2>
+<h3>Appendix A · Worked monthly example</h3>
+<table><thead><tr><th>Month</th><th>Effective Centre</th><th>Source Type</th><th>Normalized Type</th><th>Animals in Care</th><th>Fostered Animals</th></tr></thead><tbody>
+<tr><td>January 2025</td><td>Centre A</td><td>Kitten</td><td>Cat</td><td>1</td><td>0</td></tr>
+<tr><td>February–June 2025</td><td>Centre A</td><td>Kitten</td><td>Cat</td><td>1 in each overlapping month</td><td>1 in each month containing foster time</td></tr>
+<tr><td>August 2025</td><td>Centre B</td><td>Cat</td><td>Cat</td><td>1</td><td>1 when qualifying foster time overlaps August</td></tr>
+</tbody></table>
+<p class="small">The example demonstrates that Centre follows effective operational location, while Kitten and Cat normalize to the same Cat reporting family.</p>
+
+<h3>Appendix B · Animal-type normalization principles</h3>
+<table><thead><tr><th>Source label</th><th>Normalized family</th><th>Treatment</th></tr></thead><tbody>
+<tr><td>Kitten; Cat</td><td>Cat</td><td>Headline reporting family.</td></tr>
+<tr><td>Puppy; Dog</td><td>Dog</td><td>Headline reporting family.</td></tr>
+<tr><td>Duplicate Llama source IDs</td><td>Llama</td><td>Map to one reporting type; preserve each source ID.</td></tr>
+<tr><td>Other approved source types</td><td>Approved family</td><td>Retain source ID and label for reconciliation.</td></tr>
+<tr><td>Missing or unmapped</td><td>Unknown</td><td>Include in totals; exclude from named rankings.</td></tr>
+</tbody></table>
+
+<h3>Appendix C · Required validation scenarios</h3>
+<ul><li>Normal foster stay with a real next location.</li><li>Latest foster location resolved by approved status-history rules.</li><li>Same-day qualifying foster stay.</li><li>Stay ending on the first day of a month.</li><li>Multiple foster stays in the same monthly dimensional group.</li><li>Internal Centre transfer during a month.</li><li>More than one Centre during one month.</li><li>Kitten-to-Cat and Puppy-to-Dog source-type change.</li><li>Outgoing event followed by later non-episode source records.</li><li>New Incoming event after a prior care episode closes.</li><li>Unmapped Centre, Unknown Animal Type, and material Data Conflict.</li><li>Animals in Care greater than zero with Fostered Animals equal to zero, if the source data contains such a case.</li></ul>
+
+<h3>Appendix D · Reference artifacts</h3>
+<ul>
+<li>Foster Phase 1 BRD, Version 2.0, October 2026.</li>
+<li>Foster Animals Definition and approved foster start/end-date resolver.</li>
+<li>BRD · Animal Flow: Live Capacity Reporting, used as the standardized governance-section reference.</li>
+</ul>
+</section>
+
+<div class="footer-note">BC SPCA · Animal Flow · Foster Centre and Animal Type Utilization · BRD v0.2 · Draft for business review · Internal use only</div>
+</main>
+</body>
+</html>

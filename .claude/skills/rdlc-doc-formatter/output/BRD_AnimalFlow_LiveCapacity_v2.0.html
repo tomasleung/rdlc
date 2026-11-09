@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RDLC Phase-1 BRD — Animal Flow: Live Capacity Dashboard. Floor plan management, capacity configuration, ShelterBuddy occupancy validation, and data quality monitoring across Community Animal Centres.">
+  <title>Animal Flow — Live Capacity Management | Business Requirements Document</title>
+  <style>
+    :root {
+      --navy: #18364a; --blue: #176b87; --teal: #2f7f78; --green: #3f7652;
+      --amber: #a56616; --red: #9b3d35; --ink: #24323b; --muted: #5d6c75;
+      --line: #d8e0e4; --soft: #f3f7f8; --blue-soft: #eaf4f7; --green-soft: #edf6ef;
+      --amber-soft: #fff6e8; --red-soft: #fbeeed; --grey-soft: #f5f6f7; --white: #ffffff;
+      --page-width: 920px;
+    }
+    * { box-sizing: border-box; }
+    html { background: #dfe5e8; }
+    body { margin: 0; color: var(--ink); background: var(--white); font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.47; }
+    a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+    .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+    .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+    h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+    h1 { font-size: 27pt; line-height: 1.1; margin: 8mm 0 3mm; }
+    h2 { font-size: 17pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+    h3 { font-size: 12.5pt; margin: 6mm 0 2.5mm; }
+    h4 { font-size: 10.8pt; margin: 4mm 0 1.5mm; color: var(--ink); }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin: 1.1mm 0; }
+    .cover { display: flex; flex-direction: column; }
+    .cover-main { margin-top: 12mm; }
+    .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+    .subtitle { color: var(--muted); font-size: 13pt; max-width: 700px; }
+    .status { display: inline-block; margin-top: 6mm; padding: 2mm 4mm; border-radius: 99px; background: var(--amber-soft); color: #7b4a0c; font-weight: 700; }
+    .cover-meta { margin-top: 10mm; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+    .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .value { font-weight: 650; color: var(--navy); }
+    .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+    .callout.warning { border-color: var(--amber); background: var(--amber-soft); }
+    .callout.note { border-color: #7b8990; background: var(--grey-soft); }
+    .callout strong:first-child { color: var(--navy); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th, td { padding: 2.8mm 3.2mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--navy); color: var(--white); text-align: left; font-size: 9pt; letter-spacing: .02em; }
+    .metadata th:first-child, .metadata td:first-child { width: 29%; }
+    .small { font-size: 9pt; color: var(--muted); }
+    .tag { display: inline-block; padding: 1mm 2.5mm; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); font-size: 8.5pt; font-weight: 700; margin: .7mm 1mm .7mm 0; }
+    .tag.in { background: var(--green-soft); color: var(--green); border-color: #bfe0c9; }
+    .tag.out { background: var(--grey-soft); color: var(--muted); }
+    .toc a { border: 0; }
+    .toc ol { columns: 2; column-gap: 10mm; }
+    .approval td { height: 13mm; }
+    .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+
+    .decision-card { border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: 8px; padding: 4mm 5mm; margin: 3mm 0; break-inside: avoid; }
+    .decision-card h3 { margin: 0 0 2mm; }
+    .decision-card .dl { display: grid; grid-template-columns: 140px 1fr; gap: 1mm 3mm; font-size: 9.5pt; margin-top: 2mm; }
+    .decision-card .dl dt { color: var(--muted); font-weight: 700; }
+    .decision-card .dl dd { margin: 0; }
+
+    .flow-col { border: 1px solid var(--line); border-radius: 8px; padding: 4mm; }
+    .flow-col h4 { margin-top: 0; }
+    .flow-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1mm; }
+    .flow-steps li { font-size: 9.3pt; padding: 1.2mm 0; }
+    .flow-steps li:not(:last-child)::after { content: "↓"; display: block; text-align: center; color: var(--muted); }
+    .flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin: 3mm 0 5mm; }
+
+    @page { size: Letter; margin: 15mm 14mm 17mm; @bottom-left { content: "Internal use only"; color: #6b7880; font-size: 8pt; } @bottom-right { content: "Page " counter(page) " of " counter(pages); color: #6b7880; font-size: 8pt; } }
+    @media print { html, body { background: var(--white); } .page { max-width: none; padding: 0; } .cover { min-height: 200mm; page-break-after: always; } .cover-main { margin-top: 28mm; } .cover-meta { margin-top: auto; } a { color: inherit; border-bottom: 0; } }
+    @media (max-width: 720px) { .page { padding: 8mm; } .cover-meta, .flow-grid { grid-template-columns: 1fr; } .toc ol { columns: 1; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <section class="cover">
+    <div class="eyebrow">Operations / Animal Flow</div>
+    <div class="cover-main">
+      <h1>Animal Flow: Live Capacity Dashboard</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">Business Requirements Document<br>RDLC Phase-1 Artifact · Design Stage</p>
+      <span class="status">Draft · Version 2.0</span>
+    </div>
+    <div class="callout warning">
+      <strong>Not yet confirmed.</strong> This BRD is Draft. Of the three required approvals below, only one (Data Architecture) has a recorded status, and that status is Pending — Product Owner and Data Owner approval are not yet recorded. Treat this as unconfirmed pipeline input until all three are resolved.
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Capability name</div><div class="value">Animal Flow — Live Capacity Management</div></div>
+      <div><div class="label">Department</div><div class="value">Animal Flow</div></div>
+      <div><div class="label">Author</div><div class="value">Tomas Leung</div></div>
+      <div><div class="label">Created / last updated</div><div class="value">July 7, 2026</div></div>
+      <div><div class="label">RDLC stage</div><div class="value">Design</div></div>
+      <div><div class="label">Classification</div><div class="value">Internal use only</div></div>
+    </div>
+  </section>
+
+  <section id="metadata">
+    <h2>Document metadata</h2>
+    <table class="metadata">
+      <thead><tr><th>Field</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>RDLC Document Type</td><td>BRD</td></tr>
+        <tr><td>RDLC Phase</td><td>Phase 1 Business Requirement</td></tr>
+        <tr><td>RDLC Stage</td><td>Design</td></tr>
+        <tr><td>Capability Name</td><td>Animal Flow — Live Capacity Management</td></tr>
+        <tr><td>Capability Domain</td><td>Operations / Animal Flow</td></tr>
+        <tr><td>Department</td><td>Animal Flow</td></tr>
+        <tr><td>Author</td><td>Tomas Leung</td></tr>
+        <tr><td>Version</td><td>2.0</td></tr>
+        <tr><td>Status</td><td>Draft</td></tr>
+        <tr><td>Created Date</td><td>2026-07-07</td></tr>
+        <tr><td>Last Update</td><td>2026-07-07</td></tr>
+        <tr><td>Decision Support</td><td>Support real-time capacity management and animal placement decisions by providing accurate space availability, centre confirmations, floor plan visibility, and ShelterBuddy assignment validation across all Community Animal Centres.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#s01">01 — Summary</a></li>
+      <li><a href="#s02">02 — Business problem</a></li>
+      <li><a href="#s03">03 — Decision supported</a></li>
+      <li><a href="#s04">04 — Current process (as-is)</a></li>
+      <li><a href="#s05">05 — Desired capability (to-be)</a></li>
+      <li><a href="#s06">06 — Business questions</a></li>
+      <li><a href="#s07">07 — Required information (key signals)</a></li>
+      <li><a href="#s08">08 — Data sources</a></li>
+      <li><a href="#s09">09 — Scope</a></li>
+      <li><a href="#s10">10 — Assumptions &amp; constraints</a></li>
+      <li><a href="#s11">11 — Success criteria</a></li>
+      <li><a href="#s12">12 — Data validation &amp; QA</a></li>
+      <li><a href="#s13">13 — Acceptance criteria</a></li>
+      <li><a href="#s14">14 — Approvals</a></li>
+    </ol>
+  </nav>
+
+  <section id="s01">
+    <h2>01 · Summary</h2>
+    <p>This initiative provides BC SPCA Community Animal Centres (CACs) and the Animal Flow team with a centralized platform for managing, validating, and monitoring live animal housing capacity.</p>
+    <p>Unlike the original dashboard concept, the solution now combines:</p>
+    <ul>
+      <li>Floor plan management</li>
+      <li>Capacity configuration</li>
+      <li>ShelterBuddy occupancy validation</li>
+      <li>Data quality monitoring</li>
+      <li>Centre-level capacity confirmation</li>
+      <li>Real-time intake support</li>
+    </ul>
+    <p>The platform allows Centre Managers to manage and validate capacity information while enabling Animal Flow to make faster and more reliable animal placement decisions based on accurate, up-to-date operational data.</p>
+    <p>The focus is on operational accuracy, decision confidence, and data quality while remaining easy to use across all centres.</p>
+  </section>
+
+  <section id="s02">
+    <h2>02 · Business problem</h2>
+    <p>Historically, Animal Flow relied on phone calls, emails, text messages, and local knowledge to determine available capacity within Community Animal Centres.</p>
+    <h3>Key challenges included</h3>
+    <ul>
+      <li>No centralized view of DOG and CAT availability</li>
+      <li>No floor plan visibility</li>
+      <li>No verification of ShelterBuddy kennel assignments</li>
+      <li>Inconsistent understanding of available spaces</li>
+      <li>Limited visibility into stale or incomplete data</li>
+      <li>Manual effort required to validate capacity</li>
+    </ul>
+    <h3>As a result</h3>
+    <ul>
+      <li>Intake decisions take longer than necessary</li>
+      <li>Animals may be routed to centres with inaccurate capacity information</li>
+      <li>Staff spend significant time verifying information</li>
+      <li>Data quality issues remain hidden until operational problems occur</li>
+    </ul>
+    <h3>Process flow</h3>
+    <div class="flow-grid">
+      <div class="flow-col">
+        <h4>Before</h4>
+        <ul class="flow-steps">
+          <li>Need Placement</li>
+          <li>Contact Centres</li>
+          <li>Gather Capacity Information</li>
+          <li>Make Decision</li>
+        </ul>
+      </div>
+      <div class="flow-col">
+        <h4>Now — Centre Manager</h4>
+        <ul class="flow-steps">
+          <li>Review Floor Plan</li>
+          <li>Manage Open / Hold / Unavailable Spaces</li>
+          <li>Review ShelterBuddy Assignments</li>
+          <li>Correct Data Issues</li>
+          <li>Confirm Capacity</li>
+        </ul>
+      </div>
+      <div class="flow-col">
+        <h4>Now — Animal Flow</h4>
+        <ul class="flow-steps">
+          <li>Need Placement</li>
+          <li>View Live Capacity</li>
+          <li>Review Available Spaces</li>
+          <li>Review Data Freshness</li>
+          <li>Select Best CAC</li>
+          <li>Route Animal</li>
+        </ul>
+      </div>
+    </div>
+    <p class="small">Reconstructed from a source table whose header row read "Before / Now / (blank)" with the two "Now" flows (Centre Manager, Animal Flow) distinguished only inside the cell text — split into three labeled columns here for clarity; no step content was added or removed.</p>
+  </section>
+
+  <section id="s03">
+    <h2>03 · Decision supported</h2>
+    <p>The platform supports two primary decision groups.</p>
+    <div class="decision-card">
+      <h3>Decision A — Animal Placement Decision</h3>
+      <dl class="dl">
+        <dt>Decision to be made</dt><dd>Which CAC should receive an incoming animal based on available DOG or CAT capacity and current operational status?</dd>
+        <dt>Decision owner</dt><dd>Animal Flow Team</dd>
+        <dt>Frequency</dt><dd>Multiple times per day.</dd>
+        <dt>Why timing matters</dt><dd>Animals require timely placement to avoid delays, transportation inefficiencies, and animal welfare risks.</dd>
+      </dl>
+    </div>
+    <div class="decision-card">
+      <h3>Decision B — Capacity Validation Decision</h3>
+      <dl class="dl">
+        <dt>Decision to be made</dt><dd>Does the current floor plan, kennel assignment, and space availability accurately reflect the true operational state of the centre?</dd>
+      </dl>
+      <p class="small">Owner, frequency, and timing are not stated for Decision B in the source document.</p>
+    </div>
+    <div class="decision-card">
+      <h3>Decision C — Occupancy Investigation</h3>
+      <dl class="dl">
+        <dt>Decision to be made</dt><dd>Are the animals currently assigned within ShelterBuddy accurately represented within the configured capacity model?</dd>
+        <dt>Decision owner</dt><dd>Centre Manager</dd>
+        <dt>Frequency</dt><dd>Daily and as changes occur.</dd>
+        <dt>Why timing matters</dt><dd>Incorrect or missing assignments reduce confidence in live capacity decisions and create operational risk.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="s04">
+    <h2>04 · Current process (as-is)</h2>
+    <h3>Current operational process</h3>
+    <ol>
+      <li>Centre capacity information is maintained locally.</li>
+      <li>Animal assignments occur in ShelterBuddy.</li>
+      <li>Capacity validation is primarily manual.</li>
+      <li>Animal Flow verifies space through calls, emails, or local knowledge.</li>
+      <li>Intake decisions are made using best available information.</li>
+    </ol>
+    <h3>Limitations</h3>
+    <ul>
+      <li>No unified operational platform</li>
+      <li>No visual floor plan</li>
+      <li>No automated validation of occupancy</li>
+      <li>Difficult to identify missing kennel assignments</li>
+      <li>High dependency on manual communication</li>
+    </ul>
+  </section>
+
+  <section id="s05">
+    <h2>05 · Desired capability (to-be)</h2>
+    <p>The future state provides a centralized capacity management platform that combines master facility configuration, ShelterBuddy animal occupancy, and operational validation.</p>
+    <p>The platform provides:</p>
+    <div class="flow-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="flow-col">
+        <h4>For Centre Managers</h4>
+        <ul>
+          <li>Interactive CAT and DOG floor plans</li>
+          <li>Open / Hold / Unavailable space management</li>
+          <li>ShelterBuddy assignment validation</li>
+          <li>Missing kennel assignment identification</li>
+          <li>Emergency closure controls</li>
+          <li>Shift confirmation process</li>
+        </ul>
+      </div>
+      <div class="flow-col">
+        <h4>For Animal Flow</h4>
+        <ul>
+          <li>Real-time space availability</li>
+          <li>Capacity utilization monitoring</li>
+          <li>Centre comparison</li>
+          <li>Data freshness indicators</li>
+          <li>Intake support decisions</li>
+        </ul>
+      </div>
+    </div>
+    <h3>Animal occupancy validation</h3>
+    <p>The platform shall provide visibility into the individual animals contributing to space utilization. Users must be able to:</p>
+    <ul>
+      <li>View animals occupying configured spaces</li>
+      <li>Review ShelterBuddy assignment details</li>
+      <li>Identify animals missing kennel assignments</li>
+      <li>Investigate occupancy discrepancies</li>
+      <li>Navigate directly to ShelterBuddy animal records for further review</li>
+    </ul>
+    <h3>Benefits include</h3>
+    <ul>
+      <li>Faster placement decisions</li>
+      <li>Increased trust in capacity data</li>
+      <li>Reduced manual validation effort</li>
+      <li>Improved ShelterBuddy data quality</li>
+      <li>Better operational visibility across all CACs</li>
+    </ul>
+  </section>
+
+  <section id="s06">
+    <h2>06 · Business questions</h2>
+    <h3>Capacity management <span class="tag in">In scope</span></h3>
+    <ul>
+      <li>Which centres have available space right now?</li>
+      <li>Which centres are approaching capacity limits?</li>
+      <li>Which centres cannot receive additional animals?</li>
+      <li>How fresh is the centre capacity information?</li>
+      <li>Has the centre confirmed its capacity status?</li>
+    </ul>
+    <h3>Data quality <span class="tag in">In scope</span></h3>
+    <ul>
+      <li>Are all animals assigned to valid kennels?</li>
+      <li>Are any animals missing kennel assignments?</li>
+      <li>Are ShelterBuddy assignments aligned with configured floor plans?</li>
+      <li>Are configured spaces being used correctly?</li>
+    </ul>
+    <h3>Future analytics <span class="tag out">Out of scope</span></h3>
+    <ul>
+      <li>Seasonal capacity trends</li>
+      <li>Capacity forecasting</li>
+      <li>Historical utilization analysis</li>
+      <li>Predictive placement modeling</li>
+    </ul>
+  </section>
+
+  <section id="s07">
+    <h2>07 · Required information (key signals)</h2>
+    <h3>Capacity signals</h3>
+    <table>
+      <thead><tr><th>Signal</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Total Spaces</td><td>Total configured DOG/CAT spaces</td></tr>
+        <tr><td>Open Spaces</td><td>Available for animal placement</td></tr>
+        <tr><td>In Use Spaces</td><td>Occupied spaces based on ShelterBuddy</td></tr>
+        <tr><td>Hold Spaces</td><td>Temporarily unavailable for intake</td></tr>
+        <tr><td>Unavailable Spaces</td><td>Permanently or operationally unavailable</td></tr>
+        <tr><td>Utilization Rate</td><td>Percentage of occupied spaces</td></tr>
+        <tr><td>Emergency Closure Status</td><td>Centre-level closure flag</td></tr>
+      </tbody>
+    </table>
+    <h3>Data quality signals</h3>
+    <table>
+      <thead><tr><th>Signal</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Missing Kennel Assignment Count</td><td>Animals assigned to shelter location without kennel</td></tr>
+        <tr><td>Assignment Accuracy</td><td>Percentage of valid space assignments</td></tr>
+        <tr><td>ShelterBuddy Sync Time</td><td>Last successful synchronization</td></tr>
+        <tr><td>Capacity Confirmation Status</td><td>Centre manager sign-off status</td></tr>
+      </tbody>
+    </table>
+    <h3>Governance</h3>
+    <p>Master space configuration, kennel definitions, and capacity rules must be approved by Operations and maintained through formal change control.</p>
+  </section>
+
+  <section id="s08">
+    <h2>08 · Data sources</h2>
+    <p class="small">The source heading for this section read "Data Sources SharePoint List" — the trailing "SharePoint List" text is omitted here as an apparent label fragment rather than part of the section title; no content from the table below was affected.</p>
+    <table>
+      <thead><tr><th>Data domain</th><th>Source system</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Dog Capacity Configuration</td><td>DOG Master</td><td>Defines all dog spaces</td></tr>
+        <tr><td>Cat Capacity Configuration</td><td>CAT Master</td><td>Defines all cat spaces</td></tr>
+        <tr><td>Centre Configuration</td><td>CENTER Master</td><td>Defines all Centre spec</td></tr>
+        <tr><td>Shelter Occupancy</td><td>Shelter Buddy</td><td>Animal occupancy source</td></tr>
+        <tr><td>Capacity Confirmation</td><td>Power App</td><td>Centre sign-off</td></tr>
+        <tr><td>Space Status Management</td><td>Power App</td><td>Open/Hold/Unavailable control</td></tr>
+        <tr><td>Capacity Rollup</td><td>Live Capacity Platform</td><td>Operational dashboard</td></tr>
+        <tr><td>Historical Archive</td><td>Daily Snapshot</td><td>Future analytics</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="s09">
+    <h2>09 · Scope</h2>
+    <h3>In scope</h3>
+    <ul>
+      <li>DOG floor plan management</li>
+      <li>CAT floor plan management</li>
+      <li>Space configuration management</li>
+      <li>Open/Hold/Unavailable management</li>
+      <li>Shelter Buddy occupancy validation</li>
+      <li>Missing kennel assignment detection</li>
+      <li>Capacity confirmation workflow</li>
+      <li>Live capacity reporting</li>
+      <li>Intake support decision making</li>
+    </ul>
+    <h3>Out of scope</h3>
+    <ul>
+      <li>Predictive capacity forecasting</li>
+      <li>Automated routing recommendations</li>
+      <li>Historical trend reporting</li>
+      <li>APS automation</li>
+      <li>Advanced capacity optimization analytics</li>
+    </ul>
+  </section>
+
+  <section id="s10">
+    <h2>10 · Assumptions &amp; constraints</h2>
+    <h3>Assumptions</h3>
+    <ul>
+      <li>Shelter Buddy remains the authoritative source for animal occupancy.</li>
+      <li>DOG and CAT Master configurations accurately represent physical spaces.</li>
+      <li>Centre Managers maintain space status information.</li>
+      <li>Animal Flow relies on the platform for intake decisions.</li>
+    </ul>
+    <h3>Constraints</h3>
+    <ul>
+      <li>Dependent on Shelter Buddy data quality.</li>
+      <li>Kennel assignment remains optional in Shelter Buddy.</li>
+      <li>Centres may experience connectivity limitations.</li>
+      <li>Platform represents current operational state, not future reservations or animals in transit.</li>
+    </ul>
+  </section>
+
+  <section id="s11">
+    <h2>11 · Success criteria</h2>
+    <h3>Capacity management</h3>
+    <ul>
+      <li>90%+ of centres maintain current capacity information.</li>
+      <li>Animal Flow can identify intake locations without direct centre contact.</li>
+    </ul>
+    <h3>Data quality</h3>
+    <ul>
+      <li>Missing kennel assignments reduced by 80%.</li>
+      <li>Assignment validation is reviewed by Centre Managers.</li>
+    </ul>
+    <h3>Operational efficiency</h3>
+    <ul>
+      <li>Intake placement decisions occur 30% faster.</li>
+      <li>Reduction in manual communication between centres and Animal Flow.</li>
+      <li>Occupancy discrepancies can be investigated within one workflow.</li>
+    </ul>
+    <h3>Adoption</h3>
+    <ul>
+      <li>Live Capacity Management becomes the primary operational capacity tool for all CACs.</li>
+    </ul>
+  </section>
+
+  <section id="s12">
+    <h2>12 · Data validation &amp; QA</h2>
+    <ul>
+      <li>Occupancy counts must reconcile with Shelter Buddy.</li>
+      <li>Capacity totals must reconcile with configured floor plans.</li>
+      <li>Missing assignments must be surfaced automatically.</li>
+      <li>Data freshness indicators must be accurate.</li>
+      <li>Confirmation audit history must be retained.</li>
+    </ul>
+    <div class="callout note"><strong>Note</strong><br>This BRD defines decision-making and governance contracts only. All system design, data modeling, automation, and analytics implementation details will be defined in the Technical Requirement Document (TRD).</div>
+  </section>
+
+  <section id="s13">
+    <h2>13 · Acceptance criteria</h2>
+    <h3>Governance &amp; accountability</h3>
+    <ul>
+      <li>Product Owner approval obtained.</li>
+      <li>Data Owner approval obtained.</li>
+      <li>Capacity governance rules documented.</li>
+    </ul>
+    <h3>Operational readiness</h3>
+    <ul>
+      <li>Floor plans accurately reflect configured spaces.</li>
+      <li>Open/Hold/Unavailable statuses function correctly.</li>
+      <li>Capacity confirmation process operates successfully.</li>
+    </ul>
+    <h3>Data integrity</h3>
+    <ul>
+      <li>Shelter Buddy occupancy reconciles with platform counts.</li>
+      <li>Missing kennel assignments are identified and reported.</li>
+      <li>Capacity calculations are validated across pilot centres.</li>
+    </ul>
+  </section>
+
+  <section id="s14">
+    <h2>14 · Approvals</h2>
+    <table class="approval">
+      <thead><tr><th>Role</th><th>Name</th><th>Approval status</th></tr></thead>
+      <tbody>
+        <tr><td>Product Owner</td><td>Cynthia Boulter</td><td>—</td></tr>
+        <tr><td>Data Owner</td><td>Kahlee Demers</td><td>—</td></tr>
+        <tr><td>Data Architecture</td><td>Tomas Leung</td><td>Pending</td></tr>
+      </tbody>
+    </table>
+    <p class="small">"—" indicates the source document left this cell blank (no status recorded), shown distinctly from "Pending," which the source stated explicitly for Data Architecture.</p>
+  </section>
+
+  <div class="footer-note">BC SPCA · Internal use only · Animal Flow — Live Capacity Management, Version 2.0 (Draft). Formatted by <code>rdlc-doc-formatter</code> from <code>BRD_AnimalFlow_LiveCapacity_v2.0.md</code> — content unchanged from source; this formatting pass does not constitute RDLC confirmation.</div>
+</main>
+</body>
+</html>

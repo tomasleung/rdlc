@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Proposed governance and operating model for Microsoft Fabric at BC SPCA — a single entry point consolidating architecture, governance, security, operational, and cost management documentation.">
+  <title>BC SPCA Microsoft Fabric Governance &amp; Operating Model</title>
+  <style>
+    :root {
+      --navy: #18364a; --blue: #176b87; --teal: #2f7f78; --green: #3f7652;
+      --amber: #a56616; --red: #9b3d35; --ink: #24323b; --muted: #5d6c75;
+      --line: #d8e0e4; --soft: #f3f7f8; --blue-soft: #eaf4f7; --green-soft: #edf6ef;
+      --amber-soft: #fff6e8; --red-soft: #fbeeed; --grey-soft: #f5f6f7; --white: #ffffff;
+      --page-width: 920px;
+    }
+    * { box-sizing: border-box; }
+    html { background: #dfe5e8; }
+    body { margin: 0; color: var(--ink); background: var(--white); font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.47; }
+    a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+    .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+    .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+    h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+    h1 { font-size: 26pt; line-height: 1.1; margin: 8mm 0 3mm; }
+    h2 { font-size: 18pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+    h3 { font-size: 13.5pt; margin: 7mm 0 2.5mm; }
+    h4 { font-size: 11.5pt; margin: 5mm 0 2mm; }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin: 1.1mm 0; }
+    .cover { min-height: 200mm; display: flex; flex-direction: column; }
+    .cover-main { margin-top: 24mm; }
+    .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+    .subtitle { color: var(--muted); font-size: 13pt; max-width: 700px; }
+    .status { display: inline-block; margin-top: 6mm; padding: 2mm 4mm; border-radius: 99px; background: var(--amber-soft); color: #7b4a0c; font-weight: 700; }
+    .cover-meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+    .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .value { font-weight: 650; color: var(--navy); }
+    .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+    .callout.approved, .callout.in-scope { border-color: var(--green); background: var(--green-soft); }
+    .callout.warning, .callout.deferred, .callout.limitation { border-color: var(--amber); background: var(--amber-soft); }
+    .callout.risk { border-color: var(--red); background: var(--red-soft); }
+    .callout.note { border-color: #7b8990; background: var(--grey-soft); }
+    .callout strong:first-child { color: var(--navy); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th, td { padding: 2.8mm 3.2mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--navy); color: var(--white); text-align: left; font-size: 9pt; letter-spacing: .02em; }
+    td.c, th.c { text-align: center; white-space: nowrap; }
+    .small { font-size: 9pt; color: var(--muted); }
+    .tag { display: inline-block; padding: 1mm 2.5mm; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); font-size: 8.5pt; font-weight: 700; margin: .7mm 1mm .7mm 0; }
+    .toc a { border: 0; }
+    .toc ol { columns: 2; column-gap: 10mm; }
+    .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+    .principle-card { border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: 8px; padding: 4mm 5mm; margin: 3mm 0; break-inside: avoid; }
+    .principle-card h4 { margin: 0 0 1.5mm; }
+    .review-card { border: 1px solid var(--line); border-radius: 8px; padding: 4mm 5mm; margin: 4mm 0; break-inside: avoid; }
+    .review-card h3 { margin: 0 0 2mm; }
+    @page { size: Letter; margin: 15mm 14mm 17mm; @bottom-left { content: "Internal use only"; color: #6b7880; font-size: 8pt; } @bottom-right { content: "Page " counter(page) " of " counter(pages); color: #6b7880; font-size: 8pt; } }
+    @media print { html, body { background: var(--white); } .page { max-width: none; padding: 0; } .cover { page-break-after: always; } a { color: inherit; border-bottom: 0; } }
+    @media (max-width: 720px) { .page { padding: 8mm; } .cover-meta { grid-template-columns: 1fr; } .toc ol { columns: 1; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <section class="cover">
+    <div class="eyebrow">IT Governance · Microsoft Fabric</div>
+    <div class="cover-main">
+      <h1>BC SPCA Microsoft Fabric Governance &amp; Operating Model</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">A proposed governance and operating model for Microsoft Fabric at BC SPCA — a single entry point consolidating existing architecture, governance, security, operational, and cost management documentation for discussion and review.</p>
+      <span class="status">Draft for review · Version 0.1</span>
+    </div>
+    <div class="callout warning">
+      <strong>Not yet an approved standard</strong><br>
+      This document is intended as a starting point for discussion with IT leadership and the data team. It is not yet considered an approved corporate standard.
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Owner</div><div class="value">BC SPCA Information Technology Team</div></div>
+      <div><div class="label">Status</div><div class="value">Draft</div></div>
+      <div><div class="label">Audience</div><div class="value">IT Leadership, Data Team, Business Owners, Data Owners, Product Owners</div></div>
+      <div><div class="label">Classification</div><div class="value">Internal use only</div></div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#purpose">Purpose</a></li>
+      <li><a href="#vision">Vision</a></li>
+      <li><a href="#principles">Guiding principles</a></li>
+      <li><a href="#operating-model">Microsoft Fabric operating model</a></li>
+      <li><a href="#onboarding">Department onboarding framework</a></li>
+      <li><a href="#library">Governance documentation library</a></li>
+      <li><a href="#architecture">Architecture and standards</a></li>
+      <li><a href="#sensitive">Sensitive data and security</a></li>
+      <li><a href="#review">Governance areas for review</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ol>
+  </nav>
+
+  <section id="purpose">
+    <h2>01 · Purpose</h2>
+    <p>This document provides a proposed governance and operating model for Microsoft Fabric at BC SPCA.</p>
+    <p>The purpose of this document is to consolidate existing Microsoft Fabric architecture, governance, security, operational, and cost management documentation into a single entry point for discussion and review.</p>
+    <p>As BC SPCA explores broader adoption of Microsoft Fabric across additional departments, a common set of standards and governance practices will help ensure solutions remain:</p>
+    <ul>
+      <li>Secure</li>
+      <li>Governed</li>
+      <li>Scalable</li>
+      <li>Cost-effective</li>
+      <li>Supportable</li>
+      <li>Consistent across the organization</li>
+    </ul>
+  </section>
+
+  <section id="vision">
+    <h2>02 · Vision</h2>
+    <p>BC SPCA will utilize Microsoft Fabric as a centralized enterprise data platform to support:</p>
+    <ul>
+      <li>Business Intelligence</li>
+      <li>Operational Reporting</li>
+      <li>Data Engineering</li>
+      <li>Self-Service Analytics</li>
+      <li>Data Products</li>
+      <li>Organizational Decision-Making</li>
+    </ul>
+    <p>The platform should enable departments to leverage organizational data while following consistent standards for governance, architecture, security, and operational support.</p>
+  </section>
+
+  <section id="principles">
+    <h2>03 · Guiding principles</h2>
+    <div class="principle-card">
+      <h4>Security by default</h4>
+      <p>All Fabric solutions should follow least-privilege access principles and adhere to BC SPCA security requirements.</p>
+    </div>
+    <div class="principle-card">
+      <h4>Governance first</h4>
+      <p>Data governance requirements should be defined before solutions are deployed. Data ownership and accountability should be clearly established.</p>
+    </div>
+    <div class="principle-card">
+      <h4>Reuse before rebuild</h4>
+      <p>Shared datasets, dimensions, and engineering assets should be leveraged whenever possible to reduce duplication and maintenance effort.</p>
+    </div>
+    <div class="principle-card">
+      <h4>Standardized architecture</h4>
+      <p>Departments should follow approved Fabric architecture and workspace patterns to ensure consistency and supportability.</p>
+    </div>
+    <div class="principle-card">
+      <h4>Cost transparency</h4>
+      <p>Capacity usage, storage growth, and processing costs should be visible and monitored.</p>
+    </div>
+    <div class="principle-card">
+      <h4>Business ownership</h4>
+      <p>Business units own business definitions, requirements, and decisions. IT provides platform governance, architecture guidance, and technical support.</p>
+    </div>
+  </section>
+
+  <section id="operating-model">
+    <h2>04 · Microsoft Fabric operating model</h2>
+    <h3>Roles and responsibilities</h3>
+    <table>
+      <thead><tr><th>Role</th><th>Responsibility</th></tr></thead>
+      <tbody>
+        <tr><td>IT Team</td><td>Platform administration and governance</td></tr>
+        <tr><td>Data Team</td><td>Architecture, development standards, implementation support</td></tr>
+        <tr><td>Business Owner</td><td>Business requirements and prioritization</td></tr>
+        <tr><td>Data Owner</td><td>Data quality, governance, and business definitions</td></tr>
+        <tr><td>Product Owner</td><td>Data product lifecycle and adoption</td></tr>
+        <tr><td>End Users</td><td>Report consumption and feedback</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="onboarding">
+    <h2>05 · Department onboarding framework</h2>
+    <p>When a department requests a Microsoft Fabric solution, the following process is proposed:</p>
+    <table>
+      <thead><tr><th class="c">Step</th><th>Activity</th></tr></thead>
+      <tbody>
+        <tr><td class="c">1</td><td>Identify Business Sponsor</td></tr>
+        <tr><td class="c">2</td><td>Identify Data Owner</td></tr>
+        <tr><td class="c">3</td><td>Define Business Objectives</td></tr>
+        <tr><td class="c">4</td><td>Review Data Sources</td></tr>
+        <tr><td class="c">5</td><td>Assess Sensitive Data Requirements</td></tr>
+        <tr><td class="c">6</td><td>Review Security Requirements</td></tr>
+        <tr><td class="c">7</td><td>Provision Workspace</td></tr>
+        <tr><td class="c">8</td><td>Apply Architecture Standards</td></tr>
+        <tr><td class="c">9</td><td>Implement and Test Solution</td></tr>
+        <tr><td class="c">10</td><td>Deploy to Production</td></tr>
+        <tr><td class="c">11</td><td>Establish Ongoing Ownership and Support</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="library">
+    <h2>06 · Governance documentation library</h2>
+    <p>The following documents have been developed to establish a foundation for Microsoft Fabric governance, architecture, security, and operational management.</p>
+    <table>
+      <thead><tr><th>Document</th><th>Category</th><th>Description</th><th>Primary audience</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://bcspca.sharepoint.com/:w:/r/sites/IT-HUB/_layouts/15/Doc.aspx?sourcedoc=%7BD8BAAA45-5307-4A0C-A6D3-DC685F1CBDA0%7D" target="_blank" rel="noopener">Technical Architecture Specification – Fabric BI Engine</a></td><td>Architecture</td><td>Defines the core Microsoft Fabric BI architecture, including data ingestion, medallion architecture, semantic models, reporting, and Power Apps integration.</td><td>BI Developers, Data Engineers, Architects</td></tr>
+        <tr><td><a href="https://bcspca.sharepoint.com/:w:/r/sites/IT-HUB/_layouts/15/Doc.aspx?sourcedoc=%7B67D7581A-B734-405D-BD9F-C6C825435E1D%7D" target="_blank" rel="noopener">BCSPCA Fabric Data Platform Architecture Standard</a></td><td>Architecture</td><td>Enterprise-standard architecture for Bronze, Silver, Gold, shared warehouse strategy, ownership boundaries, and scalable data product design.</td><td>Data Team, Architects, Technical Leads</td></tr>
+        <tr><td><a href="https://bcspca.sharepoint.com/:w:/r/sites/IT-HUB/_layouts/15/Doc.aspx?sourcedoc=%7B82E3698D-C2F6-462B-9E38-FC2BB6B9DF8E%7D" target="_blank" rel="noopener">BCSPCA Microsoft Fabric Workspace Strategy</a></td><td>Platform Governance</td><td>Defines workspace hierarchy, centralized data engineering model, domain workspaces, OneLake shortcut strategy, and environment structure.</td><td>BI Team, Data Engineers, IT Managers</td></tr>
+        <tr><td><a href="https://bcspca.sharepoint.com/:w:/r/sites/IT-HUB/_layouts/15/Doc.aspx?sourcedoc=%7B993DF3E2-17EE-424F-93F1-1B591496AA07%7D" target="_blank" rel="noopener">BCSPCA Fabric Data Engineering Naming Standard</a></td><td>Standards</td><td>Establishes naming conventions for Lakehouses, Warehouses, Pipelines, Notebooks, Semantic Models, Tables, and Views.</td><td>BI Developers, Data Engineers</td></tr>
+        <tr><td><a href="https://bcspca.sharepoint.com/:w:/r/sites/IT-HUB/_layouts/15/Doc.aspx?sourcedoc=%7B79151F3E-DB1A-4F69-996C-EE51B8B5C1CF%7D" target="_blank" rel="noopener">Enterprise Governance, Security, and Operational Monitoring Framework for Microsoft Fabric</a></td><td>Governance &amp; Security</td><td>Defines platform governance, RBAC, monitoring, operational controls, CI/CD standards, and security practices.</td><td>IT Leadership, Security Team, Data Team</td></tr>
+        <tr><td><a href="https://bcspca.sharepoint.com/sites/IT-HUB/RDLC%20Document%20Library/Technical/Architecture/Microsoft%20Fabric%20Sensitive%20Data%20Handling%20Standard.pdf" target="_blank" rel="noopener">Microsoft Fabric Sensitive Data Handling Standard</a></td><td>Security &amp; Compliance</td><td>Defines sensitive data classification, PII handling, Microsoft Purview guidance, access controls, governance practices, and security risks.</td><td>Data Owners, Business Owners, IT Leadership</td></tr>
+        <tr><td><a href="https://bcspca.sharepoint.com/sites/IT-HUB/RDLC%20Document%20Library/Products/Animal%20Flow-%20Foster%20Anlysis/Business/Phase1/BRD/Fabric%20Governance%20Strategy.pdf" target="_blank" rel="noopener">Fabric Governance Strategy</a></td><td>Capacity &amp; Cost Governance</td><td>Provides guidance on Fabric capacity planning, workspace ownership, chargeback/showback considerations, and cost management.</td><td>IT Leadership, Finance, Product Owners</td></tr>
+        <tr><td><a href="https://bcspca.sharepoint.com/sites/IT-HUB/RDLC%20Document%20Library/Products/Animal%20Flow-%20Foster%20Anlysis/Business/Phase1/BRD/Foster%20Data%20Product%20Cost.pdf" target="_blank" rel="noopener">Foster Data Product Cost Analysis</a></td><td>Cost Management</td><td>Real-world analysis of Fabric storage, refresh workloads, capacity utilization, and operational cost forecasting for the Foster Analytics data product.</td><td>Managers, Directors, Product Owners</td></tr>
+      </tbody>
+    </table>
+    <p class="small">Links point to the source documents on the BC SPCA SharePoint IT-HUB; access requires organizational permissions.</p>
+  </section>
+
+  <section id="architecture">
+    <h2>07 · Architecture and standards</h2>
+    <p>All Microsoft Fabric implementations should leverage approved standards where applicable. Areas currently covered include:</p>
+    <ul>
+      <li>Platform Architecture</li>
+      <li>Workspace Design</li>
+      <li>Naming Standards</li>
+      <li>Capacity Planning</li>
+      <li>Cost Governance</li>
+      <li>Security Controls</li>
+      <li>Sensitive Data Management</li>
+      <li>Monitoring and Operations</li>
+    </ul>
+    <p class="small">As new departments onboard to Fabric, these standards may be expanded and refined based on organizational needs.</p>
+  </section>
+
+  <section id="sensitive">
+    <h2>08 · Sensitive data and security</h2>
+    <p>Certain business processes require access to confidential information such as:</p>
+    <ul>
+      <li>Volunteer information</li>
+      <li>Employee information</li>
+      <li>Operational records</li>
+      <li>Business-sensitive data</li>
+    </ul>
+    <p>When sensitive data is required for legitimate business purposes, it should be managed according to approved governance and security practices.</p>
+    <h3>Key principles</h3>
+    <ul>
+      <li>Store only necessary information</li>
+      <li>Restrict access to authorized users</li>
+      <li>Follow least-privilege security principles</li>
+      <li>Apply data classification standards</li>
+      <li>Leverage Microsoft Purview where appropriate</li>
+      <li>Remove sensitive information from reporting layers when possible</li>
+      <li>Conduct periodic access reviews</li>
+    </ul>
+    <p class="small">See the <em>Microsoft Fabric Sensitive Data Handling Standard</em> (§06, Governance documentation library) for the full governance detail behind these principles.</p>
+  </section>
+
+  <section id="review">
+    <h2>09 · Governance areas for review</h2>
+    <p>The following areas are recommended for discussion and review with IT leadership and the data team before additional departments are onboarded to Microsoft Fabric.</p>
+
+    <div class="review-card">
+      <h3>Governance and ownership</h3>
+      <ul>
+        <li>Define Data Owner responsibilities</li>
+        <li>Define Business Owner responsibilities</li>
+        <li>Define Product Owner responsibilities</li>
+        <li>Establish governance approval processes</li>
+        <li>Define ongoing support responsibilities</li>
+      </ul>
+      <div class="callout"><strong>Key question</strong><br>Who is accountable for the data, the solution, and the ongoing business outcomes?</div>
+    </div>
+
+    <div class="review-card">
+      <h3>Department onboarding</h3>
+      <ul>
+        <li>Define workspace request process</li>
+        <li>Define onboarding checklist</li>
+        <li>Define review and approval requirements</li>
+        <li>Define support expectations</li>
+      </ul>
+      <div class="callout"><strong>Key question</strong><br>What must a department provide before receiving a Fabric workspace?</div>
+    </div>
+
+    <div class="review-card">
+      <h3>Security and compliance</h3>
+      <ul>
+        <li>Validate sensitive data handling requirements</li>
+        <li>Confirm Microsoft Purview strategy</li>
+        <li>Review access control standards</li>
+        <li>Define periodic security reviews</li>
+      </ul>
+      <div class="callout"><strong>Key question</strong><br>How do we ensure sensitive information remains properly governed as adoption grows?</div>
+    </div>
+
+    <div class="review-card">
+      <h3>Cost and capacity management</h3>
+      <ul>
+        <li>Review capacity allocation model</li>
+        <li>Clarify ownership of Fabric costs</li>
+        <li>Establish monitoring expectations</li>
+        <li>Review future growth requirements</li>
+      </ul>
+      <div class="callout"><strong>Key question</strong><br>How will future departments consume shared Fabric capacity?</div>
+    </div>
+
+    <div class="review-card">
+      <h3>Data product governance</h3>
+      <ul>
+        <li>Define what qualifies as a BC SPCA Data Product</li>
+        <li>Establish ownership expectations</li>
+        <li>Define lifecycle management</li>
+        <li>Define retirement and support processes</li>
+      </ul>
+      <div class="callout"><strong>Key question</strong><br>How will BC SPCA govern and support data products over time?</div>
+    </div>
+  </section>
+
+  <section id="conclusion">
+    <h2>10 · Conclusion</h2>
+    <p>BC SPCA has begun establishing a governance foundation for Microsoft Fabric through the development of architecture, workspace, security, naming, operational, and cost management standards.</p>
+    <p>This document serves as a central index and discussion guide for those standards and provides a starting point for reviewing how Microsoft Fabric can be governed and scaled across additional departments.</p>
+    <p>The next step is to review these documents collectively with IT leadership and the data team, identify any gaps, and align on an operating model that supports both current and future Microsoft Fabric adoption across BC SPCA.</p>
+  </section>
+
+  <div class="footer-note">BC SPCA Information Technology Team · Internal use only · BC SPCA Microsoft Fabric Governance &amp; Operating Model, Version 0.1 (Draft for Review) · Not yet an approved corporate standard.</div>
+</main>
+</body>
+</html>

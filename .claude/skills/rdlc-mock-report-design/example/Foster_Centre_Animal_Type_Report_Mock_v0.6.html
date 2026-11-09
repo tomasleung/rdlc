@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foster Centre &amp; Animal Type Utilization — Report Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: 'Lato', sans-serif; }
+  h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .navbtn { transition: all .15s; }
+  .navbtn.active { background:#4F46E5; color:#fff; font-weight:700; }
+  .navbtn:not(.active) { color:#DCE6F5; }
+  .answer { font-size:1.05rem; font-weight:600; }
+  .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+
+<header class="bg-[#0D2F6B] text-white shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-semibold">Foster Centre &amp; Animal Type Utilization</h1>
+      <p class="text-sm text-[#DCE6F5]">Report UX mock v0.6 — Phase 2 Analysis Design · <code>CATU-*</code> register</p>
+    </div>
+    <nav class="flex gap-1 flex-wrap" role="tablist" aria-label="Report pages">
+      <button class="navbtn active px-3 py-2 rounded-md text-sm" onclick="switchTab('page1', this)" role="tab" aria-selected="true">Executive Summary</button>
+      <button class="navbtn px-3 py-2 rounded-md text-sm" onclick="switchTab('page2', this)" role="tab" aria-selected="false">Centre &amp; Region</button>
+      <button class="navbtn px-3 py-2 rounded-md text-sm" onclick="switchTab('page3', this)" role="tab" aria-selected="false">Animal Type</button>
+      <button class="navbtn px-3 py-2 rounded-md text-sm" onclick="switchTab('page4', this)" role="tab" aria-selected="false">Centre × Type</button>
+      <button class="navbtn px-3 py-2 rounded-md text-sm" onclick="switchTab('page5', this)" role="tab" aria-selected="false">Multi-Centre</button>
+      <button class="navbtn px-3 py-2 rounded-md text-sm" onclick="switchTab('page6', this)" role="tab" aria-selected="false">Methodology</button>
+    </nav>
+  </div>
+</header>
+
+<div class="bg-amber-50 border-b border-amber-200 text-amber-900 text-sm">
+  <div class="max-w-7xl mx-auto px-6 py-2 flex items-center gap-2">
+    <span class="font-bold">⚠ Illustrative mockup — not real data.</span>
+    <span>Placeholder numbers for layout review only. BRD v0.2 + Analysis Design v0.1 — both Draft, neither confirmed. <code>CATU-SEASON-01</code> omitted (open question).</span>
+  </div>
+</div>
+
+<main class="max-w-7xl mx-auto px-6 py-8">
+
+<!-- ============ PAGE 1 — EXECUTIVE SUMMARY ============ -->
+<div id="page1" class="tab-content active space-y-6">
+
+  <!-- Q-panel A: full-history baseline (CATU-BASE-01, revised) -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-BASE-01: Provincial historical baseline">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-base font-semibold text-slate-900">How has province-wide foster participation evolved since 2006, and where does it stand now?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-BASE-01</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: participation grew through the program's early years and has since moved within a recurring operating range; current utilization sits inside that range.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Animals in Care (YTD, illustrative)</p><p class="text-xl font-semibold text-[#4F46E5] mt-1">4,820</p></div>
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Fostered Animals (YTD, illustrative)</p><p class="text-xl font-semibold text-[#4F46E5] mt-1">1,490</p></div>
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">% Animals in Care Fostered</p><p class="text-xl font-semibold text-[#4F46E5] mt-1">30.9%</p></div>
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Foster Days (YTD, illustrative)</p><p class="text-xl font-semibold text-[#4F46E5] mt-1">61,200</p></div>
+    </div>
+
+    <h3 class="text-sm font-semibold text-slate-700 mt-5">Full history — 2006 to latest (illustrative, annual)</h3>
+    <div class="mt-2" style="height:260px;">
+      <canvas id="historyChart" role="img" aria-label="Bar chart of illustrative annual Fostered Animals, province-wide, 2006 through 2026"></canvas>
+    </div>
+
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5">
+        <li>Illustrative province-wide participation shows early growth, then a long period moving within a stable band.</li>
+        <li>Current-year figures sit within the recent operating range, not outside it.</li>
+        <li>This view does not establish whether that range reflects sufficient capacity or unmet demand — descriptive only (BRD interpretation boundary).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Q-panel B: recent trend (CATU-TREND-01) -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-TREND-01: Recent monthly trend">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-base font-semibold text-slate-900">Where are changes occurring over time, month to month?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-TREND-01</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: monthly % Animals in Care Fostered has moved within a narrow band year to date, with no sustained departure from the recent range.</p>
+    <div class="mt-4" style="height:240px;">
+      <canvas id="trendChart" role="img" aria-label="Line chart of illustrative monthly percent Animals in Care Fostered, organization-wide, Jan to Oct 2026"></canvas>
+    </div>
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5">
+        <li>Illustrative month-to-month movement stays within a narrow band — no abrupt shift shown.</li>
+        <li>A real change-point or seasonal read would need the confirmed <code>CATU-SEASON-01</code> scope decision first.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="bg-white rounded-lg shadow p-4 flex items-center justify-between" aria-label="CATU-DQ-01 summary">
+    <div>
+      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Centre &amp; Animal Type completeness (illustrative)</p>
+      <p class="text-lg font-semibold text-[#4F46E5]">99.4%</p>
+    </div>
+    <p class="text-xs text-slate-500 max-w-md text-right">Against the BRD §14.1 floor of 99%. Full breakdown on Methodology. <span class="font-bold">CATU-DQ-01</span></p>
+  </div>
+</div>
+
+<!-- ============ PAGE 2 — CENTRE & REGION ============ -->
+<div id="page2" class="tab-content space-y-6">
+
+  <!-- Q-panel: ranked current-period view (CATU-CENTRE-01) -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-CENTRE-01: Centre volume & utilization">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-lg font-semibold text-slate-900">Which centres and regions show higher or lower foster utilization right now?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-CENTRE-01 / CATU-REGION-01</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: Centre A shows the highest eligible utilization rate among centres with sufficient volume to rank; one shown centre falls below the ranking threshold.</p>
+
+    <div class="grid md:grid-cols-3 gap-4 mt-3">
+      <div class="md:col-span-2 bg-amber-50 border-l-4 border-[#D97706] rounded-r-md p-3 text-sm text-amber-900">
+        Describes comparative volume &amp; rate within the stated volume safeguard. Does not label a centre best/worst, and does not imply capacity or performance — not authorized by the BRD.
+      </div>
+      <div class="bg-white border rounded-md p-3">
+        <p class="text-xs font-semibold text-slate-500 uppercase">Volume safeguard (BRD §8.1)</p>
+        <p class="text-xs text-slate-600 mt-1">30+: eligible · 10–29: "Low volume" · &lt;10: counts only</p>
+      </div>
+    </div>
+
+    <div class="mt-4" style="height:260px;">
+      <canvas id="centreChart" role="img" aria-label="Horizontal bar chart of illustrative percent Animals in Care Fostered by centre, five centres shown, sorted descending, one flagged low volume"></canvas>
+    </div>
+
+    <div class="mt-4 overflow-x-auto">
+      <table class="w-full text-sm border rounded-md overflow-hidden">
+        <thead class="bg-[#0D2F6B] text-white text-xs"><tr>
+          <th class="p-2 text-left">Centre</th><th class="p-2 text-left">Region</th><th class="p-2 text-right">Animals in Care</th><th class="p-2 text-right">Fostered Animals</th><th class="p-2 text-right">% in Care Fostered</th><th class="p-2 text-left">Volume</th>
+        </tr></thead>
+        <tbody>
+          <tr class="border-b"><td class="p-2">Centre A</td><td class="p-2 text-slate-500">Lower Mainland</td><td class="p-2 text-right">420</td><td class="p-2 text-right">151</td><td class="p-2 text-right font-semibold text-[#4F46E5]">36.0%</td><td class="p-2 text-xs text-slate-500">Eligible</td></tr>
+          <tr class="border-b"><td class="p-2">Centre B</td><td class="p-2 text-slate-500">Vancouver Island</td><td class="p-2 text-right">310</td><td class="p-2 text-right">99</td><td class="p-2 text-right font-semibold text-[#4F46E5]">31.9%</td><td class="p-2 text-xs text-slate-500">Eligible</td></tr>
+          <tr class="border-b"><td class="p-2">Centre C</td><td class="p-2 text-slate-500">Okanagan</td><td class="p-2 text-right">205</td><td class="p-2 text-right">55</td><td class="p-2 text-right font-semibold text-[#4F46E5]">26.8%</td><td class="p-2 text-xs text-slate-500">Eligible</td></tr>
+          <tr class="border-b bg-slate-50"><td class="p-2">Centre D</td><td class="p-2 text-slate-500">North</td><td class="p-2 text-right">24</td><td class="p-2 text-right">5</td><td class="p-2 text-right text-slate-400">—</td><td class="p-2 text-xs font-bold text-amber-700">Low volume</td></tr>
+          <tr><td class="p-2">Centre E</td><td class="p-2 text-slate-500">Lower Mainland</td><td class="p-2 text-right">188</td><td class="p-2 text-right">41</td><td class="p-2 text-right font-semibold text-[#4F46E5]">21.8%</td><td class="p-2 text-xs text-slate-500">Eligible</td></tr>
+        </tbody>
+      </table>
+      <p class="text-xs text-slate-400 italic mt-1">+27 more centres (illustrative — mock shows a representative subset only)</p>
+    </div>
+
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5">
+        <li>Illustrative spread across eligible centres ranges roughly 22%–36%.</li>
+        <li>Centre D's volume is too low this period to assign a comparable rate.</li>
+        <li>Whether this spread reflects animal-type mix rather than a true centre difference is addressed on the Centre × Type page — not here.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Q-panel: NEW filtered long-term trajectory (CATU-CENTRE-TREND-01) -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-CENTRE-TREND-01: Centre long-term trajectory">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-lg font-semibold text-slate-900">How has one centre's utilization evolved over its available history?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-CENTRE-TREND-01 · new</span>
+    </div>
+    <p class="text-sm text-slate-600 mt-2">A within-centre view, not a cross-centre ranking (that's the panel above). Select a centre — each shows only the history it actually has.</p>
+
+    <div class="flex items-center gap-3 mt-4 flex-wrap">
+      <label for="centreSelect" class="text-sm font-semibold text-slate-700">Centre:</label>
+      <select id="centreSelect" onchange="updateCentreTrend()" class="border rounded-md px-3 py-1.5 text-sm">
+        <option value="A">Centre A</option>
+        <option value="B">Centre B</option>
+        <option value="C">Centre C</option>
+      </select>
+      <span id="dataFromBadge" class="text-xs font-bold px-2 py-1 rounded-full bg-slate-100 text-slate-600">Data available from 2011</span>
+    </div>
+
+    <p id="centreAnswer" class="answer text-[#4F46E5] mt-3">Illustrative pattern for Centre A: utilization has risen gradually since this centre's data begins in 2011, with the recent 5 years holding steady near the top of that range.</p>
+
+    <div class="grid md:grid-cols-2 gap-4 mt-3">
+      <div>
+        <h3 class="text-sm font-semibold text-slate-700">Full available history</h3>
+        <div class="mt-2" style="height:220px;"><canvas id="centreHistoryChart" role="img" aria-label="Bar chart of one selected centre's illustrative annual percent Animals in Care Fostered, full available history"></canvas></div>
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold text-slate-700">Recent 5-year zoom</h3>
+        <div class="mt-2" style="height:220px;"><canvas id="centreZoomChart" role="img" aria-label="Line chart of the same selected centre's illustrative percent Animals in Care Fostered, most recent 5 years"></canvas></div>
+      </div>
+    </div>
+
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5" id="centreInsightList">
+        <li>Illustrative trajectory for the selected centre only — not compared against any other centre here.</li>
+        <li>Years before this centre's data-start badge are not shown, rather than assumed or interpolated.</li>
+      </ul>
+    </div>
+    <p class="text-xs text-slate-400 mt-2 italic">Data-start year and 32-centre filter list are illustrative; confirming which centres have reconstructable history back to 2006 is an open data-profiling question (BRD §09), not yet resolved.</p>
+  </section>
+</div>
+
+<!-- ============ PAGE 3 — ANIMAL TYPE ============ -->
+<div id="page3" class="tab-content space-y-6">
+
+  <!-- Act 1: current-period snapshot -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-TYPE-01: Animal Type volume & utilization">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-lg font-semibold text-slate-900">Act 1 — Which animal-type families rely most on foster care right now?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-TYPE-01</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: Cat shows the highest utilization among normalized families, followed by Dog and Small Animal; a portion of records remain unmapped to a family.</p>
+
+    <div class="grid md:grid-cols-4 gap-4 mt-4">
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase">Cat</p><p class="text-lg font-semibold text-[#4F46E5]">34.2%</p></div>
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase">Dog</p><p class="text-lg font-semibold text-[#4F46E5]">22.6%</p></div>
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase">Small Animal</p><p class="text-lg font-semibold text-[#4F46E5]">18.4%</p></div>
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase">Other (Unmapped)</p><p class="text-lg font-semibold text-slate-400">—</p></div>
+    </div>
+    <div class="mt-5" style="height:240px;">
+      <canvas id="typeChart" role="img" aria-label="Bar chart of illustrative percent Animals in Care Fostered by normalized Animal Type Family: Cat, Dog, Small Animal, Other"></canvas>
+    </div>
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5">
+        <li>Cat and Dog together account for the large majority of illustrative fostered-animal volume.</li>
+        <li>"Other" reflects source animal types not yet mapped to an approved reporting family — not a true zero.</li>
+        <li>CLAUDE.md already documents this as a known gap; it is not an artifact of this mock.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Act 2: full-history trend, same pattern as CATU-CENTRE-TREND-01 but no filter needed (only 3-4 families) -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-TYPE-TREND-01: Animal Type long-term trend">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-lg font-semibold text-slate-900">Act 2 — Has the gap between animal types always looked like this, or is it recent?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-TYPE-TREND-01 · new</span>
+    </div>
+    <p class="text-sm text-slate-600 mt-2">Unlike the Centre view, all families are shown together here — only 3-4 categories, small enough that a filter isn't needed to stay readable.</p>
+    <p class="answer text-[#4F46E5] mt-3">Illustrative pattern: Cat's utilization has led Dog's for the full available history, and that gap has widened gradually rather than opening suddenly — this is part of why Centre A (Cat-heavy, see Centre × Type page) shows a higher overall rate than Centre E (Dog-heavy), independent of anything centre-specific.</p>
+
+    <div class="grid md:grid-cols-2 gap-4 mt-3">
+      <div>
+        <h3 class="text-sm font-semibold text-slate-700">Full history — 2006 to latest (illustrative, annual)</h3>
+        <div class="mt-2" style="height:220px;"><canvas id="typeHistoryChart" role="img" aria-label="Line chart of illustrative annual percent Animals in Care Fostered for Cat, Dog, and Small Animal, 2006 through 2026"></canvas></div>
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold text-slate-700">Recent 5-year zoom</h3>
+        <div class="mt-2" style="height:220px;"><canvas id="typeZoomChart" role="img" aria-label="Line chart of the same three families, most recent 5 years"></canvas></div>
+      </div>
+    </div>
+
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5">
+        <li>The Cat-over-Dog gap is illustrative here as a long-standing, gradually widening pattern — not a one-year anomaly.</li>
+        <li>This connects directly to the Centre × Type page's mix effect: a centre serving more Cats inherits part of this program-wide pattern, which is not specific to that centre.</li>
+        <li>Whether the gap reflects outcome, capacity, or policy differences between types is out of scope — descriptive only (BRD interpretation boundary).</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE 4 — CENTRE × ANIMAL TYPE ============ -->
+<div id="page4" class="tab-content space-y-6">
+
+  <div class="bg-white rounded-lg shadow p-4 text-sm text-slate-700">
+    <strong>What this page is building toward:</strong> Page 2 showed centres differ in utilization (Centre A 36.0% down to Centre E 21.8%). This page asks <em>why</em> — same five centres throughout — first who each centre serves (Act 1), then whether that explains the rate difference (Act 2), then exactly how much it explains for one centre (Act 3).
+  </div>
+
+  <!-- Act 1: Composition -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-CENTRETYPE-MIX-01: Centre × Type composition">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-lg font-semibold text-slate-900">Act 1 — What animal types does each centre actually serve?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-CENTRETYPE-MIX-01</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: Centre A serves the highest share of Cats (58%); Centre E the lowest (38%), serving more Dogs instead. Same five centres as the Centre &amp; Region page.</p>
+    <div class="mt-4" style="height:240px;">
+      <canvas id="compositionChart" role="img" aria-label="100 percent stacked bar chart showing each illustrative centre's share of Animals in Care by Cat, Dog, Small Animal, and Other, summing to 100 percent per centre"></canvas>
+    </div>
+    <div class="mt-3 bg-slate-50 border rounded-md p-3 text-xs text-slate-600">
+      Composition shares are additive by design — each centre's bar sums to 100%. This shows <em>who a centre serves</em>, not <em>how often they get fostered</em> — that comes next.
+    </div>
+  </section>
+
+  <!-- Act 2: Does it relate to the rate? Scatter using the SAME 5 centres as page 2 -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-CENTRETYPE-01: cross-centre scatter">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-lg font-semibold text-slate-900">Act 2 — Does a higher Cat share go with a higher % Animals in Care Fostered?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-CENTRETYPE-01 · scatter</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: yes, loosely — the same five centres from Page 2 line up in roughly the same order on both Cat share and utilization rate. Centre D (low volume) is the exception, which is exactly why it's excluded from ranking.</p>
+    <div class="mt-4" style="height:260px;">
+      <canvas id="scatterChart" role="img" aria-label="Bubble chart with one labeled bubble per centre A through E, x axis Cat mix share percent, y axis percent Animals in Care Fostered, bubble size proportional to Animals in Care"></canvas>
+    </div>
+    <div class="mt-3 overflow-x-auto">
+      <table class="w-full text-xs border rounded-md overflow-hidden">
+        <thead class="bg-[#0D2F6B] text-white"><tr><th class="p-1.5 text-left">Centre</th><th class="p-1.5 text-right">Cat share</th><th class="p-1.5 text-right">% in Care Fostered</th><th class="p-1.5 text-right">Animals in Care</th></tr></thead>
+        <tbody>
+          <tr class="border-b"><td class="p-1.5">Centre A</td><td class="p-1.5 text-right">58%</td><td class="p-1.5 text-right font-semibold text-[#4F46E5]">36.0%</td><td class="p-1.5 text-right">420</td></tr>
+          <tr class="border-b"><td class="p-1.5">Centre B</td><td class="p-1.5 text-right">50%</td><td class="p-1.5 text-right font-semibold text-[#4F46E5]">31.9%</td><td class="p-1.5 text-right">310</td></tr>
+          <tr class="border-b"><td class="p-1.5">Centre C</td><td class="p-1.5 text-right">44%</td><td class="p-1.5 text-right font-semibold text-[#4F46E5]">26.8%</td><td class="p-1.5 text-right">205</td></tr>
+          <tr class="border-b bg-slate-50"><td class="p-1.5">Centre D</td><td class="p-1.5 text-right">35%</td><td class="p-1.5 text-right text-slate-400">— (low vol.)</td><td class="p-1.5 text-right">24</td></tr>
+          <tr><td class="p-1.5">Centre E</td><td class="p-1.5 text-right">38%</td><td class="p-1.5 text-right font-semibold text-[#4F46E5]">21.8%</td><td class="p-1.5 text-right">188</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-3 bg-slate-100 border-l-4 border-slate-400 rounded-r-md p-3 text-sm text-slate-700">
+      No trend line is drawn. A visible pattern here is descriptive — it motivates the mix-adjustment in Act 3, it does not itself establish that mix causes the rate difference (<code>analysis-insight-standard.md</code> §2.4).
+    </div>
+  </section>
+
+  <!-- Act 3: Quantify it for Centre A, the centre named throughout -->
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-CENTRETYPE-01: decomposition">
+    <div class="flex justify-between items-start flex-wrap gap-2">
+      <h2 class="text-lg font-semibold text-slate-900">Act 3 — Exactly how much of Centre A's gap is mix vs. rate?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-CENTRETYPE-01 · decomposition</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: Centre A's 36.0% sits 3.4pp above the provincial average — about 62% of that gap (2.1pp) is mix, 38% (1.3pp) is a genuine rate effect.</p>
+
+    <div class="mt-3 bg-slate-50 border rounded-md p-3 text-sm text-slate-700">
+      <p class="font-bold text-slate-800 mb-1">What "mix effect" and "rate effect" mean</p>
+      <p><strong>Mix effect</strong> — how much of Centre A's gap is simply because it serves more Cats (and Cats get fostered more everywhere), not because Centre A does anything differently.</p>
+      <p class="mt-1"><strong>Rate effect</strong> — what's left after accounting for that: comparing Cat-for-Cat and Dog-for-Dog against the province, Centre A still fosters a higher share within each type. That part is actually about Centre A, not its population.</p>
+      <p class="mt-1 text-xs text-slate-500">Mix effect + Rate effect = Total observed difference, always.</p>
+    </div>
+
+    <div class="mt-4" style="height:220px;">
+      <canvas id="decompChart" role="img" aria-label="Bar chart decomposing Centre A's utilization difference from the provincial average into a mix effect and a within-type rate effect"></canvas>
+    </div>
+    <div class="mt-3 bg-amber-50 border-l-4 border-[#D97706] rounded-r-md p-3 text-sm text-amber-900">
+      <strong>Permitted:</strong> state whether a centre difference is mix-driven or a true within-type rate difference. <strong>Prohibited:</strong> conclude a centre is better/worse at fostering without this mix-adjustment, or apply it to a cell below the volume floor (Centre D).
+    </div>
+
+    <h3 class="text-base font-semibold text-slate-900 mt-6">Year-over-year change decomposition (illustrative)</h3>
+    <p class="text-sm text-slate-600 mb-2"><span class="font-bold">CATU-CHANGE-01</span> — which Centre/Type groups contributed most to this year's organization-wide change, residual disclosed.</p>
+    <ul class="text-sm space-y-1">
+      <li class="flex justify-between border-b py-1"><span>Centre A, Cat</span><span class="font-semibold text-[#4F46E5]">+1.4 pp contribution</span></li>
+      <li class="flex justify-between border-b py-1"><span>Centre B, Dog</span><span class="font-semibold text-[#4F46E5]">+0.6 pp contribution</span></li>
+      <li class="flex justify-between py-1 text-slate-500 italic"><span>Residual (unexplained by named drivers)</span><span>0.3 pp</span></li>
+    </ul>
+
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5">
+        <li>Centre A's rate advantage is real but only about 38% "its own" — the rest follows from serving more Cats.</li>
+        <li>Most of this year's organization-wide change traces to two named Centre/Type groups, residual disclosed rather than hidden.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Secondary, clearly optional deep-dive — collapsed by default, visually distinct from the main story -->
+  <details class="bg-slate-50 rounded-lg border border-slate-200 p-5">
+    <summary class="cursor-pointer text-base font-semibold text-slate-700">Deeper dive (optional) — has this split changed over time, for one centre?</summary>
+    <div class="mt-4" aria-label="CATU-CENTRETYPE-TREND-01: Centre × Type split over time">
+      <div class="flex justify-between items-start flex-wrap gap-2">
+        <p class="text-sm text-slate-600 max-w-xl">Same pattern as the Centre long-term view on the Centre &amp; Region page: full available history, then a recent 5-year zoom, filtered to one centre. Exploratory — Acts 1–3 above are the main story.</p>
+        <span class="text-xs font-bold px-2 py-1 rounded-full bg-slate-200 text-slate-600 shrink-0">CATU-CENTRETYPE-TREND-01</span>
+      </div>
+
+      <div class="flex items-center gap-3 mt-4 flex-wrap">
+        <label for="ctCentreSelect" class="text-sm font-semibold text-slate-700">Centre:</label>
+        <select id="ctCentreSelect" onchange="updateCentreTypeTrend()" class="border rounded-md px-3 py-1.5 text-sm">
+          <option value="A">Centre A</option>
+          <option value="B">Centre B</option>
+          <option value="C">Centre C</option>
+        </select>
+        <span id="ctDataFromBadge" class="text-xs font-bold px-2 py-1 rounded-full bg-white border text-slate-600">Data available from 2011</span>
+      </div>
+
+      <p id="ctAnswer" class="answer text-[#4F46E5] mt-3">Illustrative pattern for Centre A: the mix effect has stayed roughly flat while the within-type rate effect has grown steadily — the recent widening gap from the provincial average is increasingly a rate story, not a mix story.</p>
+
+      <div class="grid md:grid-cols-2 gap-4 mt-3">
+        <div>
+          <h3 class="text-sm font-semibold text-slate-700">Full available history — mix vs. rate effect (stacked)</h3>
+          <div class="mt-2 bg-white rounded-md p-2" style="height:220px;"><canvas id="ctHistoryChart" role="img" aria-label="Stacked bar chart of one selected centre's illustrative mix effect and within-type rate effect, full available history"></canvas></div>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-slate-700">Recent 5-year zoom</h3>
+          <div class="mt-2 bg-white rounded-md p-2" style="height:220px;"><canvas id="ctZoomChart" role="img" aria-label="Stacked bar chart of the same selected centre's illustrative mix effect and rate effect, most recent 5 years"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ============ PAGE 5 — MULTI-CENTRE ATTRIBUTION ============ -->
+<div id="page5" class="tab-content space-y-6">
+  <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-900">
+    <strong>How this page builds:</strong> Act 1 discloses <em>that</em> animals sometimes touch more than one centre in a month, so totals aren't simply additive. Act 2 goes one step further and shows <em>which centres transfer to which</em> — a directional view the overlap count alone can't give you.
+  </div>
+
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-TRANSFER-01">
+    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Act 1 — Does this happen, and how much?</p>
+    <div class="flex justify-between items-start flex-wrap gap-2 mt-1">
+      <h2 class="text-lg font-semibold text-slate-900">How often do animals relate to more than one centre in a month?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-TRANSFER-01</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: a small share of monthly Fostered Animals are associated with more than one centre — not zero, and not large enough to change how centre totals should be read.</p>
+    <div class="bg-slate-50 rounded-md p-4 inline-block mt-3">
+      <p class="text-xs font-semibold text-slate-500 uppercase">Animals attributed to &gt;1 centre in a month (illustrative)</p>
+      <p class="text-2xl font-semibold text-[#4F46E5] mt-1">4.2%</p>
+    </div>
+    <div class="mt-4 bg-slate-100 border-l-4 border-slate-400 rounded-r-md p-3 text-sm text-slate-700">
+      <strong>Non-additivity warning:</strong> Centre-level distinct-count totals do not sum to the province-wide total — an animal can validly appear in more than one centre's count within the same month.
+    </div>
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5">
+        <li>Illustrative overlap rate is low but non-zero — worth disclosing, not worth treating as a major driver on its own.</li>
+        <li>Any Centre-subtotal addition that doesn't match the province-wide total is expected, not an error.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-white rounded-lg shadow p-5" aria-label="CATU-TRANSFER-DIR-01">
+    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Act 2 — When it happens, which centres are involved?</p>
+    <div class="flex justify-between items-start flex-wrap gap-2 mt-1">
+      <h2 class="text-lg font-semibold text-slate-900">Which centres transfer animals to which?</h2>
+      <span class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-50 text-indigo-800 shrink-0">CATU-TRANSFER-DIR-01</span>
+    </div>
+    <p class="answer text-[#4F46E5] mt-2">Illustrative pattern: Centre A sends more animals out than it receives, most often to Centre E; Centre E receives more than it sends to anyone. The other three centres are closer to balanced.</p>
+
+    <p class="text-sm text-slate-600 mt-3">Derived from each animal's effective-dated centre history (same data already used for Effective Centre) — every point where an animal's centre changes is counted once, by From-Centre and To-Centre. This does not need new source data, but it is a new way of looking at it, so treat these as illustrative until the register entry above is confirmed.</p>
+
+    <div class="mt-4 overflow-x-auto">
+      <table class="text-sm border-collapse" aria-label="Illustrative transfer count matrix, From-Centre by To-Centre, Centres A through E">
+        <caption class="text-left text-xs font-semibold text-slate-500 uppercase mb-2">Transfer events by From → To centre (illustrative, 1 year)</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="border border-slate-200 bg-slate-50 p-2 text-left">From \ To</th>
+            <th scope="col" class="border border-slate-200 bg-slate-50 p-2">A</th>
+            <th scope="col" class="border border-slate-200 bg-slate-50 p-2">B</th>
+            <th scope="col" class="border border-slate-200 bg-slate-50 p-2">C</th>
+            <th scope="col" class="border border-slate-200 bg-slate-50 p-2">D</th>
+            <th scope="col" class="border border-slate-200 bg-slate-50 p-2">E</th>
+            <th scope="col" class="border border-slate-200 bg-indigo-50 p-2 text-[#4F46E5]">Sent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row" class="border border-slate-200 bg-slate-50 p-2 text-left">A</th><td class="border border-slate-200 p-2 text-center text-slate-300">—</td><td class="border border-slate-200 p-2 text-center">4</td><td class="border border-slate-200 p-2 text-center">2</td><td class="border border-slate-200 p-2 text-center">1</td><td class="border border-slate-200 p-2 text-center font-semibold bg-amber-50">6</td><td class="border border-slate-200 p-2 text-center font-semibold bg-indigo-50 text-[#4F46E5]">13</td></tr>
+          <tr><th scope="row" class="border border-slate-200 bg-slate-50 p-2 text-left">B</th><td class="border border-slate-200 p-2 text-center">3</td><td class="border border-slate-200 p-2 text-center text-slate-300">—</td><td class="border border-slate-200 p-2 text-center">5</td><td class="border border-slate-200 p-2 text-center">1</td><td class="border border-slate-200 p-2 text-center">2</td><td class="border border-slate-200 p-2 text-center font-semibold bg-indigo-50 text-[#4F46E5]">11</td></tr>
+          <tr><th scope="row" class="border border-slate-200 bg-slate-50 p-2 text-left">C</th><td class="border border-slate-200 p-2 text-center">2</td><td class="border border-slate-200 p-2 text-center">3</td><td class="border border-slate-200 p-2 text-center text-slate-300">—</td><td class="border border-slate-200 p-2 text-center">0</td><td class="border border-slate-200 p-2 text-center">1</td><td class="border border-slate-200 p-2 text-center font-semibold bg-indigo-50 text-[#4F46E5]">6</td></tr>
+          <tr><th scope="row" class="border border-slate-200 bg-slate-50 p-2 text-left">D</th><td class="border border-slate-200 p-2 text-center">0</td><td class="border border-slate-200 p-2 text-center">1</td><td class="border border-slate-200 p-2 text-center">0</td><td class="border border-slate-200 p-2 text-center text-slate-300">—</td><td class="border border-slate-200 p-2 text-center">0</td><td class="border border-slate-200 p-2 text-center font-semibold bg-indigo-50 text-[#4F46E5]">1</td></tr>
+          <tr><th scope="row" class="border border-slate-200 bg-slate-50 p-2 text-left">E</th><td class="border border-slate-200 p-2 text-center">1</td><td class="border border-slate-200 p-2 text-center">1</td><td class="border border-slate-200 p-2 text-center">1</td><td class="border border-slate-200 p-2 text-center">0</td><td class="border border-slate-200 p-2 text-center text-slate-300">—</td><td class="border border-slate-200 p-2 text-center font-semibold bg-indigo-50 text-[#4F46E5]">3</td></tr>
+          <tr>
+            <th scope="row" class="border border-slate-200 bg-amber-50 p-2 text-left text-[#B45309]">Received</th>
+            <td class="border border-slate-200 p-2 text-center font-semibold bg-amber-50 text-[#B45309]">6</td>
+            <td class="border border-slate-200 p-2 text-center font-semibold bg-amber-50 text-[#B45309]">9</td>
+            <td class="border border-slate-200 p-2 text-center font-semibold bg-amber-50 text-[#B45309]">8</td>
+            <td class="border border-slate-200 p-2 text-center font-semibold bg-amber-50 text-[#B45309]">2</td>
+            <td class="border border-slate-200 p-2 text-center font-semibold bg-amber-50 text-[#B45309]">9</td>
+            <td class="border border-slate-200 p-2 text-center text-slate-400">34 total</td>
+          </tr>
+          <tr>
+            <th scope="row" class="border border-slate-200 bg-white p-2 text-left text-xs">Net (Received − Sent)</th>
+            <td class="border border-slate-200 p-2 text-center text-xs">−7 <span class="text-slate-500">↓ net sender</span></td>
+            <td class="border border-slate-200 p-2 text-center text-xs">−2 <span class="text-slate-500">↓ sender</span></td>
+            <td class="border border-slate-200 p-2 text-center text-xs">+2 <span class="text-slate-500">↑ receiver</span></td>
+            <td class="border border-slate-200 p-2 text-center text-xs">+1 <span class="text-slate-500">↑ receiver</span></td>
+            <td class="border border-slate-200 p-2 text-center text-xs">+6 <span class="text-slate-500">↑ net receiver</span></td>
+            <td class="border border-slate-200 p-2 text-center text-xs text-slate-400">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-4 bg-slate-100 border-l-4 border-slate-400 rounded-r-md p-3 text-sm text-slate-700">
+      <strong>Reminder:</strong> every transfer counted here is one of the same overlap events already disclosed in Act 1 — this view doesn't add new animals to any count, it just names which two centres were involved and in which direction.
+    </div>
+
+    <div class="mt-4 bg-indigo-50 border-l-4 border-[#4F46E5] rounded-r-md p-3 text-sm text-indigo-900">
+      <p class="font-bold mb-1">Key Insight</p>
+      <ul class="list-disc pl-5 space-y-0.5">
+        <li>Centre A → Centre E is illustratively the single largest transfer pair (6 of 34 events).</li>
+        <li>Centre A is a net sender and Centre E is a net receiver — a directional pattern, not visible from the overlap rate alone.</li>
+        <li>This describes a pattern, not a cause — a sign to ask the Animal Flow Manager what drives it (e.g. intake capacity, species-specific placement), not a conclusion in itself.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PAGE 6 — METHODOLOGY & DATA QUALITY ============ -->
+<div id="page6" class="tab-content space-y-6">
+  <div class="bg-white rounded-lg shadow p-5">
+    <h2 class="text-lg font-semibold text-slate-900">Methodology, definitions &amp; data quality</h2>
+    <p class="text-sm text-slate-600">Transparent definitions and limitations, per BRD v0.2 §08 and §14.</p>
+
+    <h3 class="text-base font-semibold text-slate-900 mt-5">Primary reporting metrics</h3>
+    <div class="grid md:grid-cols-2 gap-4 mt-2">
+      <div class="border rounded-md p-3"><p class="font-semibold text-sm">Animals in Care</p><p class="text-xs text-slate-600 mt-1">Distinct animals whose valid incoming-to-outgoing care episode overlaps at least one day of the reporting month.</p></div>
+      <div class="border rounded-md p-3"><p class="font-semibold text-sm">Fostered Animals</p><p class="text-xs text-slate-600 mt-1">Distinct Animals in Care that overlap a qualifying foster stay for at least one day in the reporting month. Reconciles exactly to Phase 1 at the province-wide level.</p></div>
+      <div class="border rounded-md p-3"><p class="font-semibold text-sm">% Animals in Care Fostered</p><p class="text-xs text-slate-600 mt-1">Fostered Animals ÷ Animals in Care × 100. Distinct from Phase 1's "% Animals in Foster," which divides by Intake Animals instead — the two are not the same statistic.</p></div>
+      <div class="border rounded-md p-3"><p class="font-semibold text-sm">Foster Days</p><p class="text-xs text-slate-600 mt-1">Calendar days of qualifying foster care allocated to the effective Centre and Animal Type during each dated segment.</p></div>
+    </div>
+
+    <h3 class="text-base font-semibold text-slate-900 mt-5">Important interpretation notes</h3>
+    <ul class="text-sm text-slate-700 list-disc pl-5 mt-2 space-y-1">
+      <li><strong>Distinct counting:</strong> animals are counted once per reporting period and dimensional group.</li>
+      <li><strong>No simple summation:</strong> Centre/Region/Type subtotals must not be added to derive the province-wide total.</li>
+      <li><strong>Descriptive, not performance:</strong> higher or lower utilization is descriptive only. It does not establish good or poor performance, capacity sufficiency, unmet demand, better outcomes, or an operational target.</li>
+      <li><strong>Centre long-term views</strong> show only each centre's own available history — years before a centre's documented data-start are never interpolated or assumed.</li>
+    </ul>
+
+    <h3 class="text-base font-semibold text-slate-900 mt-5">Data quality (illustrative)</h3>
+    <div class="grid md:grid-cols-3 gap-4 mt-2">
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase">Completeness</p><p class="text-lg font-semibold text-[#4F46E5]">99.4%</p><p class="text-xs text-slate-500">vs. 99% floor (§14.1) · <span class="font-bold">CATU-DQ-01</span></p></div>
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase">Unmapped Centre</p><p class="text-lg font-semibold text-slate-600">0.3%</p></div>
+      <div class="bg-slate-50 rounded-md p-3"><p class="text-xs font-semibold text-slate-500 uppercase">Unknown Animal Type</p><p class="text-lg font-semibold text-slate-600">0.3%</p></div>
+    </div>
+
+    <h3 class="text-base font-semibold text-slate-900 mt-5">Historical restatement</h3>
+    <p class="text-sm text-slate-700 mt-1"><span class="font-bold">CATU-RESTATEMENT-01</span> — each quarterly refresh reprocesses full history and compares against the previously published snapshot by month and measure; any material change is logged and disclosed in the next quarterly report.</p>
+
+    <div class="mt-6 pt-4 border-t text-xs text-slate-500">
+      Source: BRD_Foster_Centre_Animal_Type_Utilization v0.2 (Draft) · Analysis Design v0.1 (Draft) · Report mock v0.6 — illustrative, not confirmed. BC SPCA · Internal use only.
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+function switchTab(pageId, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  document.querySelectorAll('.navbtn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+  btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+}
+
+const indigo = '#4F46E5', amber = '#D97706', green = '#059669', slate = '#475569', slateLight = '#CBD5E1';
+
+new Chart(document.getElementById('historyChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2006','2008','2010','2012','2014','2016','2018','2020','2022','2024','2026'],
+    datasets: [{ label:'Fostered Animals (illustrative, annual)', data:[820,1340,1810,1620,1480,1510,1390,1280,1460,1410,1490], backgroundColor: indigo }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} }
+});
+
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'],
+    datasets: [{ label:'% Animals in Care Fostered (illustrative)', data:[28.1,27.4,28.9,29.6,30.2,31.0,31.4,30.8,30.5,30.9], borderColor: indigo, backgroundColor:'rgba(79,70,229,0.12)', fill:true, tension:0.3 }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ ticks:{ callback:v=>v+'%' } } } }
+});
+
+new Chart(document.getElementById('centreChart'), {
+  type: 'bar',
+  data: { labels:['Centre A','Centre B','Centre C','Centre E','Centre D (low vol.)'], datasets:[{ label:'% Animals in Care Fostered (illustrative)', data:[36.0,31.9,26.8,21.8,null], backgroundColor:[indigo,indigo,indigo,indigo,slateLight] }] },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} }
+});
+
+new Chart(document.getElementById('typeChart'), {
+  type: 'bar',
+  data: { labels:['Cat','Dog','Small Animal','Other (Unmapped)'], datasets:[{ label:'% Animals in Care Fostered (illustrative)', data:[34.2,22.6,18.4,null], backgroundColor:[indigo,indigo,indigo,slateLight] }] },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} }
+});
+
+new Chart(document.getElementById('compositionChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Centre A','Centre B','Centre C','Centre D (low vol.)','Centre E'],
+    datasets: [
+      { label:'Cat', data:[58,50,44,35,38], backgroundColor: indigo, stack:'s' },
+      { label:'Dog', data:[32,38,40,45,46], backgroundColor: amber, stack:'s' },
+      { label:'Small Animal', data:[8,10,13,15,13], backgroundColor: green, stack:'s' },
+      { label:'Other', data:[2,2,3,5,3], backgroundColor: slateLight, stack:'s' }
+    ]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true,position:'bottom'}}, scales:{ x:{stacked:true, max:100, ticks:{ callback:v=>v+'%' }}, y:{stacked:true} } }
+});
+
+const decompTooltips = [
+  'Mix effect: the share of this centre\'s gap explained by which animal types it serves, not by anything the centre does differently.',
+  'Rate effect: what\'s left after accounting for mix — a genuine within-type difference, comparing cat-for-cat and dog-for-dog against the province.',
+  'Total observed difference: mix effect + rate effect, always.'
+];
+new Chart(document.getElementById('decompChart'), {
+  type: 'bar',
+  data: { labels:['Mix effect','Within-type rate effect','Total observed difference'], datasets:[{ label:'Illustrative percentage points', data:[2.1,1.3,3.4], backgroundColor:[amber, indigo, slate] }] },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{ callbacks:{ afterLabel: ctx => decompTooltips[ctx.dataIndex] } } }, scales:{ y:{ ticks:{ callback:v=>v+'pp' } } } }
+});
+
+// Centre long-term trajectory — illustrative per-centre datasets, each with its own data-start year
+const centreData = {
+  A: { from: 2011, answer: "utilization has risen gradually since this centre's data begins in 2011, with the recent 5 years holding steady near the top of that range.",
+       years: ['2011','2013','2015','2017','2019','2021','2023','2025','2026'], hist: [18,21,24,27,29,31,33,35,36],
+       zoom: ['2022','2023','2024','2025','2026'], zoomData: [32,33,34,35,36] },
+  B: { from: 2014, answer: "utilization climbed through the mid-2010s and has held roughly flat since 2020.",
+       years: ['2014','2016','2018','2020','2022','2024','2026'], hist: [15,19,24,28,30,31,32],
+       zoom: ['2022','2023','2024','2025','2026'], zoomData: [30,31,31,32,32] },
+  C: { from: 2018, answer: "the available history is short — just under a decade — showing a steady increase with no recent plateau yet visible.",
+       years: ['2018','2019','2020','2021','2022','2023','2024','2025','2026'], hist: [12,15,17,19,21,23,25,26,27],
+       zoom: ['2022','2023','2024','2025','2026'], zoomData: [21,23,25,26,27] }
+};
+let centreHistChart, centreZoomChart;
+function updateCentreTrend() {
+  const c = centreData[document.getElementById('centreSelect').value];
+  document.getElementById('dataFromBadge').textContent = 'Data available from ' + c.from;
+  document.getElementById('centreAnswer').textContent = 'Illustrative pattern for Centre ' + document.getElementById('centreSelect').value + ': ' + c.answer;
+  centreHistChart.data.labels = c.years; centreHistChart.data.datasets[0].data = c.hist; centreHistChart.update();
+  centreZoomChart.data.labels = c.zoom; centreZoomChart.data.datasets[0].data = c.zoomData; centreZoomChart.update();
+}
+centreHistChart = new Chart(document.getElementById('centreHistoryChart'), {
+  type:'bar', data:{ labels:centreData.A.years, datasets:[{ label:'% Animals in Care Fostered (illustrative)', data:centreData.A.hist, backgroundColor: indigo }] },
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ ticks:{ callback:v=>v+'%' } } } }
+});
+centreZoomChart = new Chart(document.getElementById('centreZoomChart'), {
+  type:'line', data:{ labels:centreData.A.zoom, datasets:[{ label:'% Animals in Care Fostered (illustrative)', data:centreData.A.zoomData, borderColor: indigo, backgroundColor:'rgba(79,70,229,0.12)', fill:true, tension:0.2 }] },
+  options:{ responsive:true, maintainAspectRatio:false, scales:{ y:{ ticks:{ callback:v=>v+'%' } } } }
+});
+
+// Animal Type long-term trend — all families on one chart (small category count, no filter needed)
+const typeYears = ['2006','2008','2010','2012','2014','2016','2018','2020','2022','2024','2026'];
+new Chart(document.getElementById('typeHistoryChart'), {
+  type: 'line',
+  data: {
+    labels: typeYears,
+    datasets: [
+      { label:'Cat', data:[16,19,22,24,26,28,29,31,32,33,34.2], borderColor: indigo, backgroundColor:'rgba(79,70,229,0.08)', fill:false, tension:0.3 },
+      { label:'Dog', data:[14,15,17,18,19,20,20.5,21,21.8,22.2,22.6], borderColor: amber, backgroundColor:'rgba(217,119,6,0.08)', fill:false, tension:0.3 },
+      { label:'Small Animal', data:[12,13,14,15,15.5,16,16.5,17,17.5,18,18.4], borderColor: green, backgroundColor:'rgba(5,150,105,0.08)', fill:false, tension:0.3 }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true,position:'bottom'}}, scales:{ y:{ ticks:{ callback:v=>v+'%' } } } }
+});
+new Chart(document.getElementById('typeZoomChart'), {
+  type: 'line',
+  data: {
+    labels: ['2022','2023','2024','2025','2026'],
+    datasets: [
+      { label:'Cat', data:[32,32.5,33,33.6,34.2], borderColor: indigo, backgroundColor:'rgba(79,70,229,0.08)', fill:false, tension:0.3 },
+      { label:'Dog', data:[21.8,22.0,22.2,22.4,22.6], borderColor: amber, backgroundColor:'rgba(217,119,6,0.08)', fill:false, tension:0.3 },
+      { label:'Small Animal', data:[17.5,17.7,17.9,18.1,18.4], borderColor: green, backgroundColor:'rgba(5,150,105,0.08)', fill:false, tension:0.3 }
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true,position:'bottom'}}, scales:{ y:{ ticks:{ callback:v=>v+'%' } } } }
+});
+
+// Cross-centre scatter — the SAME 5 centres as page 2's ranking table, labeled, bubble = volume
+const scatterCentres = [
+  { name:'Centre A', x:58, y:36.0, vol:420 },
+  { name:'Centre B', x:50, y:31.9, vol:310 },
+  { name:'Centre C', x:44, y:26.8, vol:205 },
+  { name:'Centre E', x:38, y:21.8, vol:188 },
+  { name:'Centre D (low vol.)', x:35, y:30.0, vol:24 }
+];
+new Chart(document.getElementById('scatterChart'), {
+  type: 'bubble',
+  data: {
+    datasets: scatterCentres.map((c,i) => ({
+      label: c.name,
+      data: [{ x:c.x, y:c.y, r: Math.max(6, Math.sqrt(c.vol)/1.3) }],
+      backgroundColor: c.name.includes('low vol') ? 'rgba(203,213,225,0.8)' : 'rgba(79,70,229,0.55)'
+    }))
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:true, position:'bottom' }, tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + ctx.raw.x + '% Cat, ' + ctx.raw.y + '% fostered' } } },
+    scales: {
+      x: { title:{ display:true, text:'Cat mix share (%, illustrative)' } },
+      y: { title:{ display:true, text:'% Animals in Care Fostered (illustrative)' }, ticks:{ callback:v=>v+'%' } }
+    }
+  }
+});
+
+// Centre × Type split over time — mix effect + rate effect, stacked, per centre
+const centreTypeData = {
+  A: { from: 2011, answer: "the mix effect has stayed roughly flat while the within-type rate effect has grown steadily — the recent widening gap from the provincial average is increasingly a rate story, not a mix story.",
+       years: ['2011','2013','2015','2017','2019','2021','2023','2025','2026'], mix:[1.8,1.9,2.0,2.0,2.1,2.0,2.1,2.1,2.1], rate:[0.3,0.4,0.5,0.6,0.8,1.0,1.1,1.2,1.3],
+       zoom: ['2022','2023','2024','2025','2026'], zoomMix:[2.0,2.1,2.1,2.1,2.1], zoomRate:[0.9,1.0,1.1,1.2,1.3] },
+  B: { from: 2014, answer: "both the mix effect and the rate effect have stayed close to flat across the available history — this centre's gap from the provincial average has not meaningfully changed shape.",
+       years: ['2014','2016','2018','2020','2022','2024','2026'], mix:[1.0,1.2,1.4,1.5,1.5,1.4,1.5], rate:[0.5,0.5,0.4,0.4,0.3,0.3,0.3],
+       zoom: ['2022','2023','2024','2025','2026'], zoomMix:[1.5,1.5,1.4,1.4,1.5], zoomRate:[0.3,0.3,0.3,0.3,0.3] },
+  C: { from: 2018, answer: "the available history is short; the rate effect has grown quickly in the last few years while the mix effect has stayed roughly flat.",
+       years: ['2018','2019','2020','2021','2022','2023','2024','2025','2026'], mix:[0.8,0.9,1.0,1.0,1.1,1.1,1.2,1.2,1.2], rate:[0.1,0.2,0.3,0.4,0.6,0.8,1.0,1.1,1.3],
+       zoom: ['2022','2023','2024','2025','2026'], zoomMix:[1.1,1.1,1.2,1.2,1.2], zoomRate:[0.6,0.8,1.0,1.1,1.3] }
+};
+let ctHistChart, ctZoomChart;
+function updateCentreTypeTrend() {
+  const c = centreTypeData[document.getElementById('ctCentreSelect').value];
+  const name = document.getElementById('ctCentreSelect').value;
+  document.getElementById('ctDataFromBadge').textContent = 'Data available from ' + c.from;
+  document.getElementById('ctAnswer').textContent = 'Illustrative pattern for Centre ' + name + ': ' + c.answer;
+  ctHistChart.data.labels = c.years; ctHistChart.data.datasets[0].data = c.mix; ctHistChart.data.datasets[1].data = c.rate; ctHistChart.update();
+  ctZoomChart.data.labels = c.zoom; ctZoomChart.data.datasets[0].data = c.zoomMix; ctZoomChart.data.datasets[1].data = c.zoomRate; ctZoomChart.update();
+}
+const ctTooltipFor = label => label.startsWith('Mix')
+  ? 'Mix effect: explained by which animal types this centre serves, not by what the centre does differently.'
+  : 'Rate effect: a genuine within-type difference, left over after accounting for mix.';
+const ctTooltipPlugin = { tooltip: { callbacks: { afterLabel: ctx => ctTooltipFor(ctx.dataset.label) } } };
+ctHistChart = new Chart(document.getElementById('ctHistoryChart'), {
+  type:'bar',
+  data:{ labels:centreTypeData.A.years, datasets:[
+    { label:'Mix effect (pp)', data:centreTypeData.A.mix, backgroundColor: amber, stack:'s' },
+    { label:'Rate effect (pp)', data:centreTypeData.A.rate, backgroundColor: indigo, stack:'s' }
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true,position:'bottom'}, ...ctTooltipPlugin}, scales:{ x:{stacked:true}, y:{stacked:true, ticks:{ callback:v=>v+'pp' } } } }
+});
+ctZoomChart = new Chart(document.getElementById('ctZoomChart'), {
+  type:'bar',
+  data:{ labels:centreTypeData.A.zoom, datasets:[
+    { label:'Mix effect (pp)', data:centreTypeData.A.zoomMix, backgroundColor: amber, stack:'s' },
+    { label:'Rate effect (pp)', data:centreTypeData.A.zoomRate, backgroundColor: indigo, stack:'s' }
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true,position:'bottom'}, ...ctTooltipPlugin}, scales:{ x:{stacked:true}, y:{stacked:true, ticks:{ callback:v=>v+'pp' } } } }
+});
+</script>
+</body>
+</html>

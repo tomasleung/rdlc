@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Centre and Animal Type</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
+<style>
+  /* Same layout as Animals in Care */
+  :root {
+    --paper: #fbfcfd;
+    --panel: #f1f4f8;
+    --ink: #1c2530;
+    --muted: #586676;
+    --rule: #d9e0e8;
+    --sb: #2f5f8f;
+    --sb-soft: #e3ecf5;
+    --intake: #1d6b5a;
+    --intake-soft: #e0f1ec;
+    --care-soft: #e9eef4;
+    --no: #a3302f;
+    --no-soft: #f8e6e6;
+    --font-display: "Source Serif 4", Georgia, serif;
+    --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #12171d; --panel: #1a2129; --ink: #e4e9ef; --muted: #9aa8b7; --rule: #2b3541;
+      --sb: #7fb0e0; --sb-soft: #1d2a38; --intake: #5cc4a6; --intake-soft: #17302a; --care-soft: #1e2833;
+      --no: #e88282; --no-soft: #2d1a1a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #12171d; --panel: #1a2129; --ink: #e4e9ef; --muted: #9aa8b7; --rule: #2b3541;
+    --sb: #7fb0e0; --sb-soft: #1d2a38; --intake: #5cc4a6; --intake-soft: #17302a; --care-soft: #1e2833;
+    --no: #e88282; --no-soft: #2d1a1a;
+  }
+
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--font-body); padding-inline: 20px; padding-block: 40px 72px; }
+  .page { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
+  section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  header { display: flex; flex-direction: column; gap: 10px; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.25; }
+  h1 { font-size: 2.1rem; font-weight: 700; }
+  h2 { font-size: 1.45rem; font-weight: 700; border-top: 1px solid var(--rule); padding-top: 22px; }
+  h3 { font-size: 1.1rem; font-weight: 600; }
+  p { margin: 0; max-width: 68ch; }
+  ul, ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; max-width: 68ch; }
+  .eyebrow { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--sb); font-weight: 600; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .88rem; color: var(--muted); }
+  .lede { font-size: 1.08rem; }
+  .muted { color: var(--muted); }
+  code { font-family: var(--font-mono); font-size: .86em; background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+
+  .rule-box { border: 1px solid var(--rule); border-left: 4px solid var(--intake); border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .rule-box .statement { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { background: var(--panel); font-weight: 600; font-size: .83rem; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.t { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.yes td { background: var(--intake-soft); }
+  tr.no td { color: var(--muted); }
+  tr.total td { background: var(--panel); font-weight: 600; }
+
+  .sbscreen { border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+  .sbscreen .bar { background: var(--sb); color: #fff; font-size: .8rem; font-weight: 600; padding: 6px 12px; }
+  :root[data-theme="dark"] .sbscreen .bar { color: #0e1720; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sbscreen .bar { color: #0e1720; } }
+  .sbscreen .tablewrap { border: 0; border-radius: 0; }
+  .sbscreen th { background: var(--sb-soft); }
+
+  .tag { display: inline-block; font-size: .76rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+  .tag.yes, .tag.outcome { background: var(--intake); color: var(--paper); }
+  .tag.incare { background: var(--sb-soft); color: var(--sb); }
+  .tag.no { background: var(--no-soft); color: var(--no); }
+  .tag.out, .tag.other { background: var(--panel); color: var(--muted); }
+
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .src { border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .src h3 { font-size: 1rem; }
+  .src.yes { border-top: 4px solid var(--intake); }
+  .src.sb { border-top: 4px solid var(--sb); }
+  .src p { font-size: .92rem; }
+
+  .example { display: flex; flex-direction: column; gap: 12px; }
+  .example + .example { border-top: 1px dashed var(--rule); padding-top: 22px; }
+  .verdict { background: var(--panel); border-radius: 8px; padding: 10px 14px; font-size: .95rem; }
+
+  /* month strips */
+  .years { display: flex; flex-direction: column; gap: 10px; }
+  .year { display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: center; }
+  .year .y { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+  .m { text-align: center; font-size: .72rem; padding: 6px 0; border-radius: 4px; background: var(--panel); color: var(--muted); }
+  .m.on { background: var(--intake); color: var(--paper); font-weight: 600; }
+  .m.pre { background: var(--care-soft); color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule); }
+  .key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .85rem; color: var(--muted); }
+  .key span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+  /* reference tables */
+  details summary { cursor: pointer; font-weight: 600; color: var(--sb); }
+  details .tablewrap { margin-top: 10px; }
+  .ref table { font-size: .84rem; }
+  .ref th, .ref td { padding: 5px 10px; }
+  .ref td.c, .ref th.c { text-align: center; }
+  .tick { color: var(--intake); font-weight: 700; }
+
+  footer { font-size: .85rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; }
+  @media (max-width: 520px) { h1 { font-size: 1.7rem; } body { padding-block: 24px 56px; } .m { font-size: .62rem; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="eyebrow">Foster Pathway Analytics · Centre and animal type definition</div>
+    <h1>How we assign centre and animal type</h1>
+    <div class="meta"><span>Version 0.1</span><span>Draft for Data Owner review</span><span>October 2026</span></div>
+    <p class="lede"><b>Animals in Care</b> and <b>Fostered Animals</b> tell us <i>when</i> an animal was with us. To compare foster use across centres and animal types, we also need <i>where</i> it was and <i>what type</i> it was on each of those days. Phase 1 could not do this: the location (kennel) history that gives foster stays has no centre and no animal type. The Source History and Status History do, and now that every stay is built from them, the same records give the centre and type for every day, including every foster day.</p>
+  </header>
+
+  <section>
+    <h2>The rule in one sentence</h2>
+    <div class="rule-box">
+      <div class="statement">On every day of a stay, the animal is at the centre and of the type shown by the latest record in that stay: first the intake, then each status. A foster day takes the centre and type of the care day it falls on.</div>
+      <ul>
+        <li><b>Centre:</b> the centre holding the animal (ShelterBuddy calls it <i>Physical Location</i> on the intake and <i>Region</i> on a status; the same list of centres).</li>
+        <li><b>Animal type:</b> ShelterBuddy's animal type (Cat, Kitten, Dog…), reported by <b>family</b>, so a kitten that grows into a cat stays in one family.</li>
+        <li><b>Changes:</b> a transfer, or any status at a new centre, moves the animal to that centre from that moment.</li>
+        <li><b>Foster:</b> foster stays are found exactly as in Phase 1; only the centre and type are added.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where centre and type come from</h2>
+    <p>ShelterBuddy keeps three histories for an animal. Only two of them record a centre and a type:</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>History</th><th>Gives us</th><th>Centre</th><th>Animal type</th></tr></thead>
+      <tbody>
+        <tr><td><b>Source History</b> (intake)</td><td>Start of each stay</td><td><span class="tag yes">Physical Location</span></td><td><span class="tag yes">Animal Type</span></td></tr>
+        <tr><td><b>Status History</b></td><td>End of each stay, and every change in between</td><td><span class="tag yes">Region</span></td><td><span class="tag yes">Animal Type</span></td></tr>
+        <tr class="no"><td><b>Location (kennel) History</b></td><td>Foster stays (Phase 1)</td><td><span class="tag no">None</span></td><td><span class="tag no">None</span></td></tr>
+      </tbody>
+    </table></div>
+    <p>On the <i>Edit Animal Details</i> screen, the centre on each status is the <b>Information Only Region</b> field, and the type is <b>Type</b>. Staff set them each time they record a status, so the Status History holds the centre and type at every point of the stay.</p>
+    <p class="muted">Checked across all records: the intake's Physical Location and the status's Region use the same centre ids and names (46 and 47 centres; only Kitimat appears on statuses alone). Animal types also match (Fowl, Goat, Cattle and Sheep appear on statuses only).</p>
+  </section>
+
+  <section>
+    <h2>How the centre and type are set during a stay</h2>
+    <p>For each stay from Animals in Care, in order:</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Step</th><th>Rule</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>Start:</b> the centre and type on the intake. If the intake has no centre, the centre on the first status</td><td>The intake records where the animal came in. It matches its own first status for 99.2% of intakes (centre) and 99.97% (type)</td></tr>
+        <tr><td>2</td><td><b>Each status in the stay</b> sets the centre and type from its date and time, in the order ShelterBuddy shows them</td><td>A transfer shows as <i>Internal Transfer In</i> at the new centre; 98.4% of <i>Internal Transfer Out</i> statuses are followed by one</td></tr>
+        <tr><td>3</td><td><b>A blank</b> centre or type on a status keeps the last known value</td><td>A blank does not mean the animal moved</td></tr>
+        <tr><td>4</td><td><b>Only records inside the stay count:</b> from the intake to its outcome. Statuses after the outcome are ignored</td><td>The same rule as Animals in Care: the animal had already left</td></tr>
+        <tr><td>5</td><td><b>Nothing known:</b> no centre on the intake or any status → <i>Unmapped</i>; no type → <i>Unknown</i>. Still counted in province-wide totals</td><td>509 stays (0.1%), none since 2019</td></tr>
+      </tbody>
+    </table></div>
+    <p>A return recorded on the same intake (a second stay, see Animals in Care) starts with the centre and type on the status that re-opens it.</p>
+  </section>
+
+  <section>
+    <h2>Animal type families</h2>
+    <p>ShelterBuddy has about 30 animal types. Several are the same animal at different ages, so we report <b>families</b>. A change inside a family (Kitten → Cat, Puppy → Dog) does not move the animal; a change between families (usually a corrected type) does.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Family</th><th>ShelterBuddy types</th><th class="n">Share of animals in care</th></tr></thead>
+      <tbody>
+        <tr><td><b>Cat</b></td><td>Cat, Kitten</td><td class="n">62.7%</td></tr>
+        <tr><td><b>Dog</b></td><td>Dog, Puppy</td><td class="n">23.3%</td></tr>
+        <tr><td><b>Small Animal</b></td><td>Small Animal, Small Animal - Exotic</td><td class="n">3.6%</td></tr>
+        <tr><td><b>Rabbit</b></td><td>Rabbit</td><td class="n">3.6%</td></tr>
+        <tr><td><b>Other</b></td><td>Birds, farm animals, horses, reptiles, fish, wildlife and all other types</td><td class="n">6.8%</td></tr>
+        <tr class="no"><td><b>Unknown</b></td><td>No type recorded</td><td class="n">0.0%</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Share of animal-months in care, 2006 to September 2026. The mapping is a reference list: a new ShelterBuddy type is reported as Other until it is mapped.</p>
+  </section>
+
+  <section>
+    <h2>Attaching foster stays</h2>
+    <p>The foster stay itself is <b>unchanged from Phase 1</b>: a location containing "Foster" (Foster to Adopt excluded), ending at the next location change or by the Phase 1 end-date rules. Each foster stay is then placed on the care timeline:</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Case</th><th class="n">Foster records</th><th class="n">% of all</th><th>Centre and type</th></tr></thead>
+      <tbody>
+        <tr class="yes"><td>The foster stay falls inside a care stay</td><td class="n">129,995</td><td class="n">99.34%</td><td>The centre and type of the care stay at that time. If the animal is transferred while in foster, the foster time after the transfer counts at the new centre</td></tr>
+        <tr><td>The foster stay falls outside every care stay of the animal (most often a foster move keyed a few days after the outcome, or before 2013)</td><td class="n">733</td><td class="n">0.56%</td><td>The centre and type of the animal's <b>previous</b> stay at its end; if there is none, its <b>next</b> stay at its start. The foster time also counts as time in care. <a href="#outside">Details below</a></td></tr>
+        <tr><td>The animal has <b>no care stay at all</b> (its source record has a service type such as <i>Found</i> instead of an incoming one)</td><td class="n">129</td><td class="n">0.10%</td><td>For the data owner to decide. <a href="#nostay">Details below</a></td></tr>
+        <tr class="total"><td>All foster records</td><td class="n">130,857</td><td class="n">100%</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <div class="rule-box">
+      <div class="statement">99.3% of foster records fit a care stay directly. The other 0.7% are almost all history: since 2013 they are 71 of 81,168 foster records (0.09%).</div>
+      <p>Foster records found the Phase 1 way (location containing "Foster", Foster to Adopt excluded), all years. The two exceptions are explained below so the data owner can see how small they are.</p>
+    </div>
+
+    <h3 id="outside">Foster records outside every care stay (0.56%)</h3>
+    <p>We checked all 733 against the records around them. They fall into five cases:</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th style="min-width:260px">Case</th><th class="n">Records</th><th class="n">% of all foster records</th><th class="n">Since 2013</th><th class="n">Under 1 day</th><th class="n">Over 30 days</th><th>Centre and type taken from</th></tr></thead>
+      <tbody>
+        <tr><td><b>A.</b> Foster move keyed up to 7 days <b>after the outcome</b></td><td class="n">118</td><td class="n">0.09%</td><td class="n">26</td><td class="n">67</td><td class="n">4</td><td>Previous stay, at its end</td></tr>
+        <tr><td><b>B.</b> Foster move keyed up to 7 days <b>before the intake</b></td><td class="n">24</td><td class="n">0.02%</td><td class="n">15</td><td class="n">1</td><td class="n">7</td><td>Next stay, at its start</td></tr>
+        <tr><td><b>C.</b> A return recorded on the old intake (In Care after the outcome, never closed)</td><td class="n">10</td><td class="n">0.01%</td><td class="n">0</td><td class="n">1</td><td class="n">3</td><td>Previous stay, at its end</td></tr>
+        <tr><td><b>D.</b> Before the animal's first stay, more than 7 days</td><td class="n">18</td><td class="n">0.01%</td><td class="n">2</td><td class="n">3</td><td class="n">11</td><td>Next stay, at its start</td></tr>
+        <tr><td><b>E.</b> Between two stays, more than 7 days, with no intake or status for that time</td><td class="n">563</td><td class="n">0.43%</td><td class="n">26</td><td class="n">500</td><td class="n">36</td><td>Previous stay, at its end</td></tr>
+        <tr class="total"><td>All</td><td class="n">733</td><td class="n">0.56%</td><td class="n">69</td><td class="n">572</td><td class="n">61</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li><b>572 of the 733 last less than a day:</b> the location was set to Foster and changed again within minutes, mostly in bulk location updates in 2009–2012. They are not real foster stays, but Phase 1 counts them.</li>
+      <li><b>About 160 are real foster time</b> with no intake or status around it: the move was keyed late or early (A, B), the intake was keyed late (D), or the animal came back without a new intake (C, E).</li>
+      <li>28 have no foster end in Phase 1 (unresolved) and are already excluded there.</li>
+    </ul>
+
+    <details><summary>Example B: a foster move keyed 3 days before the intake (animal 617618)</summary>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr class="no"><td class="t">6-Nov-2025 01:00</td><td>Source: Dispatch Information (not incoming)</td><td>Victoria</td><td>Cat</td><td>A service record: no stay</td></tr>
+        <tr class="yes"><td class="t">10-Nov-2025 10:19</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster starts, <b>before any intake</b></td></tr>
+        <tr class="yes"><td class="t">13-Nov-2025 17:44</td><td>Intake: Owner Surrender</td><td>Victoria</td><td>Cat</td><td>Stay starts; foster ends a minute later (Cat Room 2)</td></tr>
+        <tr><td class="t">29-Dec-2025 15:07</td><td>Status: Adopted Altered <span class="tag outcome">Outcome</span></td><td>Victoria</td><td>Cat</td><td>Stay ends</td></tr>
+      </tbody>
+    </table></div>
+    <div class="verdict">The foster (10–13 Nov) takes the next stay's start: <b>Victoria, Cat</b>. November counts the same either way.</div>
+    </details>
+
+    <details><summary>Example C: a return recorded on the old intake, after "Unresolved File" (animal 106051)</summary>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr class="yes"><td class="t">24-Oct-2007 01:00</td><td>Intake: Owner Surrender</td><td>Nanaimo</td><td>Kitten</td><td>Stay starts</td></tr>
+        <tr class="yes"><td class="t">31-Oct-2007</td><td>Status: Unresolved File <span class="tag outcome">Outcome</span></td><td>Nanaimo</td><td>Cat</td><td>Stay ends</td></tr>
+        <tr><td class="t">3-Nov-2007</td><td>Status: In Foster <span class="tag incare">In Care</span> (same intake)</td><td>Nanaimo</td><td>Kitten</td><td>In Care after the outcome, never closed: ignored</td></tr>
+        <tr class="yes"><td class="t">24-Mar-2008 17:00</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster starts, outside any stay</td></tr>
+        <tr><td class="t">19-Sep-2008 09:22</td><td>Location: (left)</td><td>—</td><td>—</td><td>Foster ends: 179 days</td></tr>
+      </tbody>
+    </table></div>
+    <div class="verdict">The foster takes the previous stay's end: <b>Nanaimo, Cat</b>, and counts as care from March to September 2008. The records suggest the kitten never left: <i>Unresolved File</i> may not be a real outcome (a decision already asked in Animals in Care).</div>
+    </details>
+
+    <details><summary>Example D: in care before the intake was keyed (animal 583027)</summary>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td class="t">14-Nov-2023 16:48</td><td>Status: Emergency Boarding <span class="tag incare">In Care</span></td><td>Burnaby</td><td>Cat</td><td>Status dated two weeks before its intake</td></tr>
+        <tr class="yes"><td class="t">16-Nov-2023 11:24</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster starts, before the intake</td></tr>
+        <tr class="yes"><td class="t">28-Nov-2023 13:00</td><td>Intake: Owner Surrender</td><td>Burnaby</td><td>Cat</td><td>Stay starts (the intake date is the start)</td></tr>
+        <tr><td class="t">8-Dec-2023 15:13</td><td>Status: Adopted Altered <span class="tag outcome">Outcome</span></td><td>Burnaby</td><td>Cat</td><td>Foster and stay end</td></tr>
+      </tbody>
+    </table></div>
+    <div class="verdict">The cat was in care from 14 November, but the intake was keyed on 28 November. The foster takes the next stay's start: <b>Burnaby, Cat</b>, and 16–28 November count as care.</div>
+    </details>
+
+    <details><summary>Example E: back in foster with no Returns intake for three months (animal 297046)</summary>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td class="t">18-Apr-2015 13:16</td><td>Intake: Returns</td><td>Nelson</td><td>Cat</td><td>Stay starts</td></tr>
+        <tr class="yes"><td class="t">15-May-2015 12:35</td><td>Status: Adopted Altered <span class="tag outcome">Outcome</span></td><td>Nelson</td><td>Cat</td><td>Stay ends</td></tr>
+        <tr class="yes"><td class="t">19-Aug-2015 13:53</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster starts, <b>no intake or status</b></td></tr>
+        <tr><td class="t">18-Nov-2015 12:37</td><td>Location: (left)</td><td>—</td><td>—</td><td>Foster ends: 91 days</td></tr>
+        <tr class="yes"><td class="t">27-Nov-2015 14:28</td><td>Intake: Returns</td><td>Nelson</td><td>Cat</td><td>The next Returns intake</td></tr>
+      </tbody>
+    </table></div>
+    <div class="verdict">The cat appears to have come back in August without a Returns intake. The foster takes the previous stay's end: <b>Nelson, Cat</b>, and August to November 2015 count as care.</div>
+    </details>
+    <p class="muted">Example A (a foster move keyed after the outcome, animal 424154) is in the worked examples below.</p>
+
+    <h3>Options for the data owner</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Option</th><th>What happens</th><th>Fostered Animals vs Phase 1</th></tr></thead>
+      <tbody>
+        <tr class="yes"><td><b>1. Keep all, previous or next stay</b> (suggested)</td><td>All 733 keep counting; centre and type from the previous stay at its end, else the next stay at its start; the foster time also counts as care</td><td>The same</td></tr>
+        <tr><td><b>2. As 1, but drop foster records under 1 day</b></td><td>The 572 bulk location updates no longer count as foster</td><td>Lower in some months of 2009–2012</td></tr>
+        <tr><td><b>3. Keep all, centre Unmapped</b></td><td>No guessed centre; shown as Unmapped in centre reports</td><td>The same</td></tr>
+        <tr><td><b>4. Exclude all</b></td><td>Only foster time inside a care stay counts</td><td>Lower; no longer matches Phase 1</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 id="nostay">Fostered animals with no care stay at all (0.10%)</h3>
+    <p>Some animals were fostered, so Phase 1 counts them, but they never have a care stay: their only source record has a <b>service</b> type that is not Incoming, such as <i>Found</i>, <i>Boarding</i> or <i>Dispatch Information</i>. Their status history shows they really were in our care (most often <i>In Foster</i> or <i>Available for Adoption - In Foster</i>), so the cause is the <b>source type chosen at intake</b>, not a missing animal.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Cause</th><th class="n">Animals</th><th class="n">% of fostered animals</th><th>What the records show</th></tr></thead>
+      <tbody>
+        <tr><td><b>F1.</b> A service source that looks like a real intake: Found (53), Dispatch Information (9), Clinic, Lost, SPCA Tag, Identification &amp; Services</td><td class="n">67</td><td class="n">0.06%</td><td>In Care statuses on that record; most likely the wrong source type was picked</td></tr>
+        <tr><td><b>F1.</b> A source that may not be a shelter animal: Boarding (23), Staff (6), Bequest (5)</td><td class="n">34</td><td class="n">0.03%</td><td>Boarding animals often have an <i>Emergency Boarding</i> status, which is an Incoming source type: probably meant as Emergency Boarding</td></tr>
+        <tr><td><b>F2.</b> An incoming intake with no status records</td><td class="n">1</td><td class="n">0.00%</td><td>Its statuses are on another record</td></tr>
+        <tr><td><b>F3.</b> No source record at all</td><td class="n">12</td><td class="n">0.01%</td><td>Animals in foster in 2005 whose intake is older than our records; their statuses give the centre and type</td></tr>
+        <tr class="total"><td>All</td><td class="n">114</td><td class="n">0.10%</td><td>of 111,440 fostered animals. <b>Since 2013: 2</b> of 67,150 (0.003%)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Of the 114, Phase 1 counts 94 (the others have no resolved foster end or ended before 2006): 299 animal-months in total, almost all 2006–2008.</p>
+
+    <details><summary>Example: a kitten keyed as "Found", fostered and adopted (animal 85401)</summary>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr class="yes"><td class="t">23-May-2007 10:35</td><td>Source: <b>Found</b> (not incoming)</td><td>Campbell River</td><td>Kitten</td><td>A service type, so <b>no care stay</b> is built</td></tr>
+        <tr><td class="t">23-May-2007</td><td>Status: Awaiting Sort <span class="tag incare">In Care</span></td><td>Campbell River</td><td>Kitten</td><td>But the statuses show the kitten in our care</td></tr>
+        <tr><td class="t">23-May-2007</td><td>Status: In Foster <span class="tag incare">In Care</span></td><td>Campbell River</td><td>Kitten</td><td></td></tr>
+        <tr class="yes"><td class="t">23-May-2007 15:29</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster starts (counted in Phase 1)</td></tr>
+        <tr><td class="t">30-Jun-2007 12:50</td><td>Location: Kitten Cages</td><td>—</td><td>—</td><td>Foster ends: 38 days</td></tr>
+        <tr><td class="t">4-Jul-2007</td><td>Status: Adopted Altered <span class="tag outcome">Outcome</span></td><td>Campbell River</td><td>Kitten</td><td>Adopted</td></tr>
+      </tbody>
+    </table></div>
+    <div class="verdict">A normal shelter stay in every way except the source type. Had it been keyed as <i>Stray</i>, it would be an Animal in Care at Campbell River, family Cat, from May to July 2007.</div>
+    </details>
+
+    <details><summary>Example: a dog with only a Dispatch Information record, set to Foster (animal 626075, 2026)</summary>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr class="yes"><td class="t">4-Jun-2026 17:55</td><td>Source: <b>Dispatch Information</b> (not incoming)</td><td>West Vancouver</td><td>Dog</td><td>A call or report, not an intake</td></tr>
+        <tr><td class="t">4-Jun-2026 17:55</td><td>Status: Information <span class="tag other">Other</span></td><td>West Vancouver</td><td>Dog</td><td>A note</td></tr>
+        <tr class="yes"><td class="t">4-Jun-2026 18:20</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster starts 25 minutes later (counted in Phase 1)</td></tr>
+        <tr><td class="t">5-Jun-2026 16:12</td><td>Location: (left)</td><td>—</td><td>—</td><td>Foster ends the next day</td></tr>
+      </tbody>
+    </table></div>
+    <div class="verdict">Either the dog was briefly fostered and the intake was never created, or the location was set by mistake. Only ShelterBuddy staff can tell which.</div>
+    </details>
+
+    <h3>Options for the data owner</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Option</th><th>What happens</th><th>Phase 1 Fostered Animals</th></tr></thead>
+      <tbody>
+        <tr><td><b>A. Keep them</b></td><td>The foster time counts as care; centre and type from the animal's own status or source records (available for 112 of the 114)</td><td>No change</td></tr>
+        <tr><td><b>B. Exclude them</b></td><td>An animal must have an incoming intake to be counted, in both phases</td><td>94 animals (299 animal-months) fewer, almost all 2006–2008</td></tr>
+        <tr class="yes"><td><b>C. Split by source type</b> (suggested)</td><td>Keep the 67 that look like real intakes (as A); exclude Boarding, Staff and Bequest (as B)</td><td>About 26 animals fewer, all before 2013</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Today Phase 1 flags these animals (no incoming intake) but still counts them. Whatever is decided should apply to both phases, so Fostered Animals stay the same in both.</p>
+  </section>
+
+  <section>
+    <h2>How the counts read by centre and type</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Measure</th><th>By centre and type, for a month or year</th></tr></thead>
+      <tbody>
+        <tr><td><b>Animals in Care</b></td><td>Distinct animals in care for at least one day at that centre, in that family</td></tr>
+        <tr><td><b>Fostered Animals</b></td><td>Distinct animals in foster for at least one day while at that centre, in that family</td></tr>
+        <tr><td><b>% Animals in Care Fostered</b></td><td>Fostered Animals ÷ Animals in Care, for the same centre, family and period</td></tr>
+      </tbody>
+    </table></div>
+    <div class="rule-box">
+      <div class="statement">Centre figures must never be added together.</div>
+      <p>An animal transferred during a month was in care at two centres that month. It counts once at <b>each</b> centre, but only once in the province-wide total. Transfers are common and increasing: the sum of all centres is 4.9% above the province total in 2006 and 17.7% above it in 2026. The province total is always its own distinct count. The same applies to families, though a family change is rare (0.04% of stays).</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Worked examples</h2>
+
+    <div class="example">
+      <h3>Animal 605768: a dog transferred from Williams Lake to Vancouver, then fostered</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History, Status History and Location History · Animal 605768</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr class="yes"><td class="t">1-Mar-2025 14:40</td><td>Intake: Owner Surrender</td><td>Williams Lake</td><td>Dog</td><td>Stay starts at Williams Lake</td></tr>
+            <tr><td class="t">12-Mar-2025 16:01</td><td>Status: Internal Transfer Out <span class="tag incare">In Care</span></td><td>Williams Lake</td><td>Dog</td><td>Still at Williams Lake</td></tr>
+            <tr class="yes"><td class="t">13-Mar-2025 12:44</td><td>Status: Internal Transfer In <span class="tag incare">In Care</span></td><td>Vancouver</td><td>Dog</td><td><b>Centre becomes Vancouver</b></td></tr>
+            <tr class="yes"><td class="t">25-Mar-2025 17:29</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster starts, at Vancouver</td></tr>
+            <tr class="yes"><td class="t">10-Jun-2025 14:12</td><td>Status: Adopted Altered <span class="tag outcome">Outcome</span></td><td>Vancouver</td><td>Dog</td><td>Foster and stay end</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Month</th><th>Centre</th><th>Family</th><th class="n">Animals in Care</th><th class="n">Fostered Animals</th></tr></thead>
+        <tbody>
+          <tr><td>Mar 2025</td><td>Williams Lake</td><td>Dog</td><td class="n">1</td><td class="n">0</td></tr>
+          <tr><td>Mar 2025</td><td>Vancouver</td><td>Dog</td><td class="n">1</td><td class="n">1</td></tr>
+          <tr class="total"><td>Mar 2025</td><td>Province</td><td>Dog</td><td class="n">1 (not 2)</td><td class="n">1</td></tr>
+          <tr><td>Apr – Jun 2025</td><td>Vancouver</td><td>Dog</td><td class="n">1</td><td class="n">1</td></tr>
+        </tbody>
+      </table></div>
+      <div class="verdict">In March the dog was in care at both centres, so it counts at each, but once in the province. It was fostered only after the transfer, so the foster counts at <b>Vancouver</b> only.</div>
+    </div>
+
+    <div class="example">
+      <h3>Animal 607033: a kitten that becomes a cat while in foster</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History, Status History and Location History · Animal 607033</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr class="yes"><td class="t">3-Apr-2025 15:57</td><td>Intake: Agency / Shelter</td><td>Alberni-Clayoquot</td><td>Kitten</td><td>Stay starts; family <b>Cat</b></td></tr>
+            <tr class="yes"><td class="t">3-Apr-2025 16:04</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster starts</td></tr>
+            <tr><td class="t">3-Apr-2025 16:25</td><td>Status: In Foster <span class="tag incare">In Care</span></td><td>Alberni-Clayoquot</td><td>Cat</td><td>Type changes, family stays Cat</td></tr>
+            <tr class="yes"><td class="t">26-May-2025 13:24</td><td>Location: Cat Adoption Room</td><td>—</td><td>—</td><td>Foster ends</td></tr>
+            <tr class="yes"><td class="t">4-Jun-2025 12:38</td><td>Status: Adopted Altered <span class="tag outcome">Outcome</span></td><td>Alberni-Clayoquot</td><td>Cat</td><td>Stay ends</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="verdict">Counted in care at Alberni-Clayoquot, family Cat, from April to June 2025, and fostered in April and May. There is no separate "Kitten" row: the type change stays inside the family, so the animal is never counted twice.</div>
+    </div>
+
+    <div class="example">
+      <h3>Animal 623743: an intake at Vancouver whose first status is at Animal Protection Services</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History, Status History and Location History · Animal 623743</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr class="yes"><td class="t">14-Apr-2026 16:15</td><td>Intake: Emergency Boarding</td><td>Vancouver</td><td>Puppy</td><td>Stay starts at Vancouver</td></tr>
+            <tr class="yes"><td class="t">14-Apr-2026 16:15</td><td>Status: Emergency Boarding <span class="tag incare">In Care</span></td><td>Animal Protection Services</td><td>Puppy</td><td><b>Centre becomes Animal Protection Services</b>, the same minute</td></tr>
+            <tr><td class="t">15-Apr-2026 09:44</td><td>Location: In Foster</td><td>—</td><td>—</td><td>Foster starts, at Animal Protection Services</td></tr>
+            <tr class="yes"><td class="t">15-Apr-2026 13:27</td><td>Status: Protective Custody In Foster <span class="tag incare">In Care</span></td><td>Vancouver</td><td>Puppy</td><td><b>Centre becomes Vancouver</b></td></tr>
+            <tr><td class="t">15-Apr-2026 13:30</td><td>Location: Foster</td><td>—</td><td>—</td><td>In foster, at Vancouver</td></tr>
+            <tr class="yes"><td class="t">22-Apr-2026 14:00</td><td>Status: Redeemed <span class="tag outcome">Outcome</span></td><td>Vancouver</td><td>Puppy</td><td>Stay ends</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="verdict">As recorded, the puppy counts in April 2026 at <b>both</b> Animal Protection Services and Vancouver, in care and fostered, and once in the province. This is common for protective-custody and emergency-boarding animals (about 1,400 stays). The data owner decides whether they should count at Animal Protection Services or at the shelter holding them.</div>
+    </div>
+
+    <div class="example">
+      <h3>Animal 424154: a foster move keyed after the outcome</h3>
+      <div class="sbscreen">
+        <div class="bar">Source History, Status History and Location History · Animal 424154</div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Date</th><th>Record</th><th>Centre</th><th>Type</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr class="yes"><td class="t">16-Jan-2017 08:52</td><td>Intake: Owner Surrender</td><td>North Peace</td><td>Kitten</td><td>Stay starts</td></tr>
+            <tr><td class="t">16-Jan-2017 09:01</td><td>Status: In Foster <span class="tag incare">In Care</span></td><td>North Peace</td><td>Kitten</td><td>The status says In Foster</td></tr>
+            <tr class="yes"><td class="t">19-Jan-2017 09:06</td><td>Status: Euthanized by Offsite Vet <span class="tag outcome">Outcome</span></td><td>North Peace</td><td>Kitten</td><td>Stay ends</td></tr>
+            <tr class="yes"><td class="t">22-Jan-2017 09:01</td><td>Location: Foster</td><td>—</td><td>—</td><td>Foster move keyed 3 days <b>after</b> the outcome</td></tr>
+            <tr><td class="t">30-Jan-2017 09:08</td><td>Location: (left)</td><td>—</td><td>—</td><td>Foster ends (Phase 1)</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="verdict">The Phase 1 foster stay (22–30 January) is outside the care stay. It takes the centre and type of the previous stay: <b>North Peace, Cat</b>. The kitten counts in January 2017 as in care and fostered at North Peace, the same as if the location had been keyed on time.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How good is the data</h2>
+    <p>Centre and type are almost always recorded and consistent. The detailed checks are in the <i>Centre and Animal Type Data Quality Report v0.2</i>.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>What the records show</th><th class="n">Stays</th><th>What we do</th></tr></thead>
+      <tbody>
+        <tr class="yes"><td>One centre and one family for the whole stay</td><td class="n">83.1%</td><td>Used as entered</td></tr>
+        <tr><td>Centre changes with a recorded transfer</td><td class="n">13.3%</td><td>Counted at each centre for its days</td></tr>
+        <tr><td>Type changes inside its family (Kitten → Cat)</td><td class="n">1.8%</td><td>No change in counting</td></tr>
+        <tr><td>Centre changes on an ordinary status, without a transfer record</td><td class="n">0.8%</td><td>Taken as recorded; listed for the data owner</td></tr>
+        <tr><td>Intake centre differs from the first status (often Animal Protection Services)</td><td class="n">0.8%</td><td>The status centre from that moment; data owner decides</td></tr>
+        <tr><td>Type family changes (usually a corrected type)</td><td class="n">0.04%</td><td>Counted in each family for its days</td></tr>
+        <tr class="no"><td>No centre anywhere</td><td class="n">0.1%</td><td>Unmapped; kept in province totals</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Centre known for 99.95% of animal-months and type for 100% (the BRD asks for at least 99%). Figures from the Centre and Animal Type Data Quality Report v0.2 (local extracts to September 2026, stays from the v0.3 rules).</p>
+  </section>
+
+  <section>
+    <h2>Known limitations</h2>
+    <ul>
+      <li><b>The centre is what staff record on each status.</b> If a status is recorded at the wrong centre, the animal is counted there; centre changes without a transfer record are listed for review.</li>
+      <li><b>Within one day, order matters.</b> An animal can be at two centres on the same day (as in the Animal Protection Services example); it counts at both.</li>
+      <li><b>Centres change over time.</b> Some centres closed (e.g. Delta, Coquitlam, Nelson) and Kitimat appears only as a transfer destination; centre trends should show the years each centre has data.</li>
+      <li><b>No grouping of centres.</b> ShelterBuddy has no region above the centre; a centre → region list must come from the data owner.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Decisions needed</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>#</th><th>Question</th><th>Suggestion</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Report by the centre holding the animal each day (as above), or by the centre that took it in?</td><td>The centre holding it, because that is where the care and foster happened. The intake centre can be a second view</td></tr>
+        <tr><td>2</td><td>Animal type families: report Cat, Dog and Small Animal only (the MVP), or add Rabbit and Other?</td><td>Cat, Dog, Small Animal, Rabbit and Other, so every animal is counted (the three MVP families cover 89.5%)</td></tr>
+        <tr><td>3</td><td>Animal Protection Services and other non-shelter centres (clinics, Prov. Office, Wild ARC): own rows, or counted at the shelter holding the animal?</td><td>Own rows, outside centre rankings, kept in province totals</td></tr>
+        <tr><td>4</td><td>A foster stay outside every care stay (733 records): which option, 1 to 4?</td><td>Option 1: keep all, centre and type from the previous stay (else the next), so Fostered Animals still match Phase 1</td></tr>
+        <tr><td>5</td><td>Fostered animals with no care stay (114 animals, 0.10%): option A, B or C?</td><td>Option C: keep the likely real intakes, exclude Boarding, Staff and Bequest; apply the same to Phase 1</td></tr>
+        <tr><td>6</td><td>Centre → region grouping</td><td>Data owner to provide the list</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Technical reference</h2>
+    <div class="tablewrap"><table>
+      <tbody>
+        <tr><td>Input</td><td><code>slv.sb_intake_status</code> rows with <code>IsInsideStay = 1</code>: intake <code>IntakeCentreId</code> / <code>IntakeAnimalTypeId</code>, then status <code>RegionId</code> / <code>StatusAnimalTypeId</code>, in <code>StatusSeq</code> order</td></tr>
+        <tr><td>Table (planned)</td><td><code>slv.sb_care_stay_scd2</code>: one row per animal × stay × segment; a new segment when the centre or type family changes. <code>SegmentStartUtc</code> to <code>SegmentEndUtc</code> (<code>NULL</code> = still in care), <code>CentreId</code>, <code>AnimalTypeId</code>, <code>AnimalFamily</code>, <code>IsCurrent</code></td></tr>
+        <tr><td>Foster</td><td>Phase 1 foster stays (<code>nb_sb_silver_kennel_history_foster_adjust</code>) joined on <code>AnimalId</code> and time to the segments; outside every stay: the previous segment, else the next</td></tr>
+        <tr><td>Family</td><td>Reference list <code>AnimalTypeId</code> → family (Cat, Dog, Small Animal, Rabbit, Other)</td></tr>
+        <tr><td>Measures</td><td>Distinct <code>AnimalId</code> per month × centre × family; the province total is a separate distinct count, never a sum of centres</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer>Examples from the local ShelterBuddy extract to 30 Sep 2026. Companion to Animals in Care, the Foster Animal Definition and the Centre and Animal Type Data Quality Report.</footer>
+</div>
+</body>
+</html>
