@@ -74,6 +74,21 @@ Both were the same underlying mistake (misapplying `///`/description) on two dif
 
 **Why this matters beyond the specific findings:** this is the first time in the project that live, independent third-party review (not our own static reasoning) fed back into the reference material with a full, honest triage — separating real gaps from already-known accepted tradeoffs from genuinely unresolved open questions, rather than treating every flag as either "fix it" or "ignore it."
 
+## 2026-09-29 — Finding: Power BI Desktop save clobbers externally-written PBIR/TMDL files
+
+**Not a TMDL syntax bug** — applies to both semantic-model files (this skill's domain) and report-layer PBIR files (e.g. new report pages/visuals built via `powerbi-report-authoring`), since both are held in Desktop's single open session. Recorded here because this is the closest existing "real Power BI Desktop testing" changelog.
+
+**Symptom:** New files written directly to disk (a new semantic-model table, a new report page, new theme/visual JSON) disappear entirely after asking the user to "save in Desktop" to clear a `hasUnsavedChanges: true` flag before reloading.
+
+**Root cause:** When Power BI Desktop has a PBIP open with `hasUnsavedChanges: true`, Desktop's in-memory model is what gets written to disk on save — it does not merge external file edits made outside Desktop. A save is a full serialize-from-memory, not a merge; anything Desktop's live session doesn't know about gets wiped. Confirmed recurring on a second, independent occurrence: 3 new textbox visual JSON files were deleted from disk entirely after a Desktop save, even though `hasUnsavedChanges` was `false` at write time — the flag flipped `true` because the *user* made their own concurrent edit in Desktop, and asking for a save to clear it clobbered the 3 new files anyway.
+
+**Fix / rule going forward:**
+- `reload` is the safe direction (Desktop re-reads from disk, no disk writes). `save` is the dangerous direction (Desktop writes its memory to disk).
+- Before making any direct PBIR/TMDL file edits, check `powerbi-desktop status` first. If `hasUnsavedChanges: true`, get that resolved *before* writing any new files — never after.
+- Once new files are written to disk that Desktop's live model doesn't know about, asking for a Desktop save is never safe again, regardless of what `hasUnsavedChanges` showed at write time. Ideal sequence: check status → write files → reload immediately, minimal gap in between. If a later status check shows `hasUnsavedChanges: true` after writing, that can only be the user's own concurrent Desktop edit (not yours, since your changes are disk-only and invisible to Desktop) — reload immediately instead of asking for a save (this discards the user's not-yet-saved Desktop edit, so warn them first if they were mid-edit).
+
+---
+
 ## Outstanding — not yet fixed/decided
 
 - **Bounded MCP retry rule** for Verify Mode — discussed and agreed in principle (max 1 corrected retry, then stop and report), not yet written into `SKILL.md`. See `SOP.md` for the interim manual guidance.

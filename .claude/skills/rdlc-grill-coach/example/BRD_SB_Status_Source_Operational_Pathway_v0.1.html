@@ -145,8 +145,8 @@
 
   <section id="summary">
     <h2>01 · Executive summary</h2>
-    <p>ShelterBuddy's Source and Status dropdown lists (58 source types, 120 statuses) have grown for 20 years with no governing structure. A stakeholder-led review (Michelle &amp; Cynthia, September 2026) has proposed consolidating 87 "active" statuses down to roughly 6 — built from manual team judgment, not from the system's own 20-year usage history.</p>
-    <p>This artifact proposes a diagnostic capability, not a consolidation plan: an evidence pack showing which Source types and Status values have actually been used, what real operational paths they follow, and where the current taxonomy is structurally incomplete. Two concrete findings already surfaced during intake: the proposed 6-bucket consolidation covers Centre Operation only — Outgoing (roughly a third of the full status taxonomy) and a distinct Vet/Medical path aren't represented at all — and at least three statuses (<code>Deceased</code>, <code>Returned Home</code>, <code>Privately Rehomed</code>) are inconsistently flagged against the system's own <code>IsOutgoing</code> logic, a setup gap independent of any consolidation decision.</p>
+    <p>ShelterBuddy's Source and Status dropdown lists (58 source types, 120 statuses) have grown for 20 years with no governing structure. A stakeholder-led review (Michelle &amp; Cynthia, September 2026) has proposed sorting 87 "active" statuses into 8 categories — 6 retained operational buckets (Available for Adoption, In Foster, Trial Adoption, Hold, Stray Hold, Information) plus 2 removal-disposition categories (Review to Delete/Hide, Delete/Hide) — built from manual team judgment, not from the system's own 20-year usage history.</p>
+    <p>This artifact proposes a diagnostic capability, not a consolidation plan: an evidence pack showing which Source types and Status values have actually been used, what real operational paths they follow, and where the current taxonomy is structurally incomplete. Two concrete findings already surfaced during intake: the proposed 6-bucket operational taxonomy (the 2 disposition categories aren't operational groups, they're a removal list) covers Centre Operation only — Outgoing (roughly a third of the full status taxonomy) and a distinct Vet/Medical path aren't represented at all — and at least three statuses (<code>Deceased</code>, <code>Returned Home</code>, <code>Privately Rehomed</code>) are inconsistently flagged against the system's own <code>IsOutgoing</code> logic, a setup gap independent of any consolidation decision.</p>
     <p>This supports one decision: how ShelterBuddy's status/substatus taxonomy should be consolidated and formalized as an Operational Group SOP. It does not propose or finalize that taxonomy itself — that stays a management judgment, grounded in real operational need. Intended delivery is a static HTML analysis pack, reviewed once with the decision owner(s), not a recurring monitored report.</p>
     <div class="callout note"><strong>Interpretation boundary</strong><br>This is diagnostic evidence, not a KPI or Signal artifact. It carries no ongoing threshold, no Red/Amber/Green rating, and does not itself define the target Operational Group structure.</div>
   </section>
@@ -186,7 +186,7 @@
       <li>Source-type usage and care-pathway classification, reusing and extending the existing draft work.</li>
       <li>Status-value usage frequency across the full 120-row list, not just the subset Michelle &amp; Cynthia's document covered.</li>
       <li>An explicit 3-stage structural map (Intake / Centre Operation / Outgoing), grounded in the system's own <code>IsIncoming</code> / <code>IsInCare</code> / <code>IsOutgoing</code> flags.</li>
-      <li>A side-by-side comparison of the proposed 6-bucket consolidation against that full structural map, naming the gaps explicitly (Outgoing, Vet/Medical).</li>
+      <li>A side-by-side comparison of the proposed 8-category sort (6 retained operational buckets + 2 removal-disposition categories) against that full structural map, naming the gaps explicitly (Outgoing, Vet/Medical).</li>
       <li>Disclosure of setup/flag inconsistencies found in the source data itself, independent of the consolidation question.</li>
     </ul>
   </section>
@@ -199,7 +199,7 @@
         <tr><td>1</td><td>Which Source types have actually been used historically, and which have zero or near-zero usage?</td><td>Intake counts by Source type, 2006–latest</td><td><span class="tag">Answered</span> already in the pathway document (5 incoming types with zero intakes since 2006)</td></tr>
         <tr><td>2</td><td>For each Source type, what is the empirical care pathway — typical status sequence, median days, common outcomes?</td><td>Pathway document's "typical status path" column</td><td><span class="tag">Answered</span></td></tr>
         <tr><td>3</td><td>Which of the 120 Status values are genuinely in use, and how often, versus never used?</td><td>Status usage frequency, full 120-row list</td><td><span class="tag">Partial</span> — Michelle &amp; Cynthia's "delete/hide" list names candidates; not checked against frequency for every row</td></tr>
-        <tr><td>4</td><td>What operational stages does the current taxonomy represent, and where does the proposed 6-bucket consolidation leave gaps?</td><td>Flag-based stage map vs. proposed buckets</td><td><span class="tag">Answered</span> — Outgoing and Vet/Medical gaps identified</td></tr>
+        <tr><td>4</td><td>What operational stages does the current taxonomy represent, and where does the proposed 8-category sort (6 retained buckets + 2 removal categories) leave gaps?</td><td>Flag-based stage map vs. proposed buckets</td><td><span class="tag">Answered</span> — Outgoing and Vet/Medical gaps identified</td></tr>
         <tr><td>5</td><td>What are the actual status-to-status transition patterns, and which look anomalous against expected stage ordering?</td><td>Status transition frequency map</td><td><span class="tag">Blocked</span> — needs the Status History event log, not yet built (§9, §12)</td></tr>
         <tr><td>6</td><td>Where does the current Source/Status setup show configuration inconsistencies that should be corrected regardless of the consolidation decision?</td><td>Flag-consistency audit</td><td><span class="tag">Partial</span> — 3 <code>IsOutgoing</code> gaps found so far; not a complete audit of all 120 rows</td></tr>
         <tr><td>7</td><td>How does Michelle &amp; Cynthia's proposed consolidation compare against the empirical evidence?</td><td>Side-by-side comparison, per status</td><td><span class="tag">Not started</span></td></tr>
@@ -266,7 +266,7 @@
         <li>Source-type historical usage and care-pathway classification (extends existing draft work)</li>
         <li>Status-value historical usage across the full 120-row list</li>
         <li>3-stage structural mapping (Intake / Centre Operation / Outgoing), grounded in system flags</li>
-        <li>Side-by-side comparison of the proposed 6-bucket consolidation against the full structural map</li>
+        <li>Side-by-side comparison of the proposed 8-category sort (6 retained operational buckets + 2 removal-disposition categories) against the full structural map</li>
         <li>Disclosure of setup/flag-consistency findings (e.g. the 3 <code>IsOutgoing</code> gaps)</li>
       </ul>
     </div>
@@ -329,7 +329,7 @@
     <h2>15 · Success criteria</h2>
     <ul>
       <li>Management can see, for every Source type and Status value, its actual historical usage and path context.</li>
-      <li>The gap between the proposed 6-bucket consolidation and a complete 3-stage operational path is visible and explicit, not implied.</li>
+      <li>The gap between the proposed 8-category sort (6 retained operational buckets + 2 removal-disposition categories) and a complete 3-stage operational path is visible and explicit, not implied.</li>
       <li>All identified setup/flag inconsistencies (minimum: the 3 <code>IsOutgoing</code> gaps) are raised to the SB Data Owner.</li>
       <li>Management has the evidence needed to define the Operational Group taxonomy themselves — this artifact has not pre-decided it for them.</li>
     </ul>

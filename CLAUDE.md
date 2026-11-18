@@ -2,6 +2,8 @@
 
 Animal Flow — Foster Pathway Analytics, Phase 1 (BC SPCA). RDLC OS project — see `README.md` for the full agent-chain narrative; this file is the short, operational version Claude Code loads automatically every session.
 
+**This repo now hosts multiple separate initiatives, not just Phase 1.** Before starting any work, read `PROJECT_STATUS.md` — it's the short index of every initiative in flight (Phase 1, CATU, SB Status/Source, Self-Service Data Platform, Triage Dashboard, Foster Volunteer Engagement, etc.). Each row links to its full detail file under `initiatives/` — read that file before resuming that initiative's work. For the full "how to behave when picking this up cold" procedure, read `SOP_New_Chat_Session.md`. Update the relevant index row and detail file whenever an initiative materially advances — don't let them go stale.
+
 ## Project Structure
 
 ```

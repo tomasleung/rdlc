@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposed Status Grouping</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.55; font-size:15.5px;}
+  .wrap{max-width:980px; margin:0 auto; padding:0 28px 80px;}
+
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:56px 48px 40px; margin-bottom:44px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12.5px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:16px;}
+  .cover h1{font-size:30px; margin:0 0 10px; line-height:1.25;}
+  .cover .subtitle{font-size:16px; color:#cfe1ea; margin:0 0 20px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:20px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; letter-spacing:.03em; background:var(--amber); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; margin-top:20px; font-size:13.5px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+
+  h2{color:var(--navy); font-size:21px; margin:44px 0 6px; padding-bottom:8px; border-bottom:2px solid var(--line);}
+  h2 .num{color:var(--teal); margin-right:8px;}
+  h3{color:var(--blue); font-size:15.5px; margin:22px 0 8px;}
+  p{margin:9px 0;}
+
+  .callout{border-radius:8px; padding:15px 18px; margin:16px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.risk{background:var(--red-soft); border-left:4px solid var(--red); color:#6b2420;}
+
+  /* Summary count table */
+  table.summary-table{width:100%; border-collapse:collapse; margin:16px 0;}
+  table.summary-table th{background:var(--navy); color:#fff; text-align:left; padding:9px 12px; font-size:12.5px;}
+  table.summary-table td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:14px;}
+  table.summary-table tr:nth-child(even) td{background:var(--navy-soft);}
+  table.summary-table td.n{font-weight:700; text-align:right; color:var(--navy);}
+
+  /* Group cards */
+  .group-card{border:1px solid var(--line); border-radius:10px; margin:16px 0; overflow:hidden;}
+  .group-head{display:flex; align-items:center; justify-content:space-between; padding:12px 18px; background:var(--navy-soft);}
+  .group-head h3{margin:0; color:var(--navy); font-size:15px;}
+  .group-head .count{background:var(--navy); color:#fff; font-weight:700; font-size:12.5px; border-radius:12px; padding:3px 11px;}
+  .group-card.review .group-head{background:var(--amber-soft);}
+  .group-card.review .group-head h3{color:var(--amber);}
+  .group-card.review .group-head .count{background:var(--amber);}
+  .group-card.delete .group-head{background:var(--red-soft);}
+  .group-card.delete .group-head h3{color:var(--red);}
+  .group-card.delete .group-head .count{background:var(--red);}
+  .group-card.notdef .group-head{background:var(--grey-soft);}
+  .group-card.notdef .group-head h3{color:var(--grey);}
+  .group-card.notdef .group-head .count{background:var(--grey);}
+  .group-body{padding:14px 18px;}
+  .id-list{display:flex; flex-wrap:wrap; gap:6px;}
+  .id-chip{background:#fff; border:1px solid var(--line); border-radius:14px; padding:3px 10px; font-size:13px;}
+  .id-chip b{color:var(--navy); margin-right:4px;}
+  .id-chip.flag{border-color:var(--amber); background:var(--amber-soft);}
+
+  /* Not Defined table */
+  table.nd-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:13px;}
+  table.nd-table th{background:var(--grey); color:#fff; text-align:left; padding:7px 10px; font-size:11.5px; text-transform:uppercase; letter-spacing:.02em;}
+  table.nd-table td{padding:6px 10px; border-bottom:1px solid var(--line);}
+  table.nd-table tr:nth-child(even) td{background:var(--grey-soft);}
+  .flag-yes{color:var(--teal); font-weight:700;}
+  .flag-no{color:var(--grey);}
+
+  /* Finding cards */
+  .finding{border-left:4px solid var(--red); background:var(--red-soft); border-radius:6px; padding:12px 16px; margin:12px 0; font-size:14px;}
+  .finding b{display:block; color:var(--red); margin-bottom:4px; font-size:13.5px;}
+  .finding.amber{border-left-color:var(--amber); background:var(--amber-soft);}
+  .finding.amber b{color:var(--amber);}
+
+  footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--grey);}
+
+  @media (max-width:680px){
+    .cover{padding:44px 24px 36px;} .cover h1{font-size:24px;}
+    .cover-meta{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Pathway Analytics &middot; SB Status/Source Diagnostic</div>
+  <div class="cover-main">
+    <h1>Proposed Status Grouping</h1>
+    <p class="subtitle">Cross-referencing Michelle &amp; Cynthia's September 2026 status consolidation proposal against the full 120-row Status export — companion to <em>Intake Source Types and Care Pathways</em>.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft — Diagnostic Evidence</span><span class="status v">v0.1</span>
+    <div class="cover-meta">
+      <div><b>Sources</b>status.csv (120 rows); SB_StatusRvw_MH_Sept2026 – MH COMMENTS.docx</div>
+      <div><b>Supports</b>BRD_SB_Status_Source_Operational_Pathway_v0.1.html, Business Question 7</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="callout note">
+  <b>What this is</b>
+  A row-by-row cross-reference, not a new taxonomy proposal. Every one of the 120 statuses in <code>status.csv</code> is matched against Michelle &amp; Cynthia's proposed groups by ID. Where the proposal doesn't mention a status at all, it's labeled <strong>Not Defined</strong> — an explicit gap, not a silent omission. This document doesn't decide where a Not Defined status should go; that's the same management judgment call this whole BRD defers (see §15 Interpretation boundary).
+</div>
+
+<h2><span class="num">01</span>Summary</h2>
+<table class="summary-table">
+  <tr><th>Proposed Group</th><th>Count</th><th>Note</th></tr>
+  <tr><td>Available for Adoption</td><td class="n">7</td><td>Including bucket ID 3 itself</td></tr>
+  <tr><td>In Foster</td><td class="n">7</td><td>Including bucket ID 4 itself</td></tr>
+  <tr><td>Trial Adoption</td><td class="n">0</td><td>Proposed as ID 74, replacing FTA — not present in this export</td></tr>
+  <tr><td>Hold</td><td class="n">15</td><td>Including bucket ID 20 itself</td></tr>
+  <tr><td>Stray Hold</td><td class="n">4</td><td>Including bucket ID 72 itself; ID 12 "Found" reviewed and explicitly excluded</td></tr>
+  <tr><td>Information</td><td class="n">1</td><td>Bucket ID 45 itself — flagged with a strikethrough in the source doc; see Finding F6</td></tr>
+  <tr><td>Review to Delete/Hide</td><td class="n">5</td><td>7 listed in source doc; 2 (IDs 11, 162) absent from this export</td></tr>
+  <tr><td>Delete/Hide</td><td class="n">28</td><td>38 listed in source doc; 10 absent from this export</td></tr>
+  <tr><td>Reclassify as Source</td><td class="n">1</td><td>ID 65, Owner Relinquishment — explicit special case, not a status group at all</td></tr>
+  <tr><td>Ambiguous (multi-group)</td><td class="n">1</td><td>ID 112 — proposed into three different groups at once; see Finding F1</td></tr>
+  <tr><td><strong>Not Defined</strong></td><td class="n"><strong>50</strong></td><td>Not mentioned anywhere in the proposal — 42% of the full export</td></tr>
+  <tr><td><strong>Total (this export)</strong></td><td class="n"><strong>120</strong></td><td></td></tr>
+</table>
+<p style="font-size:13.5px; color:var(--grey);">Counts reconcile to the 120 rows in <code>status.csv</code>, not to the proposal's own "87 active statuses" figure — that figure still doesn't reconcile to any flag in this export (BRD §4/§12, accepted limitation).</p>
+
+<h2><span class="num">02</span>Proposed groups — matched statuses</h2>
+
+<div class="group-card">
+  <div class="group-head"><h3>Available for Adoption (bucket ID 3)</h3><span class="count">7</span></div>
+  <div class="group-body"><div class="id-list">
+    <span class="id-chip"><b>3</b>Available For Adoption</span>
+    <span class="id-chip"><b>8</b>Awaiting Foster</span>
+    <span class="id-chip"><b>91</b>Awaiting Transfer</span>
+    <span class="id-chip"><b>103</b>Bequest Animal On Site</span>
+    <span class="id-chip"><b>111</b>Awaiting Surgery - Not Spay/Neuter</span>
+    <span class="id-chip"><b>124</b>Available for Adoption - Awaiting Spay/Neuter</span>
+    <span class="id-chip"><b>149</b>Available For Adoption - No Web Presence</span>
+  </div>
+  <p style="font-size:13px; color:var(--grey); margin-top:10px;">Source doc also lists IDs 112 (see Finding F1), 153, 154 — the latter two ("Internal Transfer In/Out") don't exist in this export.</p>
+  </div>
+</div>
+
+<div class="group-card">
+  <div class="group-head"><h3>In Foster (bucket ID 4)</h3><span class="count">7</span></div>
+  <div class="group-body"><div class="id-list">
+    <span class="id-chip"><b>4</b>In Foster</span>
+    <span class="id-chip"><b>35</b>Hold In Foster</span>
+    <span class="id-chip"><b>36</b>Protective Custody In Foster</span>
+    <span class="id-chip"><b>92</b>Available for Adoption - In Foster</span>
+    <span class="id-chip"><b>104</b>Bequest Animal Off Site</span>
+    <span class="id-chip"><b>130</b>Awaiting Spay/Neuter - In Foster</span>
+    <span class="id-chip"><b>143</b>Emergency Evacuation - In Foster</span>
+  </div>
+  <p style="font-size:13px; color:var(--grey); margin-top:10px;">Source doc also lists ID 112 (see Finding F1).</p>
+  </div>
+</div>
+
+<div class="group-card">
+  <div class="group-head"><h3>Trial Adoption (bucket ID 74, replaces FTA)</h3><span class="count">0</span></div>
+  <div class="group-body"><p>No substatus list given in the source document, and ID 74 itself is not present in this 120-row export. This is a <em>proposed new status</em>, not a regrouping of existing ones — it has no current data footprint to validate against.</p></div>
+</div>
+
+<div class="group-card">
+  <div class="group-head"><h3>Hold (bucket ID 20)</h3><span class="count">15</span></div>
+  <div class="group-body"><div class="id-list">
+    <span class="id-chip"><b>1</b>Euthanasia / Cremation Request</span>
+    <span class="id-chip"><b>9</b>Awaiting Sort</span>
+    <span class="id-chip"><b>20</b>Hold</span>
+    <span class="id-chip"><b>28</b>Protective Custody/Hold</span>
+    <span class="id-chip"><b>38</b>Hold In Vet Care</span>
+    <span class="id-chip"><b>40</b>Hold Quarantine</span>
+    <span class="id-chip"><b>42</b>Awaiting Euthanasia</span>
+    <span class="id-chip"><b>49</b>Emergency Boarding</span>
+    <span class="id-chip"><b>54</b>Court Hold</span>
+    <span class="id-chip"><b>55</b>Awaiting Behavioral Assessment</span>
+    <span class="id-chip"><b>63</b>Hold Agency Transfer</span>
+    <span class="id-chip"><b>78</b>Emergency Evacuation - Temporary</span>
+    <span class="id-chip flag"><b>79</b>Awaiting Final Disposition</span>
+    <span class="id-chip"><b>107</b>Protective Custody Hold Quarantine</span>
+    <span class="id-chip"><b>140</b>Protective Custody - Awaiting Foster</span>
+  </div>
+  <p style="font-size:13px; color:var(--grey); margin-top:10px;">ID 79 (amber) is a corrected reference — see Finding F2. Source doc also lists ID 112 (Finding F1) and ID 83 "Hold Medical/Surgery Recovery," which is absent from this export and separately flagged "NEEDS MORE" discussion with Vet Services in the source document.</p>
+  </div>
+</div>
+
+<div class="group-card">
+  <div class="group-head"><h3>Stray Hold (bucket ID 72)</h3><span class="count">4</span></div>
+  <div class="group-body"><div class="id-list">
+    <span class="id-chip"><b>72</b>Stray Hold</span>
+    <span class="id-chip"><b>144</b>Euthanised During Stray Hold Time</span>
+    <span class="id-chip"><b>150</b>Stray Hold - In Vet Care</span>
+    <span class="id-chip"><b>151</b>Stray Hold - Awaiting transfer</span>
+  </div>
+  <p style="font-size:13px; color:var(--grey); margin-top:10px;">ID 12 "Found" was reviewed and struck through in the source document — explicitly considered and excluded, not simply omitted.</p>
+  </div>
+</div>
+
+<div class="group-card">
+  <div class="group-head"><h3>Information (bucket ID 45)</h3><span class="count">1</span></div>
+  <div class="group-body"><div class="id-list">
+    <span class="id-chip"><b>45</b>Information</span>
+  </div>
+  <p style="font-size:13px; color:var(--grey); margin-top:10px;">No substatus list — described as "Community S/N, dispatch, license sales, L&amp;F; animals not in care but need SB#." See Finding F6 for a contradiction in how the source document treats this bucket.</p>
+  </div>
+</div>
+
+<div class="group-card review">
+  <div class="group-head"><h3>Review to Delete/Hide</h3><span class="count">5</span></div>
+  <div class="group-body"><div class="id-list">
+    <span class="id-chip"><b>25</b>Hold Finder</span>
+    <span class="id-chip flag"><b>27</b>(doc: "Stray in Foster")</span>
+    <span class="id-chip"><b>37</b>Adoption Pending / Hold On Property Check</span>
+    <span class="id-chip"><b>146</b>Adopted - Awaiting Pickup</span>
+    <span class="id-chip"><b>147</b>ID Trace</span>
+  </div>
+  <p style="font-size:13px; color:var(--grey); margin-top:10px;">ID 27 (amber) is a name mismatch — see Finding F3. IDs 11 "Temporary Lost File" and 162 "Delayed Adoption" are named in the source document but absent from this export.</p>
+  </div>
+</div>
+
+<div class="group-card delete">
+  <div class="group-head"><h3>Delete/Hide</h3><span class="count">28</span></div>
+  <div class="group-body"><div class="id-list">
+    <span class="id-chip"><b>6</b>Awaiting Spay/Neuter</span>
+    <span class="id-chip"><b>29</b>Protective Custody/Transferred Ownership</span>
+    <span class="id-chip"><b>30</b>Due For Release</span>
+    <span class="id-chip"><b>31</b>Hold For Possible Match</span>
+    <span class="id-chip"><b>33</b>Hold Intervention</span>
+    <span class="id-chip"><b>39</b>Police Hold</span>
+    <span class="id-chip"><b>44</b>Bite Quarantine</span>
+    <span class="id-chip"><b>53</b>Hold Euthanasia</span>
+    <span class="id-chip"><b>68</b>Rehabilitating</span>
+    <span class="id-chip"><b>84</b>Awaiting Behaviour Retest</span>
+    <span class="id-chip"><b>85</b>Awaiting Behaviour Completion</span>
+    <span class="id-chip"><b>89</b>Boarding Client</span>
+    <span class="id-chip"><b>101</b>Bite Quarantine (Home)</span>
+    <span class="id-chip"><b>105</b>Released/Forfeited to Shelter</span>
+    <span class="id-chip"><b>113</b>Awaiting Triage</span>
+    <span class="id-chip"><b>114</b>Awaiting Spay Check</span>
+    <span class="id-chip"><b>116</b>PAT</span>
+    <span class="id-chip"><b>117</b>Disposition Under Final Review</span>
+    <span class="id-chip"><b>118</b>Available for Adoption - Offsite</span>
+    <span class="id-chip"><b>119</b>Hospitalised</span>
+    <span class="id-chip"><b>120</b>Species Management</span>
+    <span class="id-chip"><b>121</b>Under Behavior Modification</span>
+    <span class="id-chip"><b>122</b>Awaiting Triage Completion</span>
+    <span class="id-chip"><b>131</b>Sanctuary/Life Resident</span>
+    <span class="id-chip"><b>142</b>Awaiting Vet Approval - In Foster</span>
+    <span class="id-chip"><b>148</b>Bite Quarantine/RTO</span>
+    <span class="id-chip"><b>158</b>Bite Quarantine - In Foster</span>
+    <span class="id-chip"><b>161</b>Transfer Out - Awaiting Pickup</span>
+  </div>
+  <p style="font-size:13px; color:var(--grey); margin-top:10px;">10 more IDs named in the source document (73, 82, 108, 129, 134, 141, 14, 163, 41, 58) are absent from this export — consistent with the already-documented gap between the "87 active statuses" figure and this file (BRD §12).</p>
+  </div>
+</div>
+
+<div class="group-card">
+  <div class="group-head"><h3>Reclassify as Source (special case)</h3><span class="count">1</span></div>
+  <div class="group-body"><div class="id-list">
+    <span class="id-chip"><b>65</b>Owner Relinquishment</span>
+  </div>
+  <p style="font-size:13px; color:var(--grey); margin-top:10px;">The source document is explicit this shouldn't remain a Status at all: "65 Owner Relinquishment should be kept as a <em>Source</em>, with the status being Hold, Available for Adoption, or In Foster." Not a grouping decision — a taxonomy-category change.</p>
+  </div>
+</div>
+
+<h2><span class="num">03</span>Not Defined — not mentioned anywhere in the proposal</h2>
+<div class="callout warning">
+  <b>The gap you asked to see</b>
+  50 of the 120 statuses in this export (42%) — including <code>Deceased</code>, <code>Returned Home</code>, and <code>Privately Rehomed – New Owner Unknown</code>, all three already flagged elsewhere in this BRD for <code>IsOutgoing</code> inconsistencies — are not named anywhere in Michelle &amp; Cynthia's review: not in the 6 retained buckets, not in Review to Delete/Hide, not in Delete/Hide. The proposal is silent on them, not deliberately excluding them.
+</div>
+<table class="nd-table">
+  <tr><th>ID</th><th>Name</th><th>IsInCare</th><th>IsOutgoing</th><th>IsDeceased</th></tr>
+  <tr><td>2</td><td>Euthanized</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>7</td><td>Under Vet Care</td><td class="flag-yes">Yes</td><td class="flag-no">No</td><td class="flag-no">No</td></tr>
+  <tr><td>16</td><td>Redeemed</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>19</td><td>Matched</td><td class="flag-no">No</td><td class="flag-no">No</td><td class="flag-no">No</td></tr>
+  <tr><td>22</td><td>Transfer Out</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>23</td><td>Unassisted Death</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>24</td><td>Returned To Owner</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>32</td><td>Returned Protective Custody Animal</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>43</td><td>Cremated</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>46</td><td>Interred</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>47</td><td>Lost</td><td class="flag-no">No</td><td class="flag-no">No</td><td class="flag-no">No</td></tr>
+  <tr><td>48</td><td>Euthanasia - RTO</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>50</td><td>Adopted Altered</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>51</td><td>Adopted Offsite (Unaltered)</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>52</td><td>Adopted Offsite (Altered)</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>56</td><td>Adopted Unaltered</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>57</td><td>Wildlife Released</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>59</td><td>Cremation - Private</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>60</td><td>Cremation - Communal</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>61</td><td>DOA</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>64</td><td>Released To Rescue</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>67</td><td>EOA - Euthanized on Arrival</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>71</td><td>Returned Surrender</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>75</td><td>DOA - Final Disposition</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>76</td><td>Emergency Evacuation - Released</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>77</td><td>Emergency Evacuation - Permanent</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>80</td><td>Released to Wildlife Rehabilitator</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>81</td><td>Stolen</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>86</td><td>Euthanized by Offsite Vet</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>87</td><td>Released to Owner at Vet</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>88</td><td>Euthanasia In Field</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>90</td><td>Unresolved File</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>93</td><td>Returned Home</td><td class="flag-no">No</td><td class="flag-no">No</td><td class="flag-no">No</td></tr>
+  <tr><td>100</td><td>Redemption (Offsite)</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>102</td><td>Seized Release</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>110</td><td>Deceased</td><td class="flag-no">No</td><td class="flag-no">No</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>115</td><td>Adopted Offsite</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>123</td><td>DOA Transfer</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>125</td><td>Privately Rehomed - New Owner Unknown</td><td class="flag-no">No</td><td class="flag-no">No</td><td class="flag-no">No</td></tr>
+  <tr><td>126</td><td>Post-operative Death</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>127</td><td>Stray - In Foster</td><td class="flag-yes">Yes</td><td class="flag-no">No</td><td class="flag-no">No</td></tr>
+  <tr><td>133</td><td>Unassisted Death - In Foster</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>137</td><td>Emergency Boarding Returned To Owner</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>145</td><td>DOA - Released to Owner</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+  <tr><td>152</td><td>Adopted to Finder</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>155</td><td>Possible Match</td><td class="flag-no">No</td><td class="flag-no">No</td><td class="flag-no">No</td></tr>
+  <tr><td>156</td><td>Released by Agency</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>157</td><td>Return to Habitat</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-no">No</td></tr>
+  <tr><td>159</td><td>Entered Care</td><td class="flag-no">No</td><td class="flag-no">No</td><td class="flag-no">No</td></tr>
+  <tr><td>160</td><td>Unassisted Death - In Transit</td><td class="flag-no">No</td><td class="flag-yes">Yes</td><td class="flag-yes">Yes</td></tr>
+</table>
+<p style="font-size:13px; color:var(--grey);">27 of these 50 (54%) are already <code>IsOutgoing=True</code> — i.e. they're Centre Operation exit points the proposal's 6-bucket scope was never going to cover anyway (consistent with the BRD's existing Outgoing-stage gap finding). The remaining 23 — including <code>Matched</code>, <code>Lost</code>, <code>Returned Home</code>, <code>Deceased</code>, <code>Privately Rehomed</code>, <code>Entered Care</code>, <code>Possible Match</code>, and <code>Stray - In Foster</code> — sit inside or adjacent to Centre Operation and arguably should have been addressed by a 6-bucket "complete" consolidation.</p>
+
+<h2><span class="num">04</span>Findings from the cross-reference</h2>
+
+<div class="finding">
+  <b>F1 — ID 112 is assigned to three different groups at once</b>
+  "Awaiting Vet Check / Health Exam" (ID 112) appears in the In Foster, Available for Adoption, <em>and</em> Hold substatus lists, each time annotated "(Consolidate with 7 Under Vet Care)." The proposal doesn't resolve which group it actually belongs to — or whether "Under Vet Care" (ID 7) is itself meant to survive as a group, since ID 7 is never given its own final bucket either.
+</div>
+
+<div class="finding amber">
+  <b>F2 — Likely transcription error: "49 Awaiting Final Disposition"</b>
+  The Hold substatus table lists both "49 Emergency Boarding" and "49 Awaiting Final Disposition" — reusing ID 49 for two different names. <code>status.csv</code> confirms ID 49 = Emergency Boarding and ID 79 = Awaiting Final Disposition. This summary maps the second row to ID 79 based on the name match, but the source document itself should be corrected, not silently trusted.
+</div>
+
+<div class="finding amber">
+  <b>F3 — ID 27 name mismatch</b>
+  The Review to Delete/Hide table lists "27 Stray in Foster." <code>status.csv</code> shows ID 27 = "Escaped." Either the source document has the wrong ID, or this export is stale relative to current SB configuration — unresolved, not guessed at here.
+</div>
+
+<div class="finding">
+  <b>F4 — "65 Owner Relinquishment" is a taxonomy-category change, not a grouping decision</b>
+  The source document recommends moving this out of Status entirely and into Source — a structurally different kind of change than every other row in this document, which only reassigns statuses among themselves.
+</div>
+
+<div class="finding amber">
+  <b>F5 — 12 of the 87 IDs named across the proposal's lists don't exist in this export</b>
+  IDs 11, 14, 41, 58, 73, 82, 108, 129, 134, 141, 153, 154, 162, 163, 74 — referenced in Michelle &amp; Cynthia's review or its substatus lists — are absent from <code>status.csv</code>'s 120 rows. Consistent with the already-documented "87 vs. 67/120" reconciliation gap (BRD §4, §12): this export is not a complete picture of every status the prior review had in front of it.
+</div>
+
+<div class="finding amber">
+  <b>F6 — "Information" bucket is both struck through and kept</b>
+  The summary line in the source document reads "~~45 Information~~" (strikethrough), implying removal — but item 6 of the detailed list still describes it in full ("Community S/N, dispatch, license sales, L&amp;F; animals not in care but need SB#"). This document keeps Information in the 6-bucket count per the earlier-confirmed BRD framing, but the contradiction itself is unresolved in the source and should be confirmed with Michelle directly.
+</div>
+
+<div class="finding">
+  <b>F7 — Not Defined is the largest single group</b>
+  At 50 statuses (42% of the export), "not mentioned at all" is bigger than any individual proposed bucket, including Delete/Hide (28). A consolidation proposal that's silent on more statuses than it explicitly addresses is evidence the 87/120-status review wasn't actually exhaustive — independent of whether any individual grouping choice above is right.
+</div>
+
+<footer>
+  Diagnostic evidence only — this document does not propose where a Not Defined status should go, or resolve F1–F6. It feeds Business Question 7 of <code>BRD_SB_Status_Source_Operational_Pathway_v0.1.html</code> ("How does Michelle &amp; Cynthia's proposed consolidation compare against the empirical evidence?"), moving that question from Not Started toward Partial.
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Service Data Platform Epic</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.55; font-size:15.5px;}
+  .wrap{max-width:900px; margin:0 auto; padding:0 28px 80px;}
+
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:56px 48px 40px; margin-bottom:44px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12.5px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:16px;}
+  .cover h1{font-size:30px; margin:0 0 10px; line-height:1.25;}
+  .cover .subtitle{font-size:16px; color:#cfe1ea; margin:0 0 20px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:20px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; letter-spacing:.03em; background:var(--amber); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; margin-top:20px; font-size:13.5px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+
+  h2{color:var(--navy); font-size:21px; margin:44px 0 6px; padding-bottom:8px; border-bottom:2px solid var(--line);}
+  h2 .num{color:var(--teal); margin-right:8px;}
+  h3{color:var(--blue); font-size:15.5px; margin:22px 0 8px;}
+  p{margin:9px 0;}
+
+  .callout{border-radius:8px; padding:15px 18px; margin:16px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+
+  /* Epic field cards */
+  .epic-card{border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:18px 0;}
+  .epic-field{display:grid; grid-template-columns:150px 1fr; gap:14px; padding:14px 18px; border-bottom:1px solid var(--line);}
+  .epic-field:last-child{border-bottom:none;}
+  .epic-field:nth-child(odd){background:#fbfcfc;}
+  .epic-field b{color:var(--navy); font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; padding-top:2px;}
+  .epic-field .val{font-size:14.5px;}
+  .epic-field.pending{background:var(--amber-soft) !important;}
+  .pending-tag{display:inline-block; background:var(--amber); color:#fff; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; border-radius:10px; padding:2px 8px; margin-left:6px; vertical-align:middle;}
+
+  /* Scope split */
+  .split-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0;}
+  .split-col{border-radius:8px; padding:16px 18px; border-top:4px solid var(--teal); background:var(--teal-soft);}
+  .split-col.dept{border-top-color:var(--blue); background:var(--blue-soft);}
+  .split-col h4{margin:0 0 10px; font-size:13.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--teal);}
+  .split-col.dept h4{color:var(--blue);}
+  .split-col ul{margin:0; padding-left:20px;}
+  .split-col li{margin:5px 0; font-size:14px;}
+
+  /* KPI table */
+  table.kpi-table{width:100%; border-collapse:collapse; margin:16px 0;}
+  table.kpi-table th{background:var(--navy); color:#fff; text-align:left; padding:9px 12px; font-size:12.5px;}
+  table.kpi-table td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:13.5px;}
+  table.kpi-table tr:nth-child(even) td{background:var(--navy-soft);}
+  .baseline-pending{color:var(--grey); font-style:italic; font-size:13px;}
+
+  /* ROI driver cards (condensed) */
+  .card-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:18px 0;}
+  .roi-card{border:1px solid var(--line); border-radius:8px; padding:14px 16px; background:#fbfcfc;}
+  .roi-card .n{display:inline-block; background:var(--navy); color:#fff; font-weight:700; font-size:12px; border-radius:50%; width:22px; height:22px; text-align:center; line-height:22px; margin-right:8px;}
+  .roi-card h4{display:inline; font-size:14px; color:var(--navy); margin:0;}
+  .roi-card p{font-size:13.5px; margin:8px 0 0; color:var(--ink);}
+  .roi-card.flagship{grid-column:1 / -1; background:var(--teal-soft); border-color:var(--teal);}
+  .roi-card.flagship h4{color:var(--teal);}
+
+  /* Phase flow */
+  .phase-flow{display:flex; align-items:stretch; gap:0; margin:16px 0; flex-wrap:wrap;}
+  .phase-flow .phase{flex:1; min-width:220px; border:1px solid var(--line); border-radius:8px; padding:14px 16px; background:#fbfcfc;}
+  .phase-flow .phase.p2{background:var(--teal-soft); border-color:var(--teal);}
+  .phase-flow .phase h5{margin:0 0 8px; color:var(--navy); font-size:13px; text-transform:uppercase; letter-spacing:.03em;}
+  .phase-flow .phase.p2 h5{color:var(--teal);}
+  .phase-flow .phase ul{margin:0; padding-left:18px; font-size:13.5px;}
+  .phase-flow .conn{display:flex; align-items:center; justify-content:center; padding:0 10px; color:var(--teal); font-size:20px; font-weight:700;}
+
+  footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--grey);}
+
+  @media (max-width:680px){
+    .split-grid, .card-grid{grid-template-columns:1fr;}
+    .epic-field{grid-template-columns:1fr;}
+    .phase-flow{flex-direction:column;}
+    .phase-flow .conn{transform:rotate(90deg); padding:6px 0;}
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Data Team</div>
+  <div class="cover-main">
+    <h1>Self-Service Data Platform — Asana Epic</h1>
+    <p class="subtitle">Why this product exists and what it delivers, for manager review before posting to Asana.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft — For Manager Review</span><span class="status v">v1.0</span>
+    <div class="cover-meta">
+      <div><b>Source</b>self-service.md (Business Problem Statement, ROI Drivers, KPI targets)</div>
+      <div><b>Related</b>BC SPCA Data Team Service Model (Self-Service vs. Managed Data Product)</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<h2><span class="num">01</span>Epic Summary</h2>
+<div class="epic-card">
+  <div class="epic-field">
+    <b>Problem</b>
+    <div class="val">Departments depend on the Data Team to onboard and analyze every new data source, creating a delivery bottleneck. Small departmental requests compete with enterprise initiatives, business users can't experiment independently, and the Data Team spends time on low-value integration work instead of enterprise data products.</div>
+  </div>
+  <div class="epic-field">
+    <b>Objective</b>
+    <div class="val">Provide a governed Microsoft Fabric platform where the Data Team owns provisioning, governance, security, and Bronze ingestion patterns, while departments independently develop Silver, Gold, semantic models, and reporting for their own data.</div>
+  </div>
+  <div class="epic-field">
+    <b>Scope</b>
+    <div class="val">See the Data Team / Department split below — this epic delivers the platform and guardrails, not any one department's analytics solution.</div>
+  </div>
+  <div class="epic-field">
+    <b>Ask</b>
+    <div class="val">Approval to provision the first self-service workspace as a pilot with Marketing (Mailchimp), before offering it more broadly to other departments.</div>
+  </div>
+  <div class="epic-field">
+    <b>Timeline</b>
+    <div class="val">No hard deadline at this stage. The Mailchimp pilot begins once approved; a broader rollout timeline will be set after pilot results are in.</div>
+  </div>
+  <div class="epic-field">
+    <b>Governance Guardrail</b>
+    <div class="val">Self-service operates <em>inside</em> existing Fabric governance, not around it: every workspace is provisioned under the same security model, Entra group structure, and capacity monitoring the Data Team already maintains for Managed Data Products. The Data Team retains Bronze ingestion ownership, so there is always one governed landing point per source — departments build Silver/Gold on top of it, not a parallel ungoverned pipeline.</div>
+  </div>
+  <div class="epic-field">
+    <b>Business Outcome</b>
+    <div class="val">Faster access to data, reduced delivery bottlenecks, improved scalability, and a pathway for identifying future enterprise-wide Managed Data Products.</div>
+  </div>
+</div>
+
+<h3>Scope: who owns what</h3>
+<div class="split-grid">
+  <div class="split-col">
+    <h4>Data Team owns</h4>
+    <ul>
+      <li>Fabric capacity and workspace governance</li>
+      <li>Security model and Entra group configuration</li>
+      <li>Bronze ingestion patterns per source</li>
+      <li>Shared platform standards</li>
+    </ul>
+  </div>
+  <div class="split-col dept">
+    <h4>Department owns</h4>
+    <ul>
+      <li>Silver and Gold transformations</li>
+      <li>Business rules and semantic models</li>
+      <li>Reports and downstream analytics</li>
+      <li>Ongoing maintenance of their own solution</li>
+    </ul>
+  </div>
+</div>
+
+<h3>Success Measures (Year 1)</h3>
+<table class="kpi-table">
+  <tr><th>KPI</th><th>Baseline</th><th>Year 1 Target</th></tr>
+  <tr><td>Self-service workspaces provisioned</td><td class="baseline-pending">Not yet tracked</td><td>1–2</td></tr>
+  <tr><td>New data sources onboarded</td><td class="baseline-pending">Not yet tracked</td><td>1–2</td></tr>
+  <tr><td>Department-owned solutions</td><td class="baseline-pending">Not yet tracked</td><td>1–2</td></tr>
+  <tr><td>Time to onboard a new source</td><td class="baseline-pending">Not yet tracked</td><td>&lt; 3 weeks</td></tr>
+  <tr><td>Data Team effort per source</td><td class="baseline-pending">Not yet tracked</td><td>Reduce by 50%</td></tr>
+  <tr><td>Fabric cost visibility</td><td class="baseline-pending">Not yet tracked</td><td>100% of workspaces</td></tr>
+</table>
+
+<h2><span class="num">02</span>Supporting ROI Rationale</h2>
+<p style="font-size:13.5px; color:var(--grey);">Background for the epic, not part of the Asana description itself — condensed from your ROI Drivers section.</p>
+<div class="card-grid">
+  <div class="roi-card"><span class="n">1</span><h4>Faster time to insight</h4><p>Departments get a workspace and Bronze data directly, instead of waiting in a backlog for Data Team development.</p></div>
+  <div class="roi-card"><span class="n">2</span><h4>Reduced Data Team bottlenecks</h4><p>The Data Team stops building one-off departmental integrations (Mailchimp, SurveyMonkey, volunteer systems) and focuses on Fabric governance and enterprise data products.</p></div>
+  <div class="roi-card"><span class="n">3</span><h4>Increased data adoption</h4><p>Lower effort to start means more teams become data consumers and more business-led innovation occurs.</p></div>
+  <div class="roi-card"><span class="n">4</span><h4>Lower cost of analytics delivery</h4><p>One platform — Fabric capacity, governance, security, workspace process — supports many departments instead of a custom solution per department.</p></div>
+  <div class="roi-card flagship"><span class="n">5</span><h4>Pipeline for future data products</h4><p><strong>The strongest argument in the case.</strong> Self-service is the incubation layer: a department's self-service solution that later needs cross-system integration or multi-team consumption graduates into a Managed Data Product — see the Mailchimp example below.</p></div>
+</div>
+
+<h3>Worked example: Marketing / Mailchimp</h3>
+<div class="phase-flow">
+  <div class="phase">
+    <h5>Phase 1 — Self-Service</h5>
+    <ul>
+      <li>Marketing wants Mailchimp data</li>
+      <li>Data Team lands Mailchimp into Bronze</li>
+      <li>Marketing builds its own Silver transformations</li>
+    </ul>
+  </div>
+  <div class="conn">&#8594;</div>
+  <div class="phase p2">
+    <h5>Phase 2 — Candidate for Managed Data Product</h5>
+    <ul>
+      <li>Marketing wants Mailchimp + Raiser's Edge integration</li>
+      <li>Multiple teams begin consuming the data</li>
+      <li>Graduates from Self-Service into a Managed Data Product</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
