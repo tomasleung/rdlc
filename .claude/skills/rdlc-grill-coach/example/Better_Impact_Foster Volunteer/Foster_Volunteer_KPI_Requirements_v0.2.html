@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foster Volunteer KPI Requirements v0.2</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.5; font-size:14.5px;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px 80px;}
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:52px 40px 36px; margin-bottom:36px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:14px;}
+  .cover h1{font-size:26px; margin:0 0 8px; line-height:1.25;}
+  .cover .subtitle{font-size:15px; color:#cfe1ea; margin:0 0 18px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:18px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; letter-spacing:.03em; background:var(--amber); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; margin-top:16px; font-size:13px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+  h2{color:var(--navy); font-size:19px; margin:34px 0 6px; padding-bottom:6px; border-bottom:2px solid var(--line);}
+  h3{color:var(--navy); font-size:15.5px; margin:22px 0 8px;}
+  p{margin:8px 0;}
+  .callout{border-radius:8px; padding:13px 16px; margin:14px 0; font-size:13.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.insight{background:var(--teal-soft); border-left:4px solid var(--teal); color:#1d4e49;}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.change{background:var(--blue-soft); border-left:4px solid var(--blue); color:#0d3a4a;}
+
+  /* status lifecycle strip */
+  .lifecycle{display:flex; align-items:stretch; gap:6px; margin:16px 0 8px; flex-wrap:wrap;}
+  .lc-box{background:var(--navy-soft); border:1px solid var(--line); border-radius:8px; padding:10px 12px; min-width:130px; flex:1 1 130px;}
+  .lc-box .lc-name{font-weight:700; color:var(--navy); font-size:13px;}
+  .lc-box .lc-desc{font-size:12px; color:var(--grey); margin-top:3px;}
+  .lc-arrow{display:flex; align-items:center; color:var(--grey); font-size:18px; padding:0 2px;}
+  .lc-branch{display:flex; flex-direction:column; gap:6px; flex:1 1 130px; min-width:130px;}
+  .lc-box.exit-temp{background:var(--amber-soft); border-color:#e3c998;}
+  .lc-box.exit-perm{background:var(--red-soft); border-color:#e0bcb8;}
+
+  table.kpi-req, table.ex-table, table.cast-table{width:100%; border-collapse:collapse; margin:14px 0; font-size:12.8px;}
+  table.kpi-req th, table.ex-table th, table.cast-table th{background:var(--navy); color:#fff; text-align:left; padding:9px 10px; font-size:11px; text-transform:uppercase; letter-spacing:.02em;}
+  table.kpi-req td, table.ex-table td, table.cast-table td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+  table.kpi-req tr:nth-child(even) td, table.ex-table tr:nth-child(even) td, table.cast-table tr:nth-child(even) td{background:var(--navy-soft);}
+  table.kpi-req td.cat{font-weight:700; color:var(--navy); white-space:nowrap;}
+  table.kpi-req td.name, table.ex-table td.name{font-weight:700;}
+  td.key{color:var(--grey); font-weight:700; text-align:center;}
+  .src-pill{display:inline-block; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700; white-space:nowrap;}
+  .src-pill.bi{background:var(--green-soft); color:var(--green);}
+  .src-pill.both{background:var(--blue-soft); color:var(--blue);}
+  .pri-pill{display:inline-block; padding:2px 9px; border-radius:10px; font-size:11px; font-weight:700; white-space:nowrap;}
+  .pri-pill.p1{background:var(--green-soft); color:var(--green);}
+  .pri-pill.p2{background:var(--blue-soft); color:var(--blue);}
+  .result-cell{font-weight:700; color:var(--navy);}
+  .foot{font-size:11.8px; color:var(--grey);}
+
+  footer{margin-top:40px; padding-top:14px; border-top:1px solid var(--line); font-size:11.5px; color:var(--grey);}
+  @media (max-width:900px){ table.kpi-req, table.ex-table, table.cast-table{font-size:11.5px;} .lifecycle{flex-direction:column;} .lc-arrow{transform:rotate(90deg); padding:4px 0;} }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Volunteer Engagement</div>
+  <div class="cover-main">
+    <h1>KPI Requirement Document</h1>
+    <p class="subtitle">For Data Owner review — what Better Impact actually tracks, the measures built from it, and a worked example showing how each one comes out.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft — For Data Owner Review</span><span class="status v">v0.2</span>
+    <div class="cover-meta">
+      <div><b>Data Owner</b>Lindsay (Foster Volunteer Member Support)</div>
+      <div><b>Full technical detail</b>Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html (same folder)</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="callout change">
+  <b>What changed from v0.1</b>
+  Added the Better Impact status walkthrough below, a plain-language note on a data limitation we're assuming, two new base measures (New Foster Created, Archived&ndash;to&ndash;New Ratio), and a worked example using three sample volunteers so every measure's result is shown, not just its formula. The table itself is simplified to the essentials. Member Tenure and Tenure at Exit move out of this table — they're groupings used to break the measures down, not measures themselves, and get their own section in the next version.
+</div>
+
+<h2><span>01</span> &nbsp;What Better Impact actually tracks</h2>
+<p>Every measure below is built from a volunteer's status in Better Impact. Here's the real lifecycle, left to right:</p>
+<div class="lifecycle">
+  <div class="lc-box"><div class="lc-name">Applicant</div><div class="lc-desc">Just applied, not yet reviewed.</div></div>
+  <div class="lc-arrow">&rarr;</div>
+  <div class="lc-box"><div class="lc-name">In Process</div><div class="lc-desc">Being reviewed/onboarded.</div></div>
+  <div class="lc-arrow">&rarr;</div>
+  <div class="lc-box"><div class="lc-name">Active / Accepted</div><div class="lc-desc">Approved — a real foster volunteer.</div></div>
+  <div class="lc-arrow">&rarr;</div>
+  <div class="lc-branch">
+    <div class="lc-box exit-temp"><div class="lc-name">Inactive</div><div class="lc-desc">Temporary pause — may come back.</div></div>
+    <div class="lc-box exit-perm"><div class="lc-name">Archived</div><div class="lc-desc">Permanent exit.</div></div>
+  </div>
+</div>
+<p>Everything below is measuring movement between these five statuses — mainly who's currently <strong>Active/Accepted</strong>, and who's moved to <strong>Archived</strong>.</p>
+
+<div class="callout warning">
+  <b>An assumption we're making</b>
+  Better Impact doesn't appear to keep a full history of status changes — it only keeps the most recent date for each status a volunteer has held. So if a volunteer ever went from Inactive back to Active/Accepted, the only "Active" date we can see is their most recent one, not their original one. Any measure that asks "who was already active as of some past date" could therefore miss someone who was active earlier, took a break, and came back — especially if that break-and-return happened close to the date being checked. We don't yet know how often this actually happens; we're flagging it as a risk, not treating it as solved.
+</div>
+
+<h2><span>02</span> &nbsp;The measures</h2>
+
+<div class="callout insight">
+  <b>Our default preference</b>
+  Wherever possible, we use Better Impact alone. Of the 10 measures below, <strong>8 need only Better Impact</strong>. Only the Engagement pair (rows 9&ndash;10) requires joining to ShelterBuddy, because Better Impact has no field for which specific animal a volunteer fostered — that fact lives only in ShelterBuddy.
+</div>
+
+<table class="kpi-req">
+<tr>
+  <th>Key</th><th>Priority</th><th>Analysis Category</th><th>KPI</th><th>Definition</th><th>Source System</th>
+</tr>
+<tr>
+  <td class="key">1</td><td><span class="pri-pill p1">P1</span></td><td class="cat">Retention</td>
+  <td class="name">Active Fosters Over 1 Year</td>
+  <td>How many volunteers currently marked <strong>Active/Accepted</strong> have held that status for more than one year?</td>
+  <td><span class="src-pill bi">Better Impact</span></td>
+</tr>
+<tr>
+  <td class="key">2</td><td><span class="pri-pill p1">P1</span></td><td class="cat">Retention</td>
+  <td class="name">Active Fosters</td>
+  <td>How many volunteers are currently marked <strong>Active/Accepted</strong>, regardless of how long they've held that status?</td>
+  <td><span class="src-pill bi">Better Impact</span></td>
+</tr>
+<tr>
+  <td class="key">3</td><td><span class="pri-pill p1">P1</span></td><td class="cat">Retention</td>
+  <td class="name">% Active Fosters Over 1 Year</td>
+  <td>Of all volunteers currently marked <strong>Active/Accepted</strong> (2), what percentage have held that status for more than a year (1)?</td>
+  <td><span class="src-pill bi">Better Impact</span></td>
+</tr>
+<tr>
+  <td class="key">4</td><td><span class="pri-pill p1">P1</span></td><td class="cat">Retention</td>
+  <td class="name">Fosters Archived</td>
+  <td>How many volunteers were moved to <strong>Archived</strong> status during the period (year, quarter, or month)?</td>
+  <td><span class="src-pill bi">Better Impact</span></td>
+</tr>
+<tr>
+  <td class="key">5</td><td><span class="pri-pill p1">P1</span></td><td class="cat">Retention</td>
+  <td class="name">Not Yet Archived at Start of Period</td>
+  <td>How many volunteers had already become <strong>Active/Accepted</strong>, and had not yet been moved to <strong>Archived</strong>, as of the start of that same period?</td>
+  <td><span class="src-pill bi">Better Impact</span></td>
+</tr>
+<tr>
+  <td class="key">6</td><td><span class="pri-pill p1">P1</span></td><td class="cat">Retention</td>
+  <td class="name">New Foster Created</td>
+  <td>How many new volunteer records were first created (<strong>Applicant</strong>) during the period?</td>
+  <td><span class="src-pill bi">Better Impact</span></td>
+</tr>
+<tr>
+  <td class="key">7</td><td><span class="pri-pill p1">P1</span></td><td class="cat">Retention</td>
+  <td class="name">Archived&ndash;to&ndash;New Ratio</td>
+  <td>Compared to how many new volunteers joined during the period (6), how many were moved to <strong>Archived</strong> during that same period (4)?</td>
+  <td><span class="src-pill bi">Better Impact</span></td>
+</tr>
+<tr>
+  <td class="key">8</td><td><span class="pri-pill p1">P1</span></td><td class="cat">Retention</td>
+  <td class="name">% Fosters Archived</td>
+  <td>Of the volunteers we already had at the start of the period (5), what percentage were moved to <strong>Archived</strong> by the end of it (4)?</td>
+  <td><span class="src-pill bi">Better Impact</span></td>
+</tr>
+<tr>
+  <td class="key">9</td><td><span class="pri-pill p2">P2</span></td><td class="cat">Engagement</td>
+  <td class="name">Active Fosters With a Recent Foster Placement</td>
+  <td>How many currently <strong>Active/Accepted</strong> volunteers have taken an animal into foster care within the last 90 days?</td>
+  <td><span class="src-pill both">Better Impact + ShelterBuddy</span></td>
+</tr>
+<tr>
+  <td class="key">10</td><td><span class="pri-pill p2">P2</span></td><td class="cat">Engagement</td>
+  <td class="name">% Active Fosters With a Recent Foster Placement</td>
+  <td>Of all currently <strong>Active/Accepted</strong> volunteers (2), what percentage have taken an animal into foster care in the last 90 days (9)?</td>
+  <td><span class="src-pill both">Better Impact + ShelterBuddy</span></td>
+</tr>
+</table>
+
+<h2><span>03</span> &nbsp;Example — three sample volunteers</h2>
+<p>To make every measure concrete, here are three illustrative volunteer records (not real data), followed by what each measure actually returns for them.</p>
+
+<table class="cast-table">
+<tr><th>Name</th><th>Applicant Date</th><th>In Process Date</th><th>Active/Accepted Date on file</th><th>Inactive Date</th><th>Archived Date</th><th>Current Status</th></tr>
+<tr><td><strong>Tom</strong></td><td>2025-01-01</td><td>2025-01-02</td><td>2025-01-06</td><td>2025-03-03</td><td>2025-06-01</td><td>Archived</td></tr>
+<tr><td><strong>Sarah</strong></td><td>2024-01-01</td><td>2024-01-03</td><td>2024-09-01 *</td><td>2024-06-01</td><td>&mdash;</td><td>Active/Accepted</td></tr>
+<tr><td><strong>Maria</strong></td><td>2023-03-01</td><td>2023-03-03</td><td>2023-03-10</td><td>&mdash;</td><td>&mdash;</td><td>Active/Accepted</td></tr>
+</table>
+<p class="foot">* Sarah's real first Active/Accepted date was 2024-01-10. She went Inactive on 2024-06-01 and came back Active/Accepted on 2024-09-01. Because Better Impact only keeps the most recent date per status (see the assumption above), the date on file shows 2024-09-01, not her true start — this is the exact risk being flagged, shown with a real date instead of in the abstract.</p>
+
+<p>Measured for the period <strong>Year 2025</strong>, as of <strong>Dec 31, 2025</strong>:</p>
+<table class="ex-table">
+<tr><th>Key</th><th>KPI</th><th>Result</th><th>Who's counted</th></tr>
+<tr><td class="key">1</td><td class="name">Active Fosters Over 1 Year</td><td class="result-cell">2</td><td>Sarah, Maria — both Active/Accepted today and over a year on their Active date on file</td></tr>
+<tr><td class="key">2</td><td class="name">Active Fosters</td><td class="result-cell">2</td><td>Sarah, Maria (Tom is Archived, excluded)</td></tr>
+<tr><td class="key">3</td><td class="name">% Active Fosters Over 1 Year</td><td class="result-cell">100%</td><td>2 &divide; 2</td></tr>
+<tr><td class="key">4</td><td class="name">Fosters Archived</td><td class="result-cell">1</td><td>Tom (Archived 2025-06-01, inside 2025)</td></tr>
+<tr><td class="key">5</td><td class="name">Not Yet Archived at Start of Period</td><td class="result-cell">2</td><td>Sarah, Maria — both Active before Jan 1, 2025 and not yet Archived. Tom excluded: his Active date (Jan 6) is after Jan 1</td></tr>
+<tr><td class="key">6</td><td class="name">New Foster Created</td><td class="result-cell">1</td><td>Tom (Applicant date 2025-01-01, inside 2025)</td></tr>
+<tr><td class="key">7</td><td class="name">Archived&ndash;to&ndash;New Ratio</td><td class="result-cell">100%</td><td>1 &divide; 1</td></tr>
+<tr><td class="key">8</td><td class="name">% Fosters Archived</td><td class="result-cell">50%</td><td>1 &divide; 2</td></tr>
+<tr><td class="key">9</td><td class="name">Active Fosters With a Recent Foster Placement</td><td class="result-cell">&mdash;</td><td>Can't compute from this example — needs the ShelterBuddy link, not yet confirmed</td></tr>
+<tr><td class="key">10</td><td class="name">% Active Fosters With a Recent Foster Placement</td><td class="result-cell">&mdash;</td><td>Same as above</td></tr>
+</table>
+<p class="foot">Note the same numerator (1 Archived) gives two very different-looking results — 100% (row 7) vs. 50% (row 8) — depending on which base it's compared against. That's why rows 5&ndash;8 exist as separate, named measures rather than one single "Attrition %."</p>
+<p class="foot">Also note: in this example, Sarah's break-and-return (footnote above) happened to land before Jan 1, 2025, so row 5 still counts her correctly. If her return had instead happened during 2025, she could have been wrongly left out of row 5 for that year — the assumption above isn't just theoretical, this is exactly where it would bite.</p>
+
+<h2><span>04</span> &nbsp;Dimensions — coming next</h2>
+<div class="callout note">
+  <b>Not in this version, by design</b>
+  <strong>Member Tenure</strong> (grouping Active/Accepted volunteers by how long they've held that status) and <strong>Tenure at Exit</strong> (grouping Archived volunteers by how long they lasted before leaving) are groupings used to break the measures above down further — they are not measures in their own right, so they don't belong in the table above. They'll get their own section in the next version.
+</div>
+
+<div class="callout warning">
+  <b>Still open before any of this is final</b>
+  Data Owner confirmation of the whole set; whether "Active/Accepted Date" is a real, dedicated field in Better Impact or something we'd need to approximate another way; how often the Inactive&rarr;Active break-and-return pattern actually happens; the ShelterBuddy&ndash;Better Impact join key (blocks rows 9&ndash;10); the 90-day window choice; and how far back Better Impact's own records go.
+</div>
+
+<footer>Draft for review — not a confirmed BRD. Full technical detail, formulas, and the reasoning behind each design choice are in Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html, same folder. Sample volunteer data (Tom, Sarah, Maria) is illustrative only — see SCD1_Member_Lifecycle_Validation_Sample_v0.1.csv, same folder.</footer>
+
+</div>
+</body>
+</html>

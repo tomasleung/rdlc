@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Better Impact Integration Options</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.55; font-size:15.5px;}
+  .wrap{max-width:940px; margin:0 auto; padding:0 28px 80px;}
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:56px 48px 40px; margin-bottom:44px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12.5px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:16px;}
+  .cover h1{font-size:28px; margin:0 0 10px; line-height:1.25;}
+  .cover .subtitle{font-size:16px; color:#cfe1ea; margin:0 0 20px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:20px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; letter-spacing:.03em; background:var(--amber); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; margin-top:20px; font-size:13.5px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+  h2{color:var(--navy); font-size:21px; margin:44px 0 6px; padding-bottom:8px; border-bottom:2px solid var(--line);}
+  h2 .num{color:var(--teal); margin-right:8px;}
+  h3{color:var(--blue); font-size:15.5px; margin:22px 0 8px;}
+  p{margin:9px 0;}
+  .callout{border-radius:8px; padding:15px 18px; margin:16px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.insight{background:var(--teal-soft); border-left:4px solid var(--teal); color:#1d4e49;}
+  .callout.risk{background:var(--red-soft); border-left:4px solid var(--red); color:#6b2420;}
+
+  table.tier-table{width:100%; border-collapse:collapse; margin:16px 0;}
+  table.tier-table th{background:var(--navy); color:#fff; text-align:left; padding:9px 12px; font-size:12.5px;}
+  table.tier-table td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:13.5px; vertical-align:top;}
+  table.tier-table tr:nth-child(even) td{background:var(--navy-soft);}
+  .yes{color:var(--green); font-weight:700;}
+  .no{color:var(--grey);}
+
+  .option-card{border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin:16px 0;}
+  .option-card h4{margin:0 0 8px; color:var(--navy); font-size:15px;}
+  .option-card .tag{display:inline-block; background:var(--teal-soft); color:var(--teal); border-radius:12px; padding:2px 10px; font-size:11.5px; font-weight:700; margin-right:6px;}
+  .option-card .tag.cost{background:var(--amber-soft); color:var(--amber);}
+  .option-card .tag.free{background:var(--green-soft); color:var(--green);}
+  .option-card .row{display:grid; grid-template-columns:110px 1fr; gap:8px; margin:6px 0; font-size:13.5px;}
+  .option-card .row b{color:var(--grey); font-size:11.5px; text-transform:uppercase;}
+
+  footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--grey);}
+  @media (max-width:680px){ .cover{padding:44px 24px 36px;} .cover h1{font-size:23px;} .cover-meta{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Volunteer Engagement &middot; Pre-BRD Discovery</div>
+  <div class="cover-main">
+    <h1>Better Impact — Integration Options</h1>
+    <p class="subtitle">How to actually get Better Impact data into the Foster Volunteer Engagement work, and at what cost.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft — Discovery, Not a BRD</span><span class="status v">v0.1</span>
+    <div class="cover-meta">
+      <div><b>Companion to</b>Better_Impact_Foster_Volunteer_Discovery_v0.1.html (status lifecycle + question list)</div>
+      <div><b>Unresolved</b>Which pricing tier BC SPCA currently holds — Foundation, Growth, or Impact</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="callout warning">
+  <b>Blocking unknown</b>
+  Everything below depends on knowing which Better Impact tier BC SPCA is actually on today. None of this project's files or research can answer that — it's the first thing to confirm, before anything else here matters.
+</div>
+
+<h2><span class="num">01</span>Confirmed: no scheduling or automation exists in Better Impact, at any tier</h2>
+<p>Checked directly against Better Impact's own "Comprehensive Guide to Reporting." Every report — Standard or Raw Data, Hours, Schedule, or Personal Profile — runs only when a person manually clicks to run it, and exports only when a person manually clicks to export it. "Saving" a report saves its filter/column configuration for reuse; it does not run it, export it, or email it on any schedule. There is no recurring export, no scheduled email delivery, no SFTP drop — nothing resembling ShelterBuddy's automated API-fed silver-layer pipeline.</p>
+<div class="callout risk">
+  <b>What this means</b>
+  The "no-cost, like SB" option doesn't exist. Whatever path BC SPCA takes, <strong>someone or something has to manually trigger the pull</strong> — either a person on a recurring human schedule, or our own code calling the API on an automated schedule. There is no third way where Better Impact does the scheduling for us.
+</div>
+
+<h2><span class="num">02</span>What each pricing tier includes — read directly from betterimpact.com/features</h2>
+<table class="tier-table">
+  <tr><th>Feature</th><th>Foundation</th><th>Growth</th><th>Impact</th></tr>
+  <tr><td>Access to basic (Standard) reports</td><td class="yes">Included</td><td class="yes">Included</td><td class="yes">Included</td></tr>
+  <tr><td>Advanced scheduling, activity visibility</td><td class="no">—</td><td class="yes">Included</td><td class="yes">Included</td></tr>
+  <tr><td>Standardize complex data reporting</td><td class="no">—</td><td class="no">—</td><td class="yes">Included</td></tr>
+  <tr><td><strong>Customized raw data reporting</strong></td><td class="no">—</td><td class="no">—</td><td class="yes">Included</td></tr>
+  <tr><td><strong>JSON-based REST API</strong></td><td class="no">—</td><td class="no">—</td><td class="yes">Included</td></tr>
+  <tr><td>SSO (Single Sign-On)</td><td class="no">—</td><td class="no">—</td><td class="yes">Included</td></tr>
+</table>
+<p class="small" style="color:var(--grey); font-size:13px;">Source: betterimpact.com/features, as presented to Tomas 2026-11-18. Better Impact's public pricing page lists Foundation/Growth/Impact by admin-seat count (3/10/unlimited) with "Contact Us" pricing — no published dollar figures, confirming any tier change needs a direct sales conversation, not a self-serve upgrade.</p>
+<div class="callout warning">
+  <b>Open question this creates</b>
+  "Access to basic reports" (Foundation) is ambiguous — Better Impact's reporting docs describe both "Standard Reports" (pre-formatted summaries) and "Raw Data Reports" (column-level export, what we'd actually need) as general categories, without stating which tier unlocks Raw Data Reports specifically. The features page lists "Customized raw data reporting" under Impact only, which suggests Raw Data Reports may require Impact tier too — but this isn't confirmed and is worth asking directly, since it changes whether Option A below is actually free.
+</div>
+
+<h2><span class="num">03</span>Two realistic integration paths</h2>
+
+<div class="option-card">
+  <h4>Option A — Manual periodic export <span class="tag free">No added cost, if current tier allows Raw Data Reports</span></h4>
+  <div class="row"><b>How</b><span>A person logs into Better Impact on a recurring cadence (e.g. weekly), manually runs the Personal Profile Raw Data report, exports to CSV/XLSX, and hands it to the Data Team for ingestion into Fabric.</span></div>
+  <div class="row"><b>Gives us</b><span>Current status per volunteer, same fields as the API (status, status reason, last-change date) — still no built-in history.</span></div>
+  <div class="row"><b>Can reconstruct history?</b><span>Yes, but only through human discipline — if every weekly export is kept, Data Team can stitch together a pseudo-history over time (same periodic-snapshot idea from the companion discovery doc). Miss a week and that week's state is gone permanently, since Better Impact itself never kept it either.</span></div>
+  <div class="row"><b>Real risk</b><span>Depends on a person reliably running and handing off the export every cycle — the exact same "administrative reliability" problem Lindsay's brief already flagged for status archiving. This isn't a lesser-risk option, it's the same risk moved to a different task.</span></div>
+</div>
+
+<div class="option-card">
+  <h4>Option B — API-based automated pull <span class="tag cost">Likely requires Impact tier (cost to confirm)</span></h4>
+  <div class="row"><b>How</b><span>A Fabric pipeline (or similar) calls the Better Impact REST API on an automated schedule (e.g. nightly), using the <code>updated_since</code> filter to pull only changed profiles, landing results the same way ShelterBuddy's API feed already does.</span></div>
+  <div class="row"><b>Gives us</b><span>The exact same fields as Option A (current status + last-change date) — the API does not expose more data than the Raw Data Report. No history either way.</span></div>
+  <div class="row"><b>Real benefit over A</b><span>Reliability and no manual labor, not more data. Removes the human-discipline failure point — the pull happens whether or not anyone remembers. That is the entire value proposition of paying for this tier, if an upgrade is in fact required.</span></div>
+  <div class="row"><b>Cost</b><span>Unconfirmed — Better Impact's pricing is "Contact Us" only, no published figures. Needs a direct conversation with Better Impact sales once the current tier is confirmed.</span></div>
+</div>
+
+<div class="callout insight">
+  <b>The actual decision, once facts are in</b>
+  Since neither option returns history, the choice between A and B is really "do we trust a recurring manual export forever, or pay for automation that removes that single point of failure" — not "which one gives us better data." If BC SPCA is already planning to upgrade to Impact tier for other reasons (SSO, advanced reporting), the marginal case for the API specifically is just automation reliability, worth knowing before that conversation with Better Impact sales.
+</div>
+
+<h2><span class="num">04</span>Open questions to resolve next</h2>
+<ol>
+  <li>Which tier does BC SPCA currently hold — Foundation, Growth, or Impact? <em>(Blocks everything else in this document.)</em></li>
+  <li>At that current tier, is the Personal Profile Raw Data report actually accessible, or only Standard (pre-formatted) reports? Confirms whether Option A is really free today.</li>
+  <li>If an upgrade to Impact tier is needed for API access, what does Better Impact actually quote for BC SPCA's size/admin count? (No published pricing — direct sales conversation required.)</li>
+  <li>Does the Foster Volunteer Engagement initiative's data need justify that cost on its own, or would it only make sense bundled with other reasons to upgrade (SSO, advanced reporting)? This is a business decision, not a technical one — flagging it, not deciding it here.</li>
+</ol>
+
+<footer>Discovery material only — not a BRD, not a resourcing decision. Pricing/tier facts current as of research performed 2026-11-18; Better Impact's own published pricing has no dollar figures, so cost specifics require direct vendor contact.</footer>
+
+</div>
+</body>
+</html>

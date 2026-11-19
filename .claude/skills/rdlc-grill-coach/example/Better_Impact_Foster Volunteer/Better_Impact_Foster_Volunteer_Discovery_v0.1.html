@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Better Impact Foster Volunteer Discovery</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.55; font-size:15.5px;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 28px 80px;}
+
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:56px 48px 40px; margin-bottom:44px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12.5px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:16px;}
+  .cover h1{font-size:28px; margin:0 0 10px; line-height:1.25;}
+  .cover .subtitle{font-size:16px; color:#cfe1ea; margin:0 0 20px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:20px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; letter-spacing:.03em; background:var(--amber); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; margin-top:20px; font-size:13.5px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+
+  h2{color:var(--navy); font-size:21px; margin:44px 0 6px; padding-bottom:8px; border-bottom:2px solid var(--line);}
+  h2 .num{color:var(--teal); margin-right:8px;}
+  h3{color:var(--blue); font-size:15.5px; margin:22px 0 8px;}
+  p{margin:9px 0;}
+
+  .callout{border-radius:8px; padding:15px 18px; margin:16px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.insight{background:var(--teal-soft); border-left:4px solid var(--teal); color:#1d4e49;}
+
+  /* lifecycle chain */
+  .chain{display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin:18px 0;}
+  .chain .step{background:var(--navy-soft); border:1px solid var(--line); border-radius:8px; padding:9px 16px; font-weight:600; color:var(--navy); font-size:14px; text-align:center;}
+  .chain .step.exit{background:var(--amber-soft); border-color:var(--amber); color:#6b4209;}
+  .chain .arrow{color:var(--teal); font-size:17px;}
+
+  .lifecycle-table{width:100%; border-collapse:collapse; margin:16px 0;}
+  .lifecycle-table th{background:var(--navy); color:#fff; text-align:left; padding:9px 12px; font-size:12.5px;}
+  .lifecycle-table td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:14px; vertical-align:top;}
+  .lifecycle-table tr:nth-child(even) td{background:var(--navy-soft);}
+
+  /* architecture diagram */
+  .arch-row{display:flex; align-items:stretch; gap:10px; flex-wrap:wrap; margin:18px 0;}
+  .arch-col{flex:1; min-width:150px; border:1px solid var(--line); border-radius:8px; padding:12px 14px;}
+  .arch-col h4{margin:0 0 8px; font-size:12.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--grey);}
+  .arch-col .item{background:var(--grey-soft); border-radius:6px; padding:8px 10px; margin:6px 0; font-size:13px;}
+  .arch-col .item.next{background:var(--amber-soft); border:1px dashed var(--amber); color:#6b4209;}
+  .arch-col .item.core{background:var(--teal-soft); color:#1d4e49; font-weight:600;}
+  .arch-conn{display:flex; align-items:center; justify-content:center; color:var(--teal); font-size:18px; font-weight:700;}
+
+  /* question list */
+  .qgroup{border:1px solid var(--line); border-radius:10px; margin:16px 0; overflow:hidden;}
+  .qgroup-head{background:var(--blue-soft); color:var(--blue); font-weight:700; font-size:13.5px; padding:10px 16px; text-transform:uppercase; letter-spacing:.02em;}
+  .qgroup ol{margin:0; padding:12px 16px 12px 36px;}
+  .qgroup li{margin:8px 0; font-size:14.5px;}
+  .qgroup li .why{display:block; font-size:12.5px; color:var(--grey); margin-top:2px;}
+
+  footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--grey);}
+
+  @media (max-width:680px){
+    .cover{padding:44px 24px 36px;} .cover h1{font-size:23px;}
+    .cover-meta{grid-template-columns:1fr;}
+    .arch-row{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Volunteer Engagement &middot; Pre-BRD Discovery</div>
+  <div class="cover-main">
+    <h1>Better Impact — Foster Volunteer Data Discovery</h1>
+    <p class="subtitle">Researched status lifecycle + a question list for the Better Impact admin, to confirm BC SPCA's actual configuration before any KPI is defined.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft — Discovery, Not a BRD</span><span class="status v">v0.1</span>
+    <div class="cover-meta">
+      <div><b>Feeds</b>Foster Volunteer Engagement grill-coach session (initiative 06), currently mid-session at Q1/Q2</div>
+      <div><b>Intended use</b>Bring to a meeting with BC SPCA's Better Impact admin to confirm/correct against this document</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="callout warning">
+  <b>Status of everything below</b>
+  The lifecycle in Section 1 is Better Impact's publicly documented <em>standard</em> model, researched from their own support site — not yet confirmed against BC SPCA's actual configured account. Nothing here should be treated as fact about BC SPCA's real data until the admin confirms it. That confirmation is the entire purpose of this document.
+</div>
+
+<h2><span class="num">01</span>Researched baseline: Better Impact's standard status lifecycle</h2>
+<div class="chain">
+  <div class="step">Applicant</div><span class="arrow">&#8594;</span>
+  <div class="step">In Process</div><span class="arrow">&#8594;</span>
+  <div class="step">Active (Accepted)</div><span class="arrow">&#8594;</span>
+  <div class="step exit">Inactive</div>
+  <span style="color:var(--grey); font-size:13px;">/</span>
+  <div class="step exit">Archived</div>
+</div>
+<table class="lifecycle-table">
+  <tr><th>Status</th><th>Meaning</th><th>Who sets it / how</th></tr>
+  <tr><td><strong>Applicant</strong></td><td>Just applied; entering the approval process.</td><td>Created when someone applies.</td></tr>
+  <tr><td><strong>In Process</strong></td><td>Going through approval steps (interview, paperwork, etc.).</td><td>Admin moves them here manually.</td></tr>
+  <tr><td><strong>Active / Accepted</strong></td><td>Approved and active with the organization.</td><td>Admin sets this once required paperwork is complete.</td></tr>
+  <tr><td><strong>Inactive</strong></td><td><em>Temporary</em> pause, short or long term — explicitly documented as someone "taking a break" who may return.</td><td>Manual, admin-set.</td></tr>
+  <tr><td><strong>Archived</strong></td><td>The <em>permanent</em> exit — rejected applicants, people who've moved on or been let go.</td><td>Manual, admin-set.</td></tr>
+</table>
+<div class="callout insight">
+  <b>Confirmed from Better Impact's own documentation</b>
+  Status changes are entirely manual — "the status of volunteers can only be changed by an administrator, and it must be changed manually" (one at a time or in bulk). There is no automatic trigger tied to actual volunteer activity. This independently confirms the core problem already identified in Lindsay's research brief: Active/Archived status reflects when an admin got around to updating a profile, not when a volunteer actually started or stopped fostering.
+</div>
+
+<h2><span class="num">02</span>A gap found during research — flag for the admin, not yet resolved</h2>
+<p><strong>"Assign" is not a native Better Impact status.</strong> The lifecycle above has no step corresponding to "this volunteer is currently fostering this animal." That linkage — which volunteer has which animal — lives in ShelterBuddy, via the <code>AnimalID</code>+<code>PersonID</code> placement record, not in Better Impact. This matters for the KPI design: Better Impact can tell us who is nominally <em>Active</em>; it cannot by itself tell us who is actually doing anything right now. Worth confirming with the admin whether Better Impact's configured account has any scheduling/assignment feature in use that comes closer to this, or whether assignment truly only exists on the ShelterBuddy side.</p>
+
+<h2><span class="num">03</span>Where this fits — the standardized-data pipeline</h2>
+<p>Context for why this discovery matters, carried over from the project's own architecture framing:</p>
+<div class="arch-row">
+  <div class="arch-col">
+    <h4>Legacy systems</h4>
+    <div class="item"><strong>ShelterBuddy</strong><br>Animals, and where they are</div>
+    <div class="item next"><strong>Better Impact</strong><br>Foster families &middot; next</div>
+  </div>
+  <div class="arch-conn">&#8594;</div>
+  <div class="arch-col">
+    <h4>Our data product</h4>
+    <div class="item core">Standardized data<br>Status, reasons, care capacity, floor plans</div>
+    <div class="item">Business rules &amp; workflows — stored as data, changed without code</div>
+    <div class="item">RACI — the foundation: who does what, agreed upfront</div>
+  </div>
+  <div class="arch-conn">&#8594;</div>
+  <div class="arch-col">
+    <h4>What it powers</h4>
+    <div class="item">Live Capacity app &middot; today</div>
+    <div class="item">History and reports &middot; building</div>
+    <div class="item">AI suggestions &middot; next</div>
+  </div>
+</div>
+<p class="small" style="color:var(--grey); font-size:13px;">Better Impact is explicitly the "next" legacy system to bring into this pipeline — ShelterBuddy already went through this standardization; this discovery document is the first step of doing the same for foster volunteer data.</p>
+
+<h2><span class="num">04</span>Questions for the Better Impact admin</h2>
+
+<div class="qgroup">
+  <div class="qgroup-head">Configuration — does BC SPCA actually use the standard model?</div>
+  <ol>
+    <li>Does BC SPCA's account use the standard 5 statuses (Applicant, In Process, Active, Inactive, Archived) as-is, or are any relabeled/customized? Is "member" the term BC SPCA actually uses, or does Better Impact only expose these 5 statuses under "volunteer" terminology?
+      <span class="why">The research above is generic Better Impact documentation, not BC SPCA's actual setup.</span></li>
+    <li><strong>When a volunteer transitions Active &rarr; Inactive &rarr; Active again, does Better Impact create a new record/row each time, or does it overwrite the status field on the same existing record in place?</strong>
+      <span class="why">This is the single most important question in this document. The published API and reports only expose current status + last-change date (confirmed, see Section 04 below) — but that doesn't prove the underlying database never kept the earlier rows. If status changes create new records, the history may genuinely exist in Better Impact's database even though no documented report or API endpoint surfaces it — worth asking the admin directly rather than concluding "no history exists" from documentation alone.</span></li>
+    <li>Is "foster volunteer" tracked as its own distinct volunteer type/role/position within Better Impact, separate from BC SPCA's other volunteer programs (retail, dog walking, events, etc.), or is it mixed in with everyone else?
+      <span class="why">If foster isn't cleanly separable in Better Impact itself, every downstream KPI needs a filter defined here, not invented later.</span></li>
+    <li>Are there any custom fields or sub-statuses specific to foster volunteers (e.g., species they foster, capacity/availability, special training)?</li>
+    <li><strong>Confirmed from Better Impact's own documentation, worth verifying BC SPCA's specific setup:</strong> does BC SPCA have an "Activity" configured (e.g., "Foster Care") that volunteers log hours against? Better Impact has no native animal-identity field anywhere — any "which animal" link would be a manually-typed custom field, not a structured one. We are <strong>not</strong> proposing to use this as a replacement for ShelterBuddy's <code>AnimalID</code>+<code>PersonID</code> placement record (that stays the primary source for KPIs 4&ndash;5 in the discovery definitions document, since it's an operational system of record, not self-reported logging) &mdash; but a large gap between what ShelterBuddy shows and what's logged here would itself be a useful data-quality/engagement signal worth knowing about.
+      <span class="why">Confirms there's no simpler, Better-Impact-only path for KPIs 4&ndash;5 that would avoid the ShelterBuddy join &mdash; and flags a possible secondary cross-check if such an Activity exists.</span></li>
+  </ol>
+</div>
+
+<div class="qgroup">
+  <div class="qgroup-head">Real-world usage — is the status actually kept current?</div>
+  <ol>
+    <li>In practice, how promptly is a volunteer moved from Active to Inactive or Archived once they stop fostering? Is this done per-volunteer or in periodic bulk cleanups?
+      <span class="why">Directly tests Lindsay's "ghost volunteer" and "lagging administrative spikes" concerns against real practice, not just general Better Impact documentation.</span></li>
+    <li>Is <strong>Inactive</strong> actually used as a distinct, meaningful status at BC SPCA, or do volunteers mostly go straight from Active to Archived in practice?
+      <span class="why">If Inactive isn't really used, the Retention/Attrition KPI should be designed around Active vs. Archived only, not a 3-state model that doesn't reflect real behavior.</span></li>
+    <li>Who has authority to change a volunteer's status, and is there any written SOP for when it should happen?</li>
+  </ol>
+</div>
+
+<div class="qgroup">
+  <div class="qgroup-head">Joinability — can we link Better Impact to ShelterBuddy at all?</div>
+  <ol>
+    <li>Is there any field in Better Impact that could serve as a join key to ShelterBuddy's <code>PersonID</code> (e.g., email, a BC SPCA staff/volunteer ID, name matching)?
+      <span class="why">Without a reliable join key, none of the AnimalID+PersonID-anchored KPIs already proposed (Utilization %, Conversion %, Repeat Retention %, Behavioral Attrition, Shelter Days Saved) can actually be built.</span></li>
+    <li>Is that join key unique and stable over time (not reused, not changed on re-application)?</li>
+    <li><strong>How far back does BC SPCA's actual Better Impact data go?</strong> Was there a system migration or start date, or does it cover the organization's full history? This directly limits a proposed historical roster-size approximation (see <code>Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html</code>, KPI 9) intended to pair with the existing 20-year Animals-in-Foster trend &mdash; the approximation can only go back as far as real records exist.</li>
+  </ol>
+</div>
+
+<div class="qgroup">
+  <div class="qgroup-head">Access and extract</div>
+  <ol>
+    <li><strong>Confirmed directly from the published API payload, not inferred: Better Impact only tracks current status plus the date of the last status change — not a history of earlier changes.</strong> The API's volunteer status fields are exactly <code>volunteer_status</code> (current), <code>volunteer_inactive_status_reason</code>/<code>volunteer_archived_status_reason</code> (current reason), and <code>volunteer_last_status_change</code> (a single date) — no status-history array, no audit-log endpoint, anywhere in the documented payload. The Personal Profile Raw Data report's Status Fields match this exactly. If a volunteer goes Active &rarr; Inactive &rarr; Active again, nothing in Better Impact shows that middle Inactive period once they're back to Active.
+      <span class="why">Confirms a point-in-time export can't support any time-based analysis of Better Impact's own status field. Not a blocker for the proposed KPIs, which are ShelterBuddy-anchored instead — but worth the admin knowing this is a known system limitation, not a configuration gap on BC SPCA's end. Suggested email to Better Impact, since this now informs a real architecture decision: confirm no status history exists anywhere, even on higher account tiers, rather than just in the public docs.</span></li>
+    <li>Given that limitation, would BC SPCA consider a <strong>periodic snapshot export</strong> (e.g. weekly pull of current status per volunteer, saved to Fabric) to reconstruct status history going forward, the same way a Type-2 history table is built from any source that only exposes current state?
+      <span class="why">This only matters if BC SPCA later wants historical analysis of Better Impact's own Active/Archived status itself (Layer 1, admin hygiene) — not required for the ShelterBuddy-anchored Layer 2 signals.</span></li>
+    <li>What export/API options exist, and at what refresh frequency?</li>
+  </ol>
+</div>
+
+<h2><span class="num">05</span>What happens next</h2>
+<p>Once the admin confirms or corrects the items above, this feeds directly back into the open Foster Volunteer Engagement grill-coach session (currently at Q1/Q2) — specifically Q2's cross-initiative dependency note and the eventual Q6 signal-source decision (which fields the chosen KPI actually reads from). This document doesn't propose a KPI definition itself; it only establishes what's actually possible given BC SPCA's real Better Impact configuration.</p>
+
+<footer>Discovery material only — not a BRD, not a confirmed data source. Content reflects Better Impact's public documentation as of 2026-11-18, cross-checked against this project's own files; BC SPCA-specific answers above are open until the admin responds.</footer>
+
+</div>
+</body>
+</html>

@@ -17,7 +17,7 @@
 | 03 | SB Status & Source Operational Pathway | ShelterBuddy | Diagnostic evidence for a Status/Source taxonomy consolidation decision (not ours to decide) | BRD v0.1, grill session not formally closed | Draft | `initiatives/03-sb-status-source-pathway.md` |
 | 04 | Self-Service Data Platform | Internal (IT/Data Team) | Define the repeatable Self-Service product contract (scope: Bronze/Lakehouse access only) | Epic v1.0; grill session mid-flight at Q3/Q7 | In progress | `initiatives/04-self-service-data-platform.md` |
 | 05 | Triage Dashboard | Excel trackers (pre-intake) | Rank the most vulnerable pre-intake service requests across sources | Minimal grill, Q1/Q2 awaiting confirmation | Early | `initiatives/05-triage-dashboard.md` |
-| 06 | Foster Volunteer Engagement | Better Impact + ShelterBuddy | Objective still under discovery — which KPI(s) become the confirmed core measure | Source docs saved, pre-grill-coach | Early | `initiatives/06-foster-volunteer-engagement/README.md` |
+| 06 | Foster Volunteer Engagement | Better Impact + ShelterBuddy | 10 KPIs + 2 dimensions defined from Better Impact's status lifecycle, replacing Lindsay's 2 draft measures; framework to combine with ShelterBuddy animal-side history | BRD v0.1 drafted (house format); KPI Requirements at v0.3 | **Draft for business review — not yet confirmed by Lindsay** | `initiatives/06-foster-volunteer-engagement/README.md` |
 | 07 | Reference documents | — | Informational only, not governed artifacts | N/A | N/A | `initiatives/07-reference-documents.md` |
 
 ---

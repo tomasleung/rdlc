@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industry Standard Reference</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.55; font-size:15.5px;}
+  .wrap{max-width:960px; margin:0 auto; padding:0 28px 80px;}
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:56px 48px 40px; margin-bottom:44px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12.5px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:16px;}
+  .cover h1{font-size:27px; margin:0 0 10px; line-height:1.25;}
+  .cover .subtitle{font-size:16px; color:#cfe1ea; margin:0 0 20px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:20px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; letter-spacing:.03em; background:var(--teal); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; margin-top:20px; font-size:13.5px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+  h2{color:var(--navy); font-size:21px; margin:44px 0 6px; padding-bottom:8px; border-bottom:2px solid var(--line);}
+  h2 .num{color:var(--teal); margin-right:8px;}
+  h3{color:var(--blue); font-size:15.5px; margin:22px 0 8px;}
+  p{margin:9px 0;}
+  .callout{border-radius:8px; padding:15px 18px; margin:16px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.insight{background:var(--teal-soft); border-left:4px solid var(--teal); color:#1d4e49;}
+
+  .src-card{border:1px solid var(--line); border-radius:10px; margin:18px 0; overflow:hidden;}
+  .src-head{background:var(--navy-soft); padding:12px 20px;}
+  .src-head h3{margin:0; border:none; color:var(--navy); font-size:15px;}
+  .src-head .cite{font-size:12px; color:var(--grey); margin-top:3px;}
+  .src-body{padding:4px 20px 16px;}
+
+  .type-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0;}
+  .type-card{border:1px solid var(--line); border-radius:8px; padding:10px 14px; background:#fbfcfc;}
+  .type-card b{color:var(--navy); display:block; font-size:13.5px;}
+  .type-card span{font-size:12.5px; color:var(--grey);}
+
+  table.ref-table{width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px;}
+  table.ref-table th{background:var(--navy); color:#fff; text-align:left; padding:8px 12px; font-size:12px;}
+  table.ref-table td{padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  table.ref-table tr:nth-child(even) td{background:var(--navy-soft);}
+
+  .connect{background:var(--teal-soft); border-left:3px solid var(--teal); padding:10px 14px; margin-top:10px; border-radius:0 6px 6px 0; font-size:13.5px; color:#1d4e49;}
+  .connect b{display:block; font-size:11.5px; text-transform:uppercase; color:var(--teal); margin-bottom:3px;}
+
+  footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--grey);}
+  @media (max-width:680px){ .cover{padding:44px 24px 36px;} .cover h1{font-size:22px;} .cover-meta{grid-template-columns:1fr;} .type-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Volunteer Engagement &middot; Pre-BRD Discovery</div>
+  <div class="cover-main">
+    <h1>Industry Standard Reference</h1>
+    <p class="subtitle">What the animal welfare sector actually publishes on foster metrics — and what it validates vs. doesn't, for our own KPI design.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft — Discovery, Not a BRD</span><span class="status v">v0.1</span>
+    <div class="cover-meta">
+      <div><b>Informs</b>Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html (Member Tenure, Foster Utilization Rate, Engaged Core Fosters)</div>
+      <div><b>First use of this source type</b>No prior reference to Shelter Animals Count, Maddie's Fund, or Best Friends exists anywhere else in this project</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="callout warning">
+  <b>Headline finding, stated plainly</b>
+  There is no established industry-standard <em>formula</em> for foster volunteer retention or utilization — not from Shelter Animals Count, not from Maddie's Fund, not from Best Friends. What exists instead is strong, real behavioral research into <em>why</em> caregivers leave and what helps retain them, plus one animal-side (not volunteer-side) utilization metric. Treat everything below as context and validation for our approach, not a formula to adopt wholesale — BC SPCA is defining genuinely new ground on the volunteer-metrics side.
+</div>
+
+<h2><span class="num">01</span>Shelter Animals Count — animal-side only, no volunteer metric</h2>
+<div class="src-card">
+  <div class="src-head"><h3>Shelter Animals Count (SAC) — Animal Welfare Glossary: Calculations</h3><div class="cite">shelteranimalscount.org/animal-welfare-glossary/calculations</div></div>
+  <div class="src-body">
+    <p>SAC is the closest thing to a national standards body for shelter statistics. It defines foster population counts (animals in foster care on the first and last day of the month) and explicitly <strong>excludes</strong> foster/trial placements from its Adoption definition. It does not define any volunteer-side retention, tenure, or utilization metric.</p>
+    <div class="connect"><b>What this confirms</b>Our instinct to keep the animal-side measure (Foster Utilization Rate's ShelterBuddy-anchored cut) and the volunteer-side measure (Member Tenure, Engaged Core Fosters) conceptually separate is consistent with how the sector's own standards body treats them — as different categories of thing, not one blended metric.</div>
+  </div>
+</div>
+
+<h2><span class="num">02</span>Foster Utilization Ratio (FUR) — a real, peer-reviewed metric, but animal-side</h2>
+<div class="src-card">
+  <div class="src-head"><h3>Emergency Fostering of Dogs During COVID-19 — Frontiers in Veterinary Science, 2022</h3><div class="cite">frontiersin.org/journals/veterinary-science/articles/10.3389/fvets.2022.862590 &middot; PMC9093711</div></div>
+  <div class="src-body">
+    <p><strong>Formula:</strong> <code>FUR = (dogs/puppies in foster) &divide; (dogs/puppies in foster + dogs/puppies still in shelter)</code>, computed daily, averaged monthly. Designed specifically to compare foster usage across shelters of different sizes.</p>
+    <p><strong>Limitation the authors themselves note:</strong> FUR shows <em>how much</em> a shelter uses foster homes, but not <em>why</em> the share changes.</p>
+    <div class="connect"><b>What this confirms</b>This is structurally the same family as Phase 1's "% Animals in Foster" and CATU's "% Animals in Care Fostered" — both already built, both already peer-reviewed-adjacent in structure. It does not validate a volunteer-side utilization metric; it's animal-population-side, same as SAC's framing above.</div>
+  </div>
+</div>
+
+<h2><span class="num">03</span>Maddie's Fund — Understanding Turnover of Foster Caregivers (the report you flagged)</h2>
+<div class="src-card">
+  <div class="src-head"><h3>Understanding Turnover of Foster Caregivers: Exploring the Reasons and Potential Solutions</h3><div class="cite">maddiesfund.org/assets/grants/final-foster-turnover-report.pdf &middot; 4,800+ surveyed/interviewed (869 ex-fosters, 739 taking a break, 2,788 current fosters)</div></div>
+  <div class="src-body">
+    <p>This is real behavioral research, not a metrics standard — but it's the most directly relevant thing found, because it independently validates the segmentation approach already proposed.</p>
+
+    <h3>A real, validated caregiver-type taxonomy</h3>
+    <p>The study categorizes caregivers by level of service — almost exactly the axis our Status &times; Tenure &times; Utilization table already uses:</p>
+    <div class="type-grid">
+      <div class="type-card"><b>One-time</b><span>"Fostering now but don't plan on fostering in the future"</span></div>
+      <div class="type-card"><b>Seasonal</b><span>"Fostered at certain times of year, like summer, but not others"</span></div>
+      <div class="type-card"><b>Every-once-in-a-while</b><span>Intermittent, not regular (~39% of the current-foster sample)</span></div>
+      <div class="type-card"><b>Frequent</b><span>Almost continuous or continuous (~31% of the current-foster sample)</span></div>
+    </div>
+    <div class="connect"><b>What this confirms</b>Industry research independently landed on a "how much do they actually do" segmentation almost identical in spirit to our Foster Utilization Rate / Engaged Core Fosters split — this isn't a BC SPCA-invented framework, it mirrors what a 4,800-person study found useful for the same population.</div>
+
+    <h3>Top 5 reasons for voluntary turnover</h3>
+    <table class="ref-table">
+      <tr><th>#</th><th>Reason</th></tr>
+      <tr><td>1</td><td>Needing time to focus solely on one's own pets</td></tr>
+      <tr><td>2</td><td>Adopting too many of the animals themselves ("too many foster fails")</td></tr>
+      <tr><td>3</td><td>Schedule not allowing for foster caregiving</td></tr>
+      <tr><td>4</td><td>Personal issues (age/health, caregiving for loved ones, divorce, etc.)</td></tr>
+      <tr><td>5</td><td>Living situation not allowing for foster caregiving</td></tr>
+    </table>
+    <div class="connect"><b>What this means for KPI interpretation</b>Most top reasons for leaving are personal/circumstantial, not organizational failure. This directly shapes the Prohibited Conclusion language for Member Tenure/Engaged Core Fosters: a volunteer moving to Archived should not be read as "we failed them" by default — that's an unsupported causal leap the data alone can't make, consistent with this project's standing interpretation-boundary discipline.</div>
+
+    <h3>What actually helps retention (the "buffers")</h3>
+    <ul>
+      <li>Feeling supported by the organization</li>
+      <li>Feeling that one's input matters / is listened to</li>
+      <li>Feeling appreciated</li>
+      <li>Training — especially basic handling/behavioral issues (notably under-delivered: 20&ndash;35% of ex-fosters, 15&ndash;25% of those taking a break, and 13&ndash;20% of current fosters reported receiving no training at all, and lack of training was negatively related to continuing)</li>
+      <li>Improved communication</li>
+      <li>The "foster team" model — over 80% of respondents agreed/strongly agreed this concept could work well</li>
+    </ul>
+    <div class="connect"><b>What this means for future work</b>If BC SPCA later wants to go beyond the quantitative KPIs into a qualitative "why are we losing fosters" investigation, this report's validated question set (training perception, feeling supported/heard/appreciated) is a ready-made, tested starting point — not something to design from scratch.</div>
+
+    <h3>One honest limitation of this document</h3>
+    <p>This report gives <strong>no single "retention rate %"</strong> figure usable as a sector benchmark/target — it's reasons-and-buffers research, not a KPI definitions catalog. Don't cite a number from this source as "the industry benchmark" because none is given in that form.</p>
+  </div>
+</div>
+
+<h2><span class="num">04</span>What this means for our KPI design, overall</h2>
+<ul>
+  <li><strong>Keep animal-side and volunteer-side measures separate</strong> — confirmed consistent with how SAC and the FUR literature both treat them, not a BC SPCA-specific choice.</li>
+  <li><strong>The Status &times; Tenure &times; Utilization segmentation is validated in spirit</strong>, not invented in a vacuum — independent research landed on a near-identical "level of service" framework.</li>
+  <li><strong>No external benchmark % exists to target or compare against</strong> — any Fixed Target set for Engaged Core Rate % or Foster Utilization Rate will be BC SPCA's own call, grounded in its own baseline, not an industry number. Flag this to the Data Owner before any threshold gets set.</li>
+  <li><strong>The "<25% of caregivers take multiple placements" finding</strong> (from the separate COVID emergency-fostering study referenced in the research turn before this document) is the closest thing to a sector data point for our Foster Utilization Rate's likely real-world range — useful context, not a target.</li>
+</ul>
+
+<footer>Discovery/reference material, not a BRD. Sources are research/survey reports with their own stated samples and limitations — cited, not independently re-verified.</footer>
+
+</div>
+</body>
+</html>

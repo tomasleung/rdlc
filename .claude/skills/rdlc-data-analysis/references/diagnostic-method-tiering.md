@@ -35,6 +35,7 @@ A method is a **signal to investigate, never proof of a cause**. Every flagged r
 
 ## Relationship to the rest of this skill's references
 
+- `statistical-layer-mapping.md` covers a different question shape this file doesn't: is X related to Y, what's driving it, how sure are we (correlation, cohort analysis, regression, confidence intervals). Use that file for those questions; use this one for dimensional comparison and anomaly detection. Don't duplicate a method across both files — `statistical-layer-mapping.md`'s own Overlap table says which file governs which overlapping term.
 - `kpi-benchmark-forecast-standards.md`'s single "5-Year Historical Average" benchmark and "Historical Ratio Forecasting" method are each one row of this table (multi-year seasonal baseline; a Level-1 forecast method) — this file extends that framework to dimensional comparisons and anomaly detection, it doesn't replace it.
 - Every row's method name belongs in the **Diagnostic Method** field of the extended KPI Specification Template in `reusable-templates.md`.
 - Full citations, worked formulas, and the reasoning behind each tier are in `reports/Diagnostic BI statistical methods.md` at the project root.

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foster Volunteer Discovery KPI Definitions</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.55; font-size:15.5px;}
+  .wrap{max-width:960px; margin:0 auto; padding:0 28px 80px;}
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:56px 48px 40px; margin-bottom:44px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12.5px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:16px;}
+  .cover h1{font-size:27px; margin:0 0 10px; line-height:1.25;}
+  .cover .subtitle{font-size:16px; color:#cfe1ea; margin:0 0 20px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:20px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; letter-spacing:.03em; background:var(--amber); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; margin-top:20px; font-size:13.5px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+  h2{color:var(--navy); font-size:21px; margin:44px 0 6px; padding-bottom:8px; border-bottom:2px solid var(--line);}
+  h2 .num{color:var(--teal); margin-right:8px;}
+  h3{color:var(--blue); font-size:15.5px; margin:22px 0 8px;}
+  p{margin:9px 0;}
+  .callout{border-radius:8px; padding:15px 18px; margin:16px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.insight{background:var(--teal-soft); border-left:4px solid var(--teal); color:#1d4e49;}
+
+  .kpi-card{border:1px solid var(--line); border-radius:10px; margin:18px 0; overflow:hidden;}
+  .kpi-head{background:var(--navy-soft); padding:14px 20px;}
+  .kpi-head h3{margin:0; color:var(--navy); font-size:17px; border:none;}
+  .kpi-body{padding:4px 20px 16px;}
+  .kpi-field{display:grid; grid-template-columns:140px 1fr; gap:12px; padding:10px 0; border-bottom:1px solid var(--line);}
+  .kpi-field:last-child{border-bottom:none;}
+  .kpi-field b{color:var(--grey); font-size:11.5px; text-transform:uppercase; letter-spacing:.03em; padding-top:2px;}
+  .kpi-field .val{font-size:14px;}
+  .formula{font-family:Consolas,"Courier New",monospace; background:var(--teal-soft); color:#1d4e49; padding:8px 12px; border-radius:6px; font-size:13.5px;}
+
+  table.segment-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:13px;}
+  table.segment-table th{background:var(--navy); color:#fff; text-align:left; padding:8px 10px; font-size:12px;}
+  table.segment-table td{padding:8px 10px; border:1px solid var(--line); vertical-align:top;}
+  table.segment-table tr:nth-child(even) td{background:var(--navy-soft);}
+  .cell-good{background:var(--green-soft) !important; color:#2c5a3b;}
+  .cell-risk{background:var(--amber-soft) !important; color:#6b4209;}
+  .cell-bad{background:var(--red-soft) !important; color:#6b2420;}
+
+  footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--grey);}
+  @media (max-width:680px){ .cover{padding:44px 24px 36px;} .cover h1{font-size:22px;} .cover-meta{grid-template-columns:1fr;} .kpi-field{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Volunteer Engagement &middot; Pre-BRD Discovery</div>
+  <div class="cover-main">
+    <h1>Discovery KPI Definitions</h1>
+    <p class="subtitle">Two candidate definitions proposed to replace Lindsay's single "Retention" draft — produced via the guided process in this same folder.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft — Proposed, Not Confirmed by Data Owner</span><span class="status v">v0.1</span>
+    <div class="cover-meta">
+      <div><b>Replaces</b>Lindsay's draft: "Retention = # of fosters that stay (remain active) with BC SPCA &gt;1yr"</div>
+      <div><b>Produced via</b>Foster_Volunteer_KPI_Guidance_Process_v0.1.html, Steps 1–5</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="callout warning">
+  <b>Status</b>
+  Proposed by the Data Team, not yet confirmed by Lindsay (Data Owner). Per this project's standing rule, nothing here is settled until she explicitly confirms — Step 6 of the guidance process is still open. Both definitions also depend on data access not yet granted (Better Impact read-only access, pending; the ShelterBuddy&ndash;Better Impact join key, unconfirmed — see the Discovery document in this folder).
+</div>
+
+<h2><span class="num">01</span>Why two metrics instead of one</h2>
+<p>Lindsay's original draft bundled three separable concepts — current status, tenure, and utilization — into a single count. Splitting them answers her actual question ("are my recruitment/onboarding/support efforts producing volunteers who stay <em>and</em> actually foster") in a way the original single number structurally couldn't.</p>
+
+<div class="kpi-card">
+  <div class="kpi-head"><h3>Member Tenure</h3></div>
+  <div class="kpi-body">
+    <div class="kpi-field"><b>Definition</b><div class="val">Time since Date Joined, bucketed into &lt;1yr, 1&ndash;2yr, 2yr+, cut by current Status (Applicant / In Process / Active / Inactive / Archived).</div></div>
+    <div class="kpi-field"><b>Formula</b><div class="val formula">DATEDIFF(day, Date_Joined, Today) / 365, bucketed</div></div>
+    <div class="kpi-field"><b>Grain</b><div class="val">One row per volunteer, current snapshot.</div></div>
+    <div class="kpi-field"><b>Source</b><div class="val">Better Impact — <code>Date Joined</code> field (confirmed to exist; a pure membership-duration fact, no ambiguity in what it measures).</div></div>
+    <div class="kpi-field"><b>Type</b><div class="val">Descriptive — membership-duration fact only.</div></div>
+    <div class="kpi-field"><b>Permitted conclusion</b><div class="val">How long volunteers typically stay on the roster, by current status.</div></div>
+    <div class="kpi-field"><b>Prohibited conclusion</b><div class="val">Does not by itself indicate engagement, satisfaction, or whether the volunteer is actually fostering — see Foster Utilization Rate below for that.</div></div>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-head"><h3>Foster Utilization Rate</h3></div>
+  <div class="kpi-body">
+    <div class="kpi-field"><b>Definition</b><div class="val">% of volunteers in a given Tenure/Status bucket who have at least one ShelterBuddy <code>AnimalID</code>+<code>PersonID</code> placement within a chosen recency window (proposed default: last 12 months).</div></div>
+    <div class="kpi-field"><b>Formula (primary)</b><div class="val formula">COUNT(PersonID with ≥1 AnimalID link in last 12mo) ÷ COUNT(PersonID in bucket)</div></div>
+    <div class="kpi-field"><b>Grain</b><div class="val">Tenure bucket &times; Status, current snapshot.</div></div>
+    <div class="kpi-field"><b>Source</b><div class="val">Primary cut: ShelterBuddy <code>AnimalID</code>+<code>PersonID</code> placement history — reliable, not subject to Better Impact's confirmed status-lag problem.</div></div>
+    <div class="kpi-field"><b>Secondary cut</b><div class="val">Active-status-denominator version (Better Impact Active ÷ fostered in &lt;1yr) — kept as a clearly-labeled secondary view specifically because it <em>exposes</em> the ghost-volunteer/admin-lag gap rather than hiding it. Never shown without this label.</div></div>
+    <div class="kpi-field"><b>Type</b><div class="val">Descriptive utilization measure.</div></div>
+    <div class="kpi-field"><b>Permitted conclusion</b><div class="val">What share of a given tenure/status segment is actively delivering foster placements.</div></div>
+    <div class="kpi-field"><b>Prohibited conclusion</b><div class="val">Not a performance score for individual volunteers; not a capacity-sufficiency measure on its own (that's the separate Need-vs-Capacity question from the Better Impact access-request email).</div></div>
+  </div>
+</div>
+
+<div class="callout insight">
+  <b>Starting three, confirmed 2026-11-18</b>
+  Rather than defining the % directly, the numerator and denominator are each their own named, standalone KPI first — auditable on their own, not just intermediate math inside a ratio. This is the build order: Count 1, then Count 2, then Count 1 &divide; Count 2.
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-head"><h3>1. Active Fosters Over 1 Year</h3></div>
+  <div class="kpi-body">
+    <div class="kpi-field"><b>Business definition</b><div class="val">How many foster volunteers currently marked Active in Better Impact have been with BC SPCA for more than one year, counting from the date they originally joined? This is Lindsay's original ask, precisely defined — anchored to <code>Date Joined</code>, not to the <code>last status change</code> date (which would understate anyone who ever went Inactive and came back).</div></div>
+    <div class="kpi-field"><b>Implementation note</b><div class="val formula">COUNT(Status = Active AND tenure since Date Joined &gt; 1yr)</div></div>
+    <div class="kpi-field"><b>Grain</b><div class="val">Current snapshot.</div></div>
+    <div class="kpi-field"><b>Source</b><div class="val">Better Impact only — <code>Status</code> and <code>Date Joined</code>.</div></div>
+    <div class="kpi-field"><b>Layer</b><div class="val">Layer 1 &mdash; Admin Roster Hygiene (per Lindsay's own original brief).</div></div>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-head"><h3>2. Active Fosters</h3></div>
+  <div class="kpi-body">
+    <div class="kpi-field"><b>Business definition</b><div class="val">How many foster volunteers are currently marked Active in Better Impact, regardless of how long they've been with us? The denominator for KPI 3 below, and a useful number on its own — the current size of the working roster.</div></div>
+    <div class="kpi-field"><b>Implementation note</b><div class="val formula">COUNT(Status = Active)</div></div>
+    <div class="kpi-field"><b>Grain</b><div class="val">Current snapshot.</div></div>
+    <div class="kpi-field"><b>Source</b><div class="val">Better Impact only — <code>Status</code>.</div></div>
+    <div class="kpi-field"><b>Layer</b><div class="val">Layer 1 &mdash; Admin Roster Hygiene.</div></div>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-head"><h3>3. % Active Fosters Over 1 Year</h3></div>
+  <div class="kpi-body">
+    <div class="kpi-field"><b>Business definition</b><div class="val">Of all foster volunteers currently Active (KPI 2), what percentage have been with BC SPCA for more than one year (KPI 1)? A quick, Layer 1 pulse-check on the roster's tenure mix — it answers "who's on the roster," not "who's actually fostering."</div></div>
+    <div class="kpi-field"><b>Implementation note</b><div class="val formula">KPI 1 &divide; KPI 2</div></div>
+    <div class="kpi-field"><b>Grain</b><div class="val">Current snapshot, all Active volunteers.</div></div>
+    <div class="kpi-field"><b>Source</b><div class="val">Derived from KPIs 1 and 2 — Better Impact only. No ShelterBuddy join needed, so all three are buildable as soon as Better Impact access is granted, independent of the join-key question in the Discovery document.</div></div>
+    <div class="kpi-field"><b>Layer</b><div class="val">Layer 1 &mdash; Admin Roster Hygiene. Not the operational signal on its own.</div></div>
+    <div class="kpi-field"><b>Permitted conclusion</b><div class="val">The tenure mix of the currently Active roster, and how that mix is trending over time.</div></div>
+    <div class="kpi-field"><b>Prohibited conclusion</b><div class="val"><strong>Do not read a rising % as proof retention is improving on its own.</strong> Because Active status can lag real behavior (ghost-volunteer risk, already confirmed in both Lindsay's brief and Better Impact's own documentation), a rising share could mean genuine long-term retention, or it could simply mean fewer new volunteers have joined recently — changing the mix without retention itself changing. Always read this alongside KPIs 1 and 2 themselves, and eventually the Foster Utilization Rate, before concluding anything.</div></div>
+  </div>
+</div>
+
+<div class="callout warning">
+  <b>KPIs 4 &amp; 5 — blocked, unlike 1–3</b>
+  These need the ShelterBuddy&ndash;Better Impact join key, still unconfirmed in the Discovery document. Defined now so the shape is ready the moment that's resolved — not buildable yet.
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-head"><h3>4. Active Fosters With a Recent Foster Placement</h3></div>
+  <div class="kpi-body">
+    <div class="kpi-field"><b>Business definition</b><div class="val">How many currently Active foster volunteers have taken at least one animal into foster care within the last 90 days? Answers "how many of our Active fosters can we realistically count on right now" — tenure (KPIs 1&ndash;3) can't answer that; only actual placement activity can.</div></div>
+    <div class="kpi-field"><b>Implementation note</b><div class="val formula">COUNT(Status = Active AND &ge;1 ShelterBuddy AnimalID+PersonID placement within last 90 days)</div></div>
+    <div class="kpi-field"><b>Grain</b><div class="val">Current snapshot.</div></div>
+    <div class="kpi-field"><b>Source</b><div class="val">Better Impact (<code>Status</code>) joined to ShelterBuddy (<code>AnimalID</code>+<code>PersonID</code> placement history) &mdash; requires the join key confirmed.</div></div>
+    <div class="kpi-field"><b>Layer</b><div class="val">Layer 2 &mdash; Operational Foster Signal.</div></div>
+    <div class="kpi-field"><b>Window</b><div class="val"><strong>90 days &mdash; proposed default, not yet confirmed by the Data Owner.</strong> Chosen to match a realistic placement-plus-gap cycle and a standard quarterly cadence, and to stay consistent with the 90-day window already in Lindsay's own original Layer 2 proposal. Not yet validated against BC SPCA's actual distribution of gaps between a volunteer's placements &mdash; worth a sanity check once ShelterBuddy data is joined, before treating 90 days as settled.</div></div>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-head"><h3>5. % Active Fosters With a Recent Foster Placement</h3></div>
+  <div class="kpi-body">
+    <div class="kpi-field"><b>Business definition</b><div class="val">Of all currently Active foster volunteers (KPI 2), what percentage have taken at least one animal into foster care within the last 90 days (KPI 4)? This is the number that puts a precise size on the ghost-volunteer problem &mdash; a low % here means "Active" status is substantially overstating real, usable capacity.</div></div>
+    <div class="kpi-field"><b>Implementation note</b><div class="val formula">KPI 4 &divide; KPI 2</div></div>
+    <div class="kpi-field"><b>Grain</b><div class="val">Current snapshot, all Active volunteers.</div></div>
+    <div class="kpi-field"><b>Source</b><div class="val">Derived from KPIs 2 and 4.</div></div>
+    <div class="kpi-field"><b>Layer</b><div class="val">Layer 2 &mdash; Operational Foster Signal. This is the reality check KPI 3 (tenure mix) explicitly cannot provide on its own.</div></div>
+    <div class="kpi-field"><b>Permitted conclusion</b><div class="val">What share of the current Active roster is realistically available for placement right now, based on actual recent behavior rather than administrative status.</div></div>
+    <div class="kpi-field"><b>Prohibited conclusion</b><div class="val">Not a performance score for individual volunteers, and not by itself a capacity-sufficiency answer &mdash; that's the separate Need-vs-Capacity question from the Better Impact access-request email. A volunteer with no placement in 90 days isn't necessarily failing; see the Industry Standard Reference document's turnover-reasons research before assuming cause.</div></div>
+  </div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-head"><h3>9. Foster Roster Size, Year-End (Approximate)</h3></div>
+  <div class="kpi-body">
+    <div class="kpi-field"><b>Business definition</b><div class="val">For each past year, approximately how many foster volunteers had joined BC SPCA and had not yet been permanently archived by the end of that year? Built to trend alongside the existing 20-year Animals-in-Foster chart (Intake Animals, Foster Animals, % Animals in Foster) &mdash; pairing it against this roster-size estimate lets us tell whether a change in % Animals in Foster over time was driven by more or fewer available foster volunteers, versus just a change in intake volume.</div></div>
+    <div class="kpi-field"><b>Implementation note</b><div class="val formula">COUNT(Date Joined &le; Dec 31 of year Y AND NOT Archived as of Dec 31 of year Y)</div></div>
+    <div class="kpi-field"><b>Grain</b><div class="val">One value per year, trended across available history.</div></div>
+    <div class="kpi-field"><b>Source</b><div class="val">Better Impact &mdash; <code>Date Joined</code> and <code>Date Archived</code> only, same two persistent fields used for KPI 7's fix. Limited to however far back BC SPCA's actual Better Impact records go &mdash; <strong>unconfirmed, new question added to the Discovery document.</strong></div></div>
+    <div class="kpi-field"><b>Layer</b><div class="val">Layer 1 &mdash; Admin Roster Hygiene, approximate historical reconstruction.</div></div>
+    <div class="kpi-field"><b>Permitted conclusion</b><div class="val">An approximate historical capacity-pool size, trended, for pairing with the existing animal-side chart in a capacity narrative.</div></div>
+    <div class="kpi-field"><b>Prohibited conclusion</b><div class="val"><strong>This is not a true historical Active-status count.</strong> It cannot distinguish a volunteer who was genuinely fostering that year from one who was sitting Inactive the whole time, because Better Impact has no retrievable status history (confirmed earlier in this folder's Discovery and Technical Integration documents). This approximation assumes the real-world rate of Active&rarr;Inactive&rarr;Active cycling is low enough not to matter &mdash; <strong>Tomas's own estimate is under 3%, stated as an assumption, not a verified figure</strong> &mdash; and should be checked against real data once available (e.g., by counting how many currently-Active volunteers show any evidence of a prior Inactive period, if the admin confirms that evidence is recoverable at all).</div></div>
+  </div>
+</div>
+
+<h2><span class="num">02</span>Combined view — the actual operational story</h2>
+<p>Crossing both metrics is what answers the real question neither could alone:</p>
+<table class="segment-table">
+  <tr><th></th><th>Never fostered</th><th>Fostered, not in last 12mo</th><th>Fostered within last 12mo</th></tr>
+  <tr><td><strong>Active, &lt;1yr tenure</strong></td><td>New, not yet converted</td><td>&mdash;</td><td class="cell-good">Converting well</td></tr>
+  <tr><td><strong>Active, &gt;1yr tenure</strong></td><td class="cell-risk">Long-tenured, never used — onboarding/matching problem</td><td class="cell-risk">Long-tenured, gone quiet — re-engagement candidate</td><td class="cell-good">Healthy core</td></tr>
+  <tr><td><strong>Inactive</strong></td><td>Never used before going inactive</td><td class="cell-bad">Used, then stopped — real attrition</td><td>&mdash;</td></tr>
+  <tr><td><strong>Archived</strong></td><td>Rejected/never started</td><td class="cell-bad">Used, then left — the real "lost capacity" group</td><td>&mdash;</td></tr>
+</table>
+<p class="small" style="color:var(--grey); font-size:13px;">This separates "never converted" (onboarding problem) from "converted then lost" (retention problem) — two different operational fixes that "Retention = # active &gt;1yr" could never distinguish from each other.</p>
+
+<h2><span class="num">03</span>Still open</h2>
+<ul>
+  <li>Lindsay's explicit confirmation (Step 6 of the guidance process) — not yet obtained.</li>
+  <li>Better Impact read-only access — requested, not yet granted.</li>
+  <li>The ShelterBuddy&ndash;Better Impact join key — unconfirmed (see the Discovery document's Joinability questions).</li>
+  <li>Recency window choice (12 months proposed, not confirmed) — a Data Owner call, not a Data Team default to impose silently.</li>
+</ul>
+
+<footer>Discovery material — proposed KPI definitions, not a confirmed BRD contract. Supersedes nothing until Lindsay explicitly confirms.</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Better Impact Technical Integration and Risk</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.55; font-size:15.5px;}
+  .wrap{max-width:960px; margin:0 auto; padding:0 28px 80px;}
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:56px 48px 40px; margin-bottom:44px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12.5px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:16px;}
+  .cover h1{font-size:27px; margin:0 0 10px; line-height:1.25;}
+  .cover .subtitle{font-size:16px; color:#cfe1ea; margin:0 0 20px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:20px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; letter-spacing:.03em; background:var(--amber); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; margin-top:20px; font-size:13.5px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+  h2{color:var(--navy); font-size:21px; margin:44px 0 6px; padding-bottom:8px; border-bottom:2px solid var(--line);}
+  h2 .num{color:var(--teal); margin-right:8px;}
+  h3{color:var(--blue); font-size:15.5px; margin:22px 0 8px;}
+  p{margin:9px 0;}
+  .callout{border-radius:8px; padding:15px 18px; margin:16px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.insight{background:var(--teal-soft); border-left:4px solid var(--teal); color:#1d4e49;}
+  .callout.risk{background:var(--red-soft); border-left:4px solid var(--red); color:#6b2420;}
+
+  .timeline{border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin:16px 0; background:#fbfcfc;}
+  .timeline .axis{display:flex; align-items:center; gap:0; margin:14px 0; flex-wrap:wrap;}
+  .timeline .pull{background:var(--navy); color:#fff; border-radius:6px; padding:4px 10px; font-size:12px; font-weight:700; white-space:nowrap;}
+  .timeline .gap{flex:1; min-width:60px; height:2px; background:var(--line); position:relative;}
+  .timeline .gap.missed{background:var(--red); height:3px;}
+  .timeline .event{position:absolute; top:-26px; left:50%; transform:translateX(-50%); background:var(--amber-soft); color:#6b4209; border:1px solid var(--amber); border-radius:5px; padding:2px 7px; font-size:11px; white-space:nowrap;}
+  .timeline .legend{font-size:12.5px; color:var(--grey); margin-top:30px;}
+
+  table.risk-table{width:100%; border-collapse:collapse; margin:16px 0;}
+  table.risk-table th{background:var(--navy); color:#fff; text-align:left; padding:9px 12px; font-size:12.5px;}
+  table.risk-table td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:13.5px; vertical-align:top;}
+  table.risk-table tr:nth-child(even) td{background:var(--navy-soft);}
+
+  .stage-card{border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin:10px 0; background:#fbfcfc;}
+  .stage-card b{color:var(--navy); display:block; margin-bottom:4px; font-size:14px;}
+
+  footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--grey);}
+  @media (max-width:680px){ .cover{padding:44px 24px 36px;} .cover h1{font-size:22px;} .cover-meta{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Volunteer Engagement &middot; Internal Technical Discovery</div>
+  <div class="cover-main">
+    <h1>Better Impact — Technical Integration &amp; History Risk</h1>
+    <p class="subtitle">Internal plan: how the Data Team would build our own history from Better Impact's current-state-only data, and exactly where that approach loses information.</p>
+    <hr class="cover-rule">
+    <span class="status">Draft — Internal, Fallback Plan</span><span class="status v">v0.1</span>
+    <div class="cover-meta">
+      <div><b>Companion to</b>Better_Impact_Foster_Volunteer_Discovery_v0.1.html, Better_Impact_Integration_Options_v0.1.html</div>
+      <div><b>Status</b>Fallback plan only — do not build until the admin question in Section 01 is answered</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="callout warning">
+  <b>Read this before building anything</b>
+  Everything in this document assumes Better Impact genuinely has no retrievable history — which is confirmed true for every <em>documented</em> report and API endpoint, but not yet confirmed true for the <em>underlying database</em>. The discovery document now asks the admin directly: when a volunteer transitions Active &rarr; Inactive &rarr; Active, does Better Impact create a new record each time, or overwrite the same one? If the answer is "new record," real history may exist and a support-assisted one-time extract could beat everything proposed below. Don't commit engineering effort here until that question is answered.
+</div>
+
+<h2><span class="num">01</span>The core problem, stated precisely</h2>
+<p>If we only ever read Better Impact's <em>current</em> status, we can still answer <strong>start</strong> and <strong>end</strong> questions correctly (when did this person first appear as Active, when were they Archived) — those are single point-in-time facts and current-state reads capture them fine, eventually. What we lose is the <strong>middle</strong>: if a volunteer goes Active &rarr; Inactive &rarr; Active again, and we only check in periodically, we can miss the entire Inactive period if it falls between two of our checks.</p>
+
+<h2><span class="num">02</span>Gating risk: which plan BC SPCA is actually on decides whether Section 03 is even buildable</h2>
+<div class="callout risk">
+  <b>Confirmed from betterimpact.com/features — only the Impact plan includes the API</b>
+  Everything Section 03 proposes (a Fabric pipeline calling the Better Impact API on a schedule) requires API access, and the API is listed only under the top "Impact" tier — not Foundation, not Growth. BC SPCA's current tier is still unconfirmed (see the Integration Options document). Until that's known, treat the self-built-SCD2 fallback below as <strong>provisional</strong>, not a plan we can commit to.
+</div>
+<p>If BC SPCA turns out to be on Foundation or Growth, and upgrading to Impact isn't approved, the automated path in Section 03 is not available at all — there is no API to call. The only remaining option becomes:</p>
+<div class="stage-card"><b>Manual-export-only path</b>Someone at BC SPCA (the Better Impact admin, or whoever holds the granted access) has to manually log in, manually run the report, and manually send the export to the Data Team — on whatever cadence they're willing to repeat by hand, since Better Impact has no scheduling feature at any tier (confirmed in the Integration Options document). This isn't a lesser version of the automated pipeline; it's a fundamentally weaker position:</div>
+<table class="risk-table">
+  <tr><th></th><th>With API (Impact tier)</th><th>Without API (manual export only)</th></tr>
+  <tr><td>Who triggers each pull</td><td>Our own scheduled Fabric pipeline</td><td>A person, every single time, indefinitely</td></tr>
+  <tr><td>Realistic cadence</td><td>Nightly, reliably</td><td>Whatever a busy admin can sustain — likely far less frequent, and likely to lapse</td></tr>
+  <tr><td>What we can ever see</td><td>Current status + last-change date, same as always — no history either way</td><td>The same two fields, but captured less often, and dependent on someone remembering</td></tr>
+  <tr><td>What we can determine</td><td><strong>Start and end</strong> reliably; middle transitions only as good as pull frequency (Section 04)</td><td><strong>Start and end only</strong> — "middle" visibility effectively collapses to whatever the admin happens to catch, not a designed capability</td></tr>
+</table>
+<div class="callout warning">
+  <b>Plain statement of the risk, as you described it</b>
+  Without Impact-tier API access, we are not choosing a slower version of history-tracking — we are choosing to depend on a person to manually run and send us a report, and even then we can only ever confirm when someone started and when someone was archived. Any volunteer who went Inactive and back to Active in between two manual exports is invisible to us, and there is no tier-independent way to close that gap. This is a resourcing/cost decision for the Data Owner, not a technical workaround we can engineer around.
+</div>
+
+<h2><span class="num">03</span>The proposed fallback: build our own SCD2 from periodic snapshots</h2>
+<p>Since we already run our own pipeline into Microsoft Fabric for ShelterBuddy (the existing <code>kennel_history_scd2</code> pattern), the same architecture applies here: call the Better Impact API on a recurring schedule, compare each pull against the last one, and insert a new history row only when something changed.</p>
+<div class="stage-card"><b>Step 1 — Scheduled pull</b>Fabric pipeline calls the Better Impact API (requires Impact-tier access — see the Integration Options document) on a fixed cadence. Each pull returns current status + last-change date for every volunteer.</div>
+<div class="stage-card"><b>Step 2 — Diff against the prior pull</b>Compare each volunteer's status to what we stored last time. If unchanged, do nothing. If changed, close out the previous SCD2 row (set its end date) and open a new one with the new status, starting at the pull's own timestamp — not at Better Impact's <code>last_status_change</code> date, which may predate our detection of it.</div>
+<div class="stage-card"><b>Step 3 — Our own history table</b>Over time, this builds a <code>Foster_Volunteer_Status_History</code> table in the same shape as <code>kennel_history_scd2</code> — but entirely self-collected, starting from zero the day we turn this on.</div>
+
+<h2><span class="num">04</span>Risk — granularity is capped by pull frequency, and a missed cycle is gone forever</h2>
+<p>This is exactly the scenario you described: if a volunteer goes Inactive and back to Active <em>between</em> two scheduled pulls, our pipeline never sees the Inactive state at all — by the time we check again, they're already back to Active, indistinguishable from someone who was never inactive.</p>
+<div class="timeline">
+  <div class="axis">
+    <span class="pull">Pull — Mon</span>
+    <div class="gap missed"><span class="event">Inactive &rarr; Active, both happen here</span></div>
+    <span class="pull">Pull — Wed</span>
+  </div>
+  <p class="legend">Example: nightly pulls still miss a same-day round trip. Weekly pulls would miss an entire week-long pause. There is no pull frequency that eliminates this risk — only one that shrinks the window where it can happen.</p>
+</div>
+<table class="risk-table">
+  <tr><th>Pull cadence</th><th>What we catch</th><th>What we still miss</th><th>Cost/load tradeoff</th></tr>
+  <tr><td>Nightly</td><td>Any status change lasting a day or more</td><td>Same-day round trips (flag and un-flag within hours)</td><td>Low per-pull cost; most realistic default</td></tr>
+  <tr><td>Weekly</td><td>Changes lasting most of a week</td><td>Short pauses, most real-world "took a short break" cases</td><td>Lower API load, but defeats the purpose for retention/attrition KPIs</td></tr>
+  <tr><td>Hourly or sub-daily</td><td>Nearly everything</td><td>Only truly instantaneous double-changes</td><td>Likely excessive for a volunteer-status use case; probably not worth the API load</td></tr>
+</table>
+<p>Recommendation if this fallback is needed at all: nightly, matching typical operational cadences elsewhere in this project, not weekly — weekly would undermine the entire reason for building this.</p>
+
+<h2><span class="num">05</span>Risk — no retroactive backfill, unlike ShelterBuddy</h2>
+<div class="callout risk">
+  <b>This is the bigger risk, not the pull-frequency one</b>
+  ShelterBuddy's <code>kennel_history_scd2</code> already has roughly 20 years of real history behind it. A self-built Better Impact SCD2 has <strong>none</strong> — it only starts accumulating from the day the pipeline is turned on, because there is nothing to backfill from; Better Impact itself never kept the earlier states either. The two history tables will look structurally identical but have wildly different depth.
+</div>
+<p>Concrete consequence: the proposed <strong>12-Month Repeat Retention %</strong> and <strong>365-day Effective Behavioral Attrition</strong> signals (from the Foster Volunteer KPI research brief) both need roughly a year of history to compute meaningfully. If this fallback is built, those two signals will be <strong>data-starved for the first ~12 months</strong> after go-live — not broken, just not yet meaningful, since there's no prior year to compare against. The other three proposed signals (Utilization %, 1st-to-2nd Placement Conversion %, Shelter Days Saved) are less affected since they lean more on ShelterBuddy's own `AnimalID`+`PersonID` history, which already has depth.</p>
+
+<h2><span class="num">06</span>What would eliminate these risks</h2>
+<p>If the admin confirms Better Impact's database creates a new record on every status transition (Section 01's question), ask a direct follow-up: can Better Impact support staff run a one-time historical extract from the underlying database, even if no self-service report exposes it? That single confirmation could replace this entire fallback plan with real, deep history instead of a shallow one we have to grow ourselves.</p>
+
+<h2><span class="num">07</span>Decision this document does not make</h2>
+<p>Whether to actually build this fallback — and at what pull cadence — is a build-vs-wait call for the Data Owner/decision owner once the admin's answers are in, not something to decide from this document alone. This document only makes the tradeoff visible.</p>
+
+<footer>Internal technical discovery, not a BRD, not an approved build plan. Supersede this entire document if the admin confirms real history exists in Better Impact's underlying database.</footer>
+
+</div>
+</body>
+</html>

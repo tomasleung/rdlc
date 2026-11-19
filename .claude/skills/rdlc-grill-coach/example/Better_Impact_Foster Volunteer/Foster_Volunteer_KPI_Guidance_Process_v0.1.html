@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foster Volunteer KPI Guidance Process</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6;
+    --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3;
+    --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3;
+    --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4;
+    --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.55; font-size:15.5px;}
+  .wrap{max-width:900px; margin:0 auto; padding:0 28px 80px;}
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:56px 48px 40px; margin-bottom:44px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12.5px; color:#9db9c9; font-weight:600;}
+  .cover-main{margin-top:16px;}
+  .cover h1{font-size:27px; margin:0 0 10px; line-height:1.25;}
+  .cover .subtitle{font-size:16px; color:#cfe1ea; margin:0 0 20px; font-weight:400;}
+  .cover-rule{border:none; border-top:1px solid rgba(255,255,255,.22); margin:20px 0;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; letter-spacing:.03em; background:var(--teal); color:#fff; text-transform:uppercase; margin-right:8px;}
+  .status.v{background:rgba(255,255,255,.14); color:#cfe1ea;}
+  .cover-meta{display:grid; grid-template-columns:1fr 1fr; gap:10px 28px; margin-top:20px; font-size:13.5px; color:#cfe1ea;}
+  .cover-meta b{color:#fff; display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin-bottom:2px;}
+  h2{color:var(--navy); font-size:21px; margin:44px 0 6px; padding-bottom:8px; border-bottom:2px solid var(--line);}
+  h2 .num{color:var(--teal); margin-right:8px;}
+  p{margin:9px 0;}
+  .callout{border-radius:8px; padding:15px 18px; margin:16px 0; font-size:14.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  .callout.insight{background:var(--teal-soft); border-left:4px solid var(--teal); color:#1d4e49;}
+
+  .stage-list{counter-reset:stage; margin:18px 0; display:flex; flex-direction:column; gap:10px;}
+  .stage{display:flex; gap:14px; align-items:flex-start; border:1px solid var(--line); border-radius:8px; padding:14px 18px; background:#fbfcfc;}
+  .stage-num{counter-increment:stage; background:var(--navy); color:#fff; font-weight:700; font-size:13px; border-radius:50%; width:28px; height:28px; flex-shrink:0; display:flex; align-items:center; justify-content:center;}
+  .stage-num:before{content:counter(stage);}
+  .stage b{color:var(--navy); display:block; margin-bottom:4px; font-size:15px;}
+  .stage .say{background:var(--blue-soft); border-left:3px solid var(--blue); padding:8px 12px; margin-top:8px; font-size:13.5px; font-style:italic; color:#124e63; border-radius:0 6px 6px 0;}
+
+  footer{margin-top:50px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--grey);}
+  @media (max-width:680px){ .cover{padding:44px 24px 36px;} .cover h1{font-size:22px;} .cover-meta{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Volunteer Engagement &middot; Internal Process Guide</div>
+  <div class="cover-main">
+    <h1>Guiding a Data Owner from a Rough KPI to a Governed Definition</h1>
+    <p class="subtitle">A reusable, 6-step method — worked through using Lindsay's "Retention" proposal, but intended for any Data Owner's first-draft metric.</p>
+    <hr class="cover-rule">
+    <span class="status">Internal Process Guide</span><span class="status v">v0.1</span>
+    <div class="cover-meta">
+      <div><b>Why this exists</b>This is the Decision-First framework applied concretely — not abstractly described — to one real metric, so the method is reusable the next time a Data Owner brings a rough first draft.</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<p>This is the method to use whenever a Data Owner hands us a rough, first-draft metric — not just for Lindsay's Retention proposal. The point isn't to correct them; it's to guide them, using their own words and their own data, to a definition that actually serves the decision they have in mind.</p>
+
+<div class="stage-list">
+  <div class="stage">
+    <span class="stage-num"></span>
+    <div>
+      <b>Treat their input as a valid signal of intent, not a flawed answer to correct.</b>
+      A rough KPI draft — "Retention = # active >1yr" — tells us what the Data Owner cares about, even if the formula itself can't carry that weight. Open by taking the concern seriously, not by pointing out what's wrong with the formula.
+    </div>
+  </div>
+  <div class="stage">
+    <span class="stage-num"></span>
+    <div>
+      <b>Ask what decision it's meant to support, in their own words.</b>
+      This is the one question that determines everything downstream — don't infer it, ask it directly and record their actual answer.
+      <div class="say">"If this number went up or down next quarter, what would you actually do differently?"</div>
+    </div>
+  </div>
+  <div class="stage">
+    <span class="stage-num"></span>
+    <div>
+      <b>Stress-test their literal definition against one concrete, worked scenario — not an abstract objection.</b>
+      Show them a specific case, not a theory, so they see the gap themselves instead of being told about it.
+      <div class="say">"Volunteer A fostered once in March 2023, never got archived. Today, under your definition, they count as a retained &gt;1yr member. Does that match what you meant?"</div>
+    </div>
+  </div>
+  <div class="stage">
+    <span class="stage-num"></span>
+    <div>
+      <b>Once they agree the gap is real, show them why: the metric is bundling separable concepts.</b>
+      A single count is usually doing two or three jobs at once (e.g. status, tenure, utilization) that need to be tracked separately to answer the real decision from Step 2.
+    </div>
+  </div>
+  <div class="stage">
+    <span class="stage-num"></span>
+    <div>
+      <b>Propose a small number of named candidate definitions, each explicitly tied back to their Step 2 answer.</b>
+      Not a long menu — 2&ndash;3 concrete, named options, each one tested against "does this actually tell you what to do differently."
+    </div>
+  </div>
+  <div class="stage">
+    <span class="stage-num"></span>
+    <div>
+      <b>Confirmation gate.</b>
+      Nothing is settled until the Data Owner picks and explicitly confirms a definition — same rule as every other RDLC artifact in this project. A mid-discussion "sounds good" is not confirmation.
+    </div>
+  </div>
+</div>
+
+<div class="callout insight">
+  <b>Worked through once already</b>
+  See <code>Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html</code> in this same folder for where Steps 1&ndash;5 landed for Lindsay's Retention proposal specifically — Member Tenure and Foster Utilization Rate, replacing the single ambiguous count. Step 6 (her explicit confirmation) is still open.
+</div>
+
+<footer>Internal process guide, not a BRD. Reusable for the next Data Owner's first-draft metric, inside or outside this initiative.</footer>
+
+</div>
+</body>
+</html>

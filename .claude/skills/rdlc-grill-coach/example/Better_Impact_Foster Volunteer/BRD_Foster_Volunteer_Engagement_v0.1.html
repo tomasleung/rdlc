@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="BRD for integrating Better Impact foster-volunteer data with ShelterBuddy animal-side history to define core volunteer KPIs and a forward capacity benchmark.">
+  <title>Foster Volunteer Engagement: Better Impact Data Integration | Business Requirements Document</title>
+  <style>
+    :root {
+      --navy: #18364a; --blue: #176b87; --teal: #2f7f78; --green: #3f7652;
+      --amber: #a56616; --red: #9b3d35; --ink: #24323b; --muted: #5d6c75;
+      --line: #d8e0e4; --soft: #f3f7f8; --blue-soft: #eaf4f7; --green-soft: #edf6ef;
+      --amber-soft: #fff6e8; --red-soft: #fbeeed; --grey-soft: #f5f6f7; --white: #ffffff;
+      --page-width: 920px;
+    }
+    * { box-sizing: border-box; }
+    html { background: #dfe5e8; }
+    body { margin: 0; color: var(--ink); background: var(--white); font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.47; }
+    a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+    .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+    .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+    h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+    h1 { font-size: 28pt; line-height: 1.08; margin: 8mm 0 3mm; }
+    h2 { font-size: 18pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+    h3 { font-size: 13.5pt; margin: 7mm 0 2.5mm; }
+    h4 { font-size: 11.5pt; margin: 5mm 0 2mm; }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+    li { margin: 1.1mm 0; }
+    .cover { min-height: 235mm; display: flex; flex-direction: column; }
+    .cover-main { margin-top: 28mm; }
+    .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+    .subtitle { color: var(--muted); font-size: 13pt; max-width: 700px; }
+    .status { display: inline-block; margin-top: 6mm; padding: 2mm 4mm; border-radius: 99px; background: var(--amber-soft); color: #7b4a0c; font-weight: 700; }
+    .cover-meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+    .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .value { font-weight: 650; color: var(--navy); }
+    .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+    .callout.approved, .callout.in-scope { border-color: var(--green); background: var(--green-soft); }
+    .callout.warning, .callout.deferred, .callout.limitation { border-color: var(--amber); background: var(--amber-soft); }
+    .callout.risk { border-color: var(--red); background: var(--red-soft); }
+    .callout.note { border-color: #7b8990; background: var(--grey-soft); }
+    .callout strong:first-child { color: var(--navy); }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+    th, td { padding: 2.8mm 3.2mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    th:last-child, td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+    th { background: var(--navy); color: var(--white); text-align: left; font-size: 9pt; letter-spacing: .02em; }
+    .metadata th:first-child, .metadata td:first-child { width: 29%; }
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 4mm 0 6mm; }
+    .definition-card { border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: 8px; padding: 5mm; break-inside: avoid; }
+    .definition-card h3 { margin: 0 0 2mm; font-size: 14pt; }
+    .formula { font-family: Consolas, "Courier New", monospace; background: var(--soft); padding: 2.5mm 3mm; border-radius: 5px; margin: 2mm 0 3mm; }
+    .small { font-size: 9pt; color: var(--muted); }
+    .tag { display: inline-block; padding: 1mm 2.5mm; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); font-size: 8.5pt; font-weight: 700; margin: .7mm 1mm .7mm 0; }
+    .toc a { border: 0; }
+    .toc ol { columns: 2; column-gap: 10mm; }
+    .approval td { height: 15mm; }
+    .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+    @page { size: Letter; margin: 15mm 14mm 17mm; }
+    @media print {
+      html, body { background: var(--white); }
+      .page { max-width: none; padding: 0; }
+      .cover { page-break-after: always; }
+      a { color: inherit; border-bottom: 0; }
+    }
+    @media (max-width: 720px) {
+      .page { padding: 8mm; }
+      .card-grid, .cover-meta { grid-template-columns: 1fr; }
+      .toc ol { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+<main class="page">
+  <section class="cover">
+    <div class="eyebrow">Foster Volunteer Engagement</div>
+    <div class="cover-main">
+      <h1>Foster Volunteer Engagement: Better Impact Data Integration</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">Business Requirements Document<br>RDLC OS &middot; Step 0 Intake / BRD stage</p>
+      <span class="status">Draft for business review &middot; Version 0.1</span>
+    </div>
+    <div class="callout approved">
+      <strong>Decision supported</strong><br>
+      How to size, retain, and re-engage the foster volunteer pool relative to animal demand — enabling recruitment timing, targeted retention action (onboarding vs. re-engagement), and a historically-grounded forward benchmark, in place of manual, un-joined spreadsheet comparisons across two systems.
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Author</div><div class="value">Data &amp; Analytics (RDLC OS), on behalf of Tomas Leung</div></div>
+      <div><div class="label">Created</div><div class="value">2026-11-19</div></div>
+      <div><div class="label">Business decision owner</div><div class="value">Lindsay, Foster Volunteer Member Support — Pending formal designation</div></div>
+      <div><div class="label">Business definition owner</div><div class="value">Data &amp; Analytics (Tomas Leung) — definitions proposed, pending Lindsay's sign-off</div></div>
+      <div><div class="label">Technical owner</div><div class="value">Tomas Leung, Data Architecture</div></div>
+      <div><div class="label">Classification</div><div class="value">Internal — BC SPCA</div></div>
+    </div>
+  </section>
+
+  <section id="metadata">
+    <h2>Document metadata</h2>
+    <table class="metadata">
+      <thead><tr><th>Field</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>RDLC document type</td><td>Business Requirements Document (BRD)</td></tr>
+        <tr><td>RDLC phase</td><td>Foster Volunteer Engagement (initiative 06 — not "Phase 1" or "Phase 2"; those labels already belong to the ShelterBuddy-counters and Centre &amp; Animal Type Utilization initiatives respectively, see Section 4 naming note)</td></tr>
+        <tr><td>RDLC stage</td><td>Step 0 — Intake / BRD (<code>rdlc-grill-coach</code>)</td></tr>
+        <tr><td>Capability name</td><td>Foster Volunteer Engagement — Better Impact Data Integration</td></tr>
+        <tr><td>Capability domain</td><td>Foster Volunteer Engagement</td></tr>
+        <tr><td>Author</td><td>Data &amp; Analytics (RDLC OS), on behalf of Tomas Leung</td></tr>
+        <tr><td>Version</td><td>0.1</td></tr>
+        <tr><td>Status</td><td>Draft for business review</td></tr>
+        <tr><td>Created date</td><td>2026-11-19</td></tr>
+        <tr><td>Last updated</td><td>2026-11-19</td></tr>
+        <tr><td>Historical window</td><td>ShelterBuddy: 2006–2025 (confirmed range, per initiative 02/CATU profiling). Better Impact: <strong>unconfirmed</strong> — how far back BC SPCA's actual records go is an open admin question (Section 12).</td></tr>
+        <tr><td>Refresh frequency</td><td>Pending — Better Impact has no native scheduling at any confirmed tier; cadence depends on which extraction option (Section 9) is selected.</td></tr>
+        <tr><td>Primary delivery</td><td>This BRD, plus the companion KPI Requirements document (v0.3) and Discovery KPI Definitions document, same folder. Power BI delivery is a later RDLC OS stage, out of scope for this document.</td></tr>
+        <tr><td>Business decision owner</td><td>Lindsay, Foster Volunteer Member Support — Pending formal designation as Decision Owner specifically (she is the confirmed Data Owner for the underlying KPI definitions)</td></tr>
+        <tr><td>Business definition owner</td><td>Data &amp; Analytics (Tomas Leung) — proposed, pending Lindsay's explicit confirmation</td></tr>
+        <tr><td>Technical owner</td><td>Tomas Leung, Data Architecture</td></tr>
+        <tr><td>Source-system authority</td><td>Better Impact: admin not yet identified by name — Pending. ShelterBuddy: Cynthia Boulter (Data Owner, per initiative 01) — not yet confirmed as authority for this specific integration.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#summary">Executive summary</a></li>
+      <li><a href="#problem">Business problem</a></li>
+      <li><a href="#decision">Decision supported</a></li>
+      <li><a href="#current-state">Current state</a></li>
+      <li><a href="#desired-capability">Desired capability</a></li>
+      <li><a href="#business-questions">Business questions</a></li>
+      <li><a href="#analytical-approach">Analytical approach</a></li>
+      <li><a href="#definitions">Business definitions and KPI contracts</a></li>
+      <li><a href="#data-sources">Data sources</a></li>
+      <li><a href="#design-requirements">Data-design requirements</a></li>
+      <li><a href="#scope">Scope</a></li>
+      <li><a href="#constraints">Assumptions, constraints, dependencies, and limitations</a></li>
+      <li><a href="#report-requirements">Report and consumption requirements</a></li>
+      <li><a href="#data-quality">Data quality and validation</a></li>
+      <li><a href="#success-criteria">Success criteria</a></li>
+      <li><a href="#acceptance-criteria">Acceptance criteria</a></li>
+      <li><a href="#deliverables">Deliverables</a></li>
+      <li><a href="#governance">Governance and change control</a></li>
+      <li><a href="#approvals">Approvals</a></li>
+      <li><a href="#appendices">Appendices</a></li>
+    </ol>
+  </nav>
+
+  <section id="summary">
+    <h2>01 &middot; Executive summary</h2>
+    <p>The Foster Volunteer Member Support team cannot currently see, in one place, how BC SPCA's foster-volunteer pool is performing. Better Impact (the volunteer-management system) has its own reporting, but it is hard to locate, cannot be compared against ShelterBuddy's animal-side data, and — until this effort — had no agreed definition of which measures actually matter. Today, any combined view requires manually exporting from both systems and reconciling them by hand.</p>
+    <p>This BRD governs a set of 10 volunteer-side KPIs and 2 supporting dimensions, built entirely from Better Impact's own status lifecycle (Applicant &rarr; In Process &rarr; Active/Accepted &rarr; Inactive / Archived), replacing the Data Owner's two original, imprecisely-specified measures ("Retention," "Attrition") with named, decomposed, independently auditable definitions. It also governs a framework for reading these volunteer-side measures side by side with ShelterBuddy's existing animal-side history (Intake Animals, Foster Animals, % Animals in Foster), so that capacity and demand can finally be compared.</p>
+    <p>The principal outputs are: (1) the KPI and dimension set itself (Section 8); (2) a documented method for combining it with the animal side to support specific operational decisions (Section 6 of the companion Requirements document); and (3) a plan to build a historical volunteer-pool trend to sit alongside the animal side's existing 20-year history, from which a forward operating benchmark can eventually be set.</p>
+    <div class="callout warning">
+      <strong>Main interpretation boundary</strong><br>
+      No measure in this BRD may be read as a performance score for an individual volunteer, as a confirmed cause of attrition, or as a fully automated cross-system report. Several measures depend on fields in Better Impact (Active/Accepted Date, Archived Date) whose existence and reliability are <strong>not yet confirmed</strong> by the Better Impact admin — see Sections 9 and 12.
+    </div>
+  </section>
+
+  <section id="problem">
+    <h2>02 &middot; Business problem</h2>
+    <p><strong>Current condition.</strong> The Foster Volunteer Member Support team manages volunteer records in Better Impact and animal placements in ShelterBuddy. No report or process currently combines the two. Any question that touches both — for example, "do we have enough fosters for our current intake volume" — requires someone to manually export data from each system and compare it by hand.</p>
+    <p><strong>Information/decision gap.</strong> Before this effort, the team had two informally stated measures — "Retention" (fosters active more than a year) and "Attrition" (fosters archived per year/quarter) — neither with a documented formula, population, or grain. Both were found, on inspection, to be ambiguous in ways that would produce inconsistent answers depending on who built the report (see the companion Discovery KPI Definitions document for the specific ambiguities found and resolved).</p>
+    <p><strong>People/process affected.</strong> Lindsay (Foster Volunteer Member Support) is the primary person affected; any Foster Manager who needs to decide whether to prioritize recruitment versus retention action is a secondary consumer.</p>
+    <p><strong>Operational/governance consequence.</strong> Without defined measures, retention and capacity decisions have been made without a consistent, auditable basis. Without a cross-system view, capacity (volunteer side) and demand (animal side) cannot be compared at all, so it isn't possible to tell whether a given period's foster shortfall is a recruitment problem, a retention problem, or simply a demand spike.</p>
+    <p><strong>Why existing reports are insufficient.</strong> Better Impact's own standard reports are difficult to locate within the product and do not support cross-product analysis. Better Impact also retains no change history for a volunteer's status — only the current status and, per BC SPCA's own custom tracking, a date per status last reached — which further limits what any native report could show even if it were easy to find.</p>
+  </section>
+
+  <section id="decision">
+    <h2>03 &middot; Decision supported</h2>
+    <table>
+      <thead><tr><th>Field</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Decision to be made</td><td>Whether, and where, to act on foster-volunteer capacity and retention — recruit, intervene on retention, or re-engage an under-utilized Active pool — informed by both the volunteer-side measures (Section 8) and the animal-side demand context (Section 6 of the companion Requirements document).</td></tr>
+        <tr><td>Intended business action</td><td>Timing a recruitment push; targeting a retention intervention at a specific tenure band (onboarding fix vs. re-engagement campaign, per the Time With Us Before Leaving dimension); eventually, setting an operating benchmark for pool size based on real historical pattern.</td></tr>
+        <tr><td>Decision owner</td><td>Lindsay, Foster Volunteer Member Support — Pending formal confirmation as Decision Owner.</td></tr>
+        <tr><td>Decision frequency/timing</td><td>Proposed quarterly or annual review cadence — not yet confirmed.</td></tr>
+        <tr><td>Why timing matters</td><td>BC SPCA's animal intake has a known seasonal pattern (per the existing 20-year animal-side history); a capacity decision made too late in a seasonal ramp has less value than the same decision made earlier.</td></tr>
+        <tr><td>What this artifact does not decide</td><td>It does not set a specific recruitment headcount target, does not attribute a confirmed cause to any individual's departure, does not evaluate individual volunteer performance, and does not implement an automated cross-system join (Section 11).</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="current-state">
+    <h2>04 &middot; Current state</h2>
+    <ul>
+      <li><strong>Existing process/artifact:</strong> manual export from Better Impact and from ShelterBuddy, reconciled by hand; no standing report combines them.</li>
+      <li><strong>Existing trusted definitions:</strong> none formally governed before this effort. Lindsay's own two draft measures ("Retention," "Attrition") were the only prior starting point, and both were found ambiguous on inspection.</li>
+      <li><strong>Current sources:</strong> Better Impact (volunteer status and status dates); ShelterBuddy (animal intake, foster placement, and the existing Intake Animals / Foster Animals / % Animals in Foster history).</li>
+      <li><strong>Known limitations:</strong> Better Impact retains no change history for status (only the current status, plus a date-per-status-last-reached that BC SPCA tracks via its own custom fields — not yet confirmed as a reliable, dedicated field by the admin); Better Impact has no scheduling/automation for reports at any tier; API and raw-data-report access is gated to a tier BC SPCA's current subscription has not been confirmed to hold.</li>
+      <li><strong>Manual effort/fragmentation:</strong> as described in Section 2 — every cross-system question today requires a manual export-and-compare step.</li>
+      <li><strong>Previous phases that must remain authoritative:</strong> the Phase 1 (ShelterBuddy counters, initiative 01) animal-side measures and the Centre &amp; Animal Type Utilization (CATU, initiative 02) "Animals in Care" population measure are both authoritative on the animal side and are <strong>not redefined by this BRD</strong>. Note: Phase 1's own "% Animals in Foster" measure is itself still contested within this project (initiative 01) — this BRD uses it as-is, flags it is not yet confirmed, and does not attempt to resolve that separate open question.</li>
+    </ul>
+  </section>
+
+  <section id="desired-capability">
+    <h2>05 &middot; Desired capability</h2>
+    <p>A documented, named set of foster-volunteer KPIs and dimensions (Section 8), each traceable to a specific business question and a specific decision (see the companion Requirements document, Section 5). A documented method for reading those measures next to the animal side's existing history (same document, Section 6), without requiring a confirmed system-to-system join to begin producing value. A historical volunteer-pool view that can eventually sit alongside the animal side's existing 20-year chart. All of this delivered first as governed documentation (this BRD and its companions), with a Power BI build to follow once this BRD and its linked KPI set are confirmed — out of scope for this document itself.</p>
+  </section>
+
+  <section id="business-questions">
+    <h2>06 &middot; Business questions</h2>
+    <table>
+      <thead><tr><th>Business question</th><th>Intended measure / view</th></tr></thead>
+      <tbody>
+        <tr><td>How many of our fosters are long-standing, reliable capacity?</td><td>Active Fosters Over 1 Year (KPI 1)</td></tr>
+        <tr><td>How big is our total usable foster pool right now?</td><td>Active Fosters (KPI 2)</td></tr>
+        <tr><td>Is our active pool mostly experienced or mostly new?</td><td>% Active Fosters Over 1 Year (KPI 3); Time as an Active Foster (Dimension 11)</td></tr>
+        <tr><td>How many people are we actually losing, and is it getting worse relative to who we had?</td><td>Fosters Archived (KPI 4); Not Yet Archived at Start of Period (KPI 5); % Fosters Archived (KPI 8)</td></tr>
+        <tr><td>Are we replacing the people we lose?</td><td>New Foster Created (KPI 6); Archived&ndash;to&ndash;New Ratio (KPI 7)</td></tr>
+        <tr><td>Are we losing people early, or after years?</td><td>Time With Us Before Leaving (Dimension 12)</td></tr>
+        <tr><td>Of our Active roster, how many are actually placing animals right now?</td><td>Active Fosters With a Recent Foster Placement (KPI 9); % Active Fosters With a Recent Foster Placement (KPI 10)</td></tr>
+        <tr><td>Relative to historical animal-side demand, is our volunteer capacity keeping pace?</td><td>Active Fosters (KPI 2) read against % Animals in Foster / Intake Animals (Requirements document, Section 6) — side-by-side reading only, not an automated join</td></tr>
+      </tbody>
+    </table>
+    <p class="small">Out of scope for this question list: why any individual volunteer left (causal attribution), and what the "right" recruitment headcount is (a target-setting decision, not a reporting one).</p>
+  </section>
+
+  <section id="analytical-approach">
+    <h2>07 &middot; Analytical approach</h2>
+    <ul>
+      <li><strong>Reporting grain:</strong> one row per Better Impact volunteer record for KPIs 1&ndash;8 and Dimensions 11&ndash;12; one row per ShelterBuddy animal placement for the animal-side pairing in Section 6 of the Requirements document.</li>
+      <li><strong>Population:</strong> all Better Impact records that have reached at least Applicant status; measures scoped to Active/Accepted or Archived are stated explicitly per KPI (Section 8).</li>
+      <li><strong>Entity/event identifiers:</strong> Better Impact member record (identifier not yet profiled); ShelterBuddy <code>AnimalID</code>+<code>PersonID</code> placement link (existence of a reliable link between the two systems is <strong>unconfirmed</strong> — Section 12).</li>
+      <li><strong>Time zone:</strong> assumed Pacific, not yet explicitly confirmed.</li>
+      <li><strong>Interval boundaries:</strong> calendar year, quarter, or month, Data Owner's choice; "start of period" = first calendar day of the chosen interval.</li>
+      <li><strong>Effective-dated treatment:</strong> Active/Accepted Date and Archived Date are used as point-in-time proxies for "was this person already a foster, and not yet gone, as of a past date." This is an approximation, not a true historical status snapshot — Better Impact retains no change history, only the most recent date reached per status (see Section 12's assumptions).</li>
+      <li><strong>Distinct-count keys:</strong> one count per volunteer member record; one count per ShelterBuddy placement event where used.</li>
+      <li><strong>Additive/non-additive behaviour:</strong> Active Fosters (KPI 2) and Not Yet Archived at Start of Period (KPI 5) are point-in-time snapshots — not additive across periods. Fosters Archived (KPI 4) and New Foster Created (KPI 6) are additive within a stated period only.</li>
+      <li><strong>Historical restatement:</strong> not supported. If a volunteer's status was overwritten by a later reactivation or reinstatement before this BRD's extraction began, the earlier period cannot be corrected retroactively.</li>
+      <li><strong>Current/open record treatment:</strong> Active and Inactive are both treated as "not yet gone" for KPI 5's purposes (Inactive is <em>not</em> a disqualifier); Archived is treated as terminal, pending the admin confirming whether reinstatement from Archived is actually possible (Section 12).</li>
+    </ul>
+    <div class="callout note">
+      <strong>Worked example required by this standard</strong><br>
+      A 5-person illustrative dataset (Tom, Sarah, Maria, David, Priya — see Appendix A and <code>SCD1_Member_Lifecycle_Validation_Sample_v0.1.csv</code>, same folder) was built specifically to validate every formula in Section 8 by hand before this BRD was drafted, including the one case (a reactivation straddling a period boundary) where the stated assumption in Section 12 would visibly break the count if it occurred at the wrong time.
+    </div>
+  </section>
+
+  <section id="definitions">
+    <h2>08 &middot; Business definitions and KPI contracts</h2>
+    <p>Full field-by-field contracts (business definition, formula, grain, source, layer, permitted/prohibited conclusion) are maintained in the companion <code>Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html</code> (internal/technical) and summarized in business language in <code>Foster_Volunteer_KPI_Requirements_v0.3.html</code> (Data Owner-facing), both in this same folder. This BRD governs that set by reference rather than duplicating every field; the cards below are a condensed summary.</p>
+    <div class="card-grid">
+      <div class="definition-card">
+        <h3>1&ndash;3 &middot; Active Fosters Over 1 Year / Active Fosters / % Active Fosters Over 1 Year</h3>
+        <p>How many current Active/Accepted volunteers have held that status over a year (1); how many are Active/Accepted at all, any tenure (2); the ratio of the two (3).</p>
+        <div class="formula">(1) COUNT(Status=Active AND tenure&gt;1yr) &middot; (2) COUNT(Status=Active) &middot; (3) = (1) &divide; (2)</div>
+        <p class="small">Grain: current snapshot. Source: Better Impact. Owner: Tomas Leung (proposed), pending Lindsay's confirmation.</p>
+      </div>
+      <div class="definition-card">
+        <h3>4&ndash;6, 8 &middot; Fosters Archived / Not Yet Archived at Start of Period / New Foster Created / % Fosters Archived</h3>
+        <p>How many were Archived in the period (4); how many had already become Active and weren't yet Archived as of the period's start, including anyone currently Inactive (5); how many new records started in the period (6); the true attrition rate, (4)&divide;(5) (8).</p>
+        <div class="formula">(4) COUNT(ArchivedDate in period) &middot; (5) COUNT(ActiveDate&le;start AND not yet Archived by start) &middot; (6) COUNT(ApplicantDate in period) &middot; (8) = (4) &divide; (5)</div>
+        <p class="small">Grain: period-based count (4, 6) or start-of-period snapshot (5). Source: Better Impact.</p>
+      </div>
+      <div class="definition-card">
+        <h3>7 &middot; Archived&ndash;to&ndash;New Ratio</h3>
+        <p>Archived during the period, divided by new volunteers who joined during that same period — a loss-versus-growth comparison, distinct from the attrition rate (8), which compares loss against the people already on hand.</p>
+        <div class="formula">(7) = (4) &divide; (6)</div>
+        <p class="small">Grain: period-based. Source: Better Impact.</p>
+      </div>
+      <div class="definition-card">
+        <h3>9&ndash;10 &middot; Active Fosters With a Recent Foster Placement / %</h3>
+        <p>How many currently Active/Accepted volunteers have taken an animal into foster care within the last 90 days (9); what share of all Active/Accepted volunteers that represents (10).</p>
+        <div class="formula">(9) COUNT(Status=Active AND &ge;1 SB placement in last 90 days) &middot; (10) = (9) &divide; (2)</div>
+        <p class="small">Grain: current snapshot. Source: Better Impact + ShelterBuddy — <strong>requires the join key confirmed (Section 12).</strong> 90-day window proposed, not yet confirmed.</p>
+      </div>
+      <div class="definition-card">
+        <h3>11 &middot; Time as an Active Foster <em>(dimension)</em></h3>
+        <p>Groups Active/Accepted volunteers by how long they've held that status (e.g. under 1yr / 1&ndash;2yr / 2+yr) — not a standalone count, used to break down KPIs 1&ndash;3.</p>
+        <p class="small">Band boundaries are proposed defaults, to be built as an adjustable setting, not hard-coded (per the Requirements document, Section 4).</p>
+      </div>
+      <div class="definition-card">
+        <h3>12 &middot; Time With Us Before Leaving <em>(dimension)</em></h3>
+        <p>Groups Archived volunteers by how long they had been Active/Accepted before leaving — separates early exits (possible onboarding issue) from long-tenure exits (a different, more natural kind of exit).</p>
+        <p class="small">Same band-boundary note as Dimension 11.</p>
+      </div>
+    </div>
+    <div class="callout warning">
+      <strong>Approval status</strong><br>
+      All 10 KPIs and 2 dimensions above are <strong>proposed, not yet confirmed</strong> by Lindsay as Data Owner. Formulas are validated against the Appendix A worked example, not yet against a real Better Impact export.
+    </div>
+  </section>
+
+  <section id="data-sources">
+    <h2>09 &middot; Data sources</h2>
+    <table>
+      <thead><tr><th>Source</th><th>Business authority</th><th>Governed purpose</th><th>Keys / fields needed</th><th>Known quality concerns</th></tr></thead>
+      <tbody>
+        <tr><td>Better Impact</td><td>Admin not yet identified by name — Pending</td><td>Volunteer status and tenure (KPIs 1&ndash;8, Dimensions 11&ndash;12)</td><td>Member record identifier; Status; Applicant/In Process/Active/Accepted/Inactive/Archived dates</td><td>No retained change history (only current status + most-recent date per status); field existence/reliability of the Active/Accepted and Archived dates not yet confirmed by the admin; no native report scheduling at any tier; API/raw-data access gated to an unconfirmed subscription tier</td></tr>
+        <tr><td>ShelterBuddy</td><td>Cynthia Boulter (per initiative 01) — not yet confirmed as authority for this specific integration</td><td>Animal-side demand context (Intake Animals, Foster Animals, % Animals in Foster, Animals in Care); foster placement history for KPIs 9&ndash;10</td><td><code>AnimalID</code>+<code>PersonID</code> placement record; existing Intake Animals/Foster Animals history</td><td>Phase 1's own "% Animals in Foster" measure is itself contested elsewhere in this project (initiative 01) — used here as-is, not re-litigated by this BRD; no confirmed join key to a Better Impact member record</td></tr>
+      </tbody>
+    </table>
+    <p class="small">No physical table or column names are asserted here beyond what is already documented in this project's existing Table Definitions and initiative files; where physical profiling is incomplete, this is stated as a dependency (Section 12), not invented.</p>
+  </section>
+
+  <section id="design-requirements">
+    <h2>10 &middot; Data-design requirements</h2>
+    <ul>
+      <li><strong>Required output grain:</strong> one row per Better Impact member record, with derived period-based counts per Section 7.</li>
+      <li><strong>Effective start/end semantics:</strong> Active/Accepted Date and Archived Date act as the only available start/end markers; no interim Inactive period is reliably bounded.</li>
+      <li><strong>Event precedence/tie-breaking:</strong> not yet defined — depends on whether Better Impact's underlying date fields can hold same-day multiple transitions; flagged as a dependency pending admin confirmation.</li>
+      <li><strong>Source identifiers retained for audit:</strong> the Better Impact member identifier must be retained on every derived row; no equivalent requirement yet defined for ShelterBuddy placement records pending the join-key confirmation.</li>
+      <li><strong>Change detection:</strong> not available — Better Impact exposes no change log; any change-detection approach would have to be built as a BC SPCA-side snapshot comparison, which is itself subject to the same overwrite risk described in Section 12.</li>
+      <li><strong>Current-row handling:</strong> the member's current Status always reflects "now"; all period-based KPIs (4&ndash;8) must derive their own point-in-time logic from the date fields rather than relying on current Status.</li>
+      <li><strong>Conflict handling / unknown-unmapped treatment:</strong> Applicant and In Process records are explicitly excluded from the "foster" population used in KPIs 1&ndash;3 and 5 — they have never been an active foster. Whether a "Total Members, all statuses" base measure should also be built is an open design question, not yet decided (see Appendix D).</li>
+      <li><strong>Lineage/traceability:</strong> every KPI in Section 8 traces to a specific business question in Section 6; every formula was hand-validated against Appendix A before being included in this BRD.</li>
+      <li><strong>Reconciliation controls:</strong> re-run the Appendix A worked example against the formulas in Section 8 any time a formula changes, before republishing either this BRD or the companion documents.</li>
+    </ul>
+    <div class="callout note">
+      A status-row change in Better Impact (e.g. Active &rarr; Inactive) must <strong>not</strong> be read as a new foster-placement event — it is an administrative status change only, unrelated to any specific animal placement.
+    </div>
+  </section>
+
+  <section id="scope">
+    <h2>11 &middot; Scope</h2>
+    <h3>In scope</h3>
+    <ul>
+      <li>The 10 KPIs and 2 dimensions defined in Section 8, built entirely from Better Impact.</li>
+      <li>The business-question-to-decision mapping in Section 6 (and the Requirements document's Section 5).</li>
+      <li>A documented, person-read (not system-automated) framework for comparing the above against existing ShelterBuddy animal-side history (Requirements document, Section 6).</li>
+      <li>A worked, hand-validated example proving every formula computes as intended (Appendix A).</li>
+    </ul>
+    <h3>Deferred to a named future phase</h3>
+    <ul>
+      <li><strong>Animals in Care as a second denominator</strong> alongside the current Intake-Animals-based % Animals in Foster, once that measure is confirmed and available for this pairing. <span class="small">(Per Tomas's explicit instruction, this deferred item is intentionally not stated in the Data-Owner-facing Requirements document — it is recorded here only, in this governed BRD, per the BRD Content Standard's requirement to state deferred scope explicitly.)</span></li>
+      <li>An automated, system-to-system join between Better Impact and ShelterBuddy, pending confirmation that a reliable join key exists at all (Section 12).</li>
+      <li>A historical volunteer-pool trend view to sit alongside the existing 20-year animal-side chart, pending confirmation of how far back Better Impact's own records actually go.</li>
+      <li>A forward operating benchmark for pool size, pending the historical view above being built.</li>
+    </ul>
+    <h3>Out of scope</h3>
+    <ul>
+      <li>Individual volunteer performance evaluation — no measure in this BRD may be read as a performance score for a named person.</li>
+      <li>Causal attribution of why any individual volunteer left.</li>
+      <li>Setting an actual recruitment headcount target.</li>
+      <li>Real-time or live reporting — Better Impact has no native scheduling at any tier.</li>
+      <li>Power BI/report build — this BRD is a Step 0 intake artifact; semantic model and report design are later RDLC OS stages, not covered here.</li>
+    </ul>
+  </section>
+
+  <section id="constraints">
+    <h2>12 &middot; Assumptions, constraints, dependencies, and accepted limitations</h2>
+    <h3>Assumptions</h3>
+    <ul>
+      <li>"Active/Accepted Date" and "Archived Date" are real, dedicated, reliable fields in Better Impact — not yet confirmed.</li>
+      <li>The rate of Active&rarr;Inactive&rarr;Active cycling is low (Tomas's own estimate, under 3%) — stated as an assumption, not verified.</li>
+      <li>Archived is a terminal status with no path back — not yet confirmed; if reinstatement is possible, it inherits the same overwrite risk as Inactive&rarr;Active reactivation.</li>
+    </ul>
+    <h3>Constraints</h3>
+    <ul>
+      <li>Better Impact has no scheduling or automation for any report, at any tier.</li>
+      <li>Better Impact's JSON API and raw-data reporting are gated to a subscription tier BC SPCA's current holding has not been confirmed to include.</li>
+    </ul>
+    <h3>Dependencies</h3>
+    <ul>
+      <li>Better Impact admin confirmation: does "Active/Accepted Date" exist as a dedicated field; does "Archived Date" behave the same way; can a volunteer go Inactive&rarr;Active again and is any trace visible afterward; can a volunteer be un-Archived and is any trace visible afterward; does the 5-status lifecycle match BC SPCA's actual configured account; how far back do records go.</li>
+      <li>Confirmation of a reliable join key between a Better Impact member record and a ShelterBuddy <code>AnimalID</code>+<code>PersonID</code> record (blocks KPIs 9&ndash;10).</li>
+      <li>Lindsay's explicit sign-off on the KPI/dimension set, the 90-day window (KPIs 9&ndash;10), and the time-band boundaries (Dimensions 11&ndash;12).</li>
+    </ul>
+    <h3>Accepted limitations</h3>
+    <ul>
+      <li>No automated cross-system join exists yet — Section 6 of the Requirements document is a side-by-side reading framework, not a computed joint report.</li>
+      <li>No true historical status snapshot exists — KPI 5 is a deliberate approximation (not-yet-archived, not confirmed-active), which includes anyone sitting Inactive the whole time.</li>
+      <li>Any reactivation or reinstatement that occurred before this BRD's data extraction began cannot be recovered retroactively.</li>
+    </ul>
+  </section>
+
+  <section id="report-requirements">
+    <h2>13 &middot; Report and consumption requirements</h2>
+    <ul>
+      <li><strong>Required views:</strong> the KPI table (Section 8); the dimension table (same); the business-question/decision mapping (Section 6, and Requirements document Section 5); the animal-side combination scenarios (Requirements document, Section 6).</li>
+      <li><strong>Filters/comparisons:</strong> by period (year/quarter/month); by Analysis Category (Retention/Engagement); by tenure band (Dimensions 11&ndash;12).</li>
+      <li><strong>Narrative/interpretation rules:</strong> every KPI's Permitted and Prohibited Conclusion (per the Discovery KPI Definitions document) must be carried into any future report built from this BRD, not dropped for brevity.</li>
+      <li><strong>Zero/null/unknown presentation:</strong> KPIs 9&ndash;10 must display as explicitly "not computable — needs the ShelterBuddy join" rather than a blank or zero, which would misleadingly imply no recent placements occurred.</li>
+      <li><strong>Low-volume suppression:</strong> not yet defined — Pending, flag before any report build begins.</li>
+      <li><strong>Drill-through/export, aggregate vs. record-level access:</strong> not yet defined — Pending.</li>
+      <li><strong>Delivery format:</strong> this BRD and its companion documents (HTML) for now; Power BI report is a later, out-of-scope stage.</li>
+      <li><strong>Publication frequency:</strong> Pending, tied to the refresh-frequency dependency in Section 9/12.</li>
+    </ul>
+  </section>
+
+  <section id="data-quality">
+    <h2>14 &middot; Data quality and validation</h2>
+    <ul>
+      <li><strong>Completeness thresholds:</strong> not yet defined — Pending, dependent on confirmed field availability (Section 12).</li>
+      <li><strong>Worked-example validation:</strong> complete — all 10 KPIs and 2 dimensions were hand-computed against the 5-person Appendix A sample before inclusion in this BRD, including the one case (Sarah's reactivation) designed specifically to test the stated assumption under Section 12.</li>
+      <li><strong>Source-to-output reconciliation:</strong> not yet performed against a real Better Impact export — Pending.</li>
+      <li><strong>Refresh repeatability:</strong> blocked until an extraction method (manual export vs. API, see the Technical Integration &amp; Risk document) is selected and confirmed.</li>
+      <li><strong>Restatement controls:</strong> none available — see the accepted limitation in Section 12 regarding lost reactivation/reinstatement history.</li>
+      <li><strong>Publication-blocking criteria:</strong> do not publish a year-over-quarter-over-month comparison of % Fosters Archived (KPI 8) without the caveat that different period lengths absorb "joined-and-left-in-the-same-period" people differently and are therefore not directly comparable to each other.</li>
+    </ul>
+  </section>
+
+  <section id="success-criteria">
+    <h2>15 &middot; Success criteria</h2>
+    <ul>
+      <li>Lindsay can answer her original Retention and Attrition questions precisely, using named measures with stated formulas, rather than an ambiguous single number.</li>
+      <li>A side-by-side reading of volunteer capacity against animal-side demand is possible without a manual re-derivation each time (Requirements document, Section 6).</li>
+      <li>Every measure is reproducible from its documented formula against the same input data (demonstrated against Appendix A).</li>
+      <li>Known limitations (no history, no confirmed join, contested animal-side denominator) are visible in the governing documents, not hidden from the reader.</li>
+      <li>A volunteer-side historical trend exists, once Better Impact's historical depth is confirmed, enabling a benchmark discussion grounded in real pattern rather than a guess.</li>
+    </ul>
+  </section>
+
+  <section id="acceptance-criteria">
+    <h2>16 &middot; Acceptance criteria</h2>
+    <table>
+      <thead><tr><th>Criterion</th><th>Evidence required</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Governance approval</td><td>Lindsay's explicit "Confirmed" on this BRD and the KPI/dimension set</td><td>Pending</td></tr>
+        <tr><td>Definition approval</td><td>Sign-off on the Requirements document v0.3 (or its successor)</td><td>Pending</td></tr>
+        <tr><td>Source interpretation</td><td>Better Impact admin confirms field existence, reactivation/reinstatement visibility, and historical depth</td><td>Pending</td></tr>
+        <tr><td>Data integrity</td><td>Worked-example reconciliation (Appendix A)</td><td>Complete</td></tr>
+        <tr><td>Reconciliation against real data</td><td>Source-to-output check against an actual Better Impact export</td><td>Pending</td></tr>
+        <tr><td>Security and access</td><td>Not yet addressed</td><td>Pending</td></tr>
+        <tr><td>Operational readiness</td><td>Extraction method selected (manual export vs. API tier upgrade)</td><td>Pending</td></tr>
+        <tr><td>Refresh readiness</td><td>Cadence confirmed once extraction method is chosen</td><td>Pending</td></tr>
+        <tr><td>Known-limitation acceptance</td><td>Lindsay explicitly accepts the no-history/approximation limitations documented in Section 12</td><td>Pending</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="deliverables">
+    <h2>17 &middot; Deliverables</h2>
+    <table>
+      <thead><tr><th>Deliverable</th><th>Purpose</th><th>Format</th><th>Owner</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>This BRD (v0.1)</td><td>Governed problem/scope/definition record</td><td>HTML</td><td>Tomas Leung</td><td>Draft for business review</td></tr>
+        <tr><td>Foster_Volunteer_KPI_Requirements_v0.3.html</td><td>Data Owner-facing KPI/dimension reference</td><td>HTML</td><td>Tomas Leung</td><td>Draft for business review</td></tr>
+        <tr><td>Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html</td><td>Internal technical KPI contracts</td><td>HTML</td><td>Tomas Leung</td><td>Draft</td></tr>
+        <tr><td>SCD1_Member_Lifecycle_Validation_Sample_v0.1.csv</td><td>Worked-example validation data (Appendix A)</td><td>CSV</td><td>Tomas Leung</td><td>Complete, illustrative only</td></tr>
+        <tr><td>Volunteer-side historical pool trend (future)</td><td>Pair against the existing 20-year animal-side chart</td><td>TBD</td><td>TBD</td><td>Not started — blocked on Better Impact historical-depth confirmation</td></tr>
+        <tr><td>Combined capacity/demand benchmark view (future)</td><td>Forward operating benchmark grounded in historical pattern</td><td>TBD</td><td>TBD</td><td>Not started — blocked on the item above plus the join-key confirmation</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="governance">
+    <h2>18 &middot; Governance and change control</h2>
+    <ul>
+      <li><strong>Business decision owner:</strong> Lindsay — Pending formal designation.</li>
+      <li><strong>Business definition owner:</strong> Tomas Leung (proposed) — Pending Lindsay's sign-off.</li>
+      <li><strong>Technical owner:</strong> Tomas Leung, Data Architecture.</li>
+      <li><strong>Source-system authority:</strong> Better Impact admin — not yet identified by name; ShelterBuddy — Cynthia Boulter (per initiative 01), not yet confirmed as authority for this specific integration.</li>
+      <li><strong>Publication approver:</strong> Pending.</li>
+      <li><strong>Change-approval requirements:</strong> any change to a confirmed KPI formula, population, or grain requires a new document version — this project's documents are never silently overwritten (see version history in Appendix C).</li>
+      <li><strong>Regression-test requirement:</strong> re-run the Appendix A worked example after any formula change, before republishing.</li>
+      <li><strong>Historical-restatement policy:</strong> not supported — see Section 12's accepted limitation.</li>
+      <li><strong>Disclosure requirement:</strong> the Appendix A sample data (Tom, Sarah, Maria, David, Priya) is illustrative only and must never be presented or mistaken as a real Better Impact export.</li>
+    </ul>
+  </section>
+
+  <section id="approvals">
+    <h2>19 &middot; Approvals</h2>
+    <table class="approval">
+      <thead><tr><th>Role</th><th>Name</th><th>Decision</th><th>Date</th></tr></thead>
+      <tbody>
+        <tr><td>Business decision owner</td><td>Lindsay</td><td>Pending</td><td></td></tr>
+        <tr><td>Business definition owner</td><td>Tomas Leung (proposed)</td><td>Pending</td><td></td></tr>
+        <tr><td>Technical owner</td><td>Tomas Leung</td><td>Pending</td><td></td></tr>
+        <tr><td>Source-system authority (Better Impact)</td><td>To be assigned</td><td>Pending</td><td></td></tr>
+        <tr><td>Source-system authority (ShelterBuddy)</td><td>Cynthia Boulter (proposed)</td><td>Pending</td><td></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="appendices">
+    <h2>20 &middot; Appendices</h2>
+    <h3>Appendix A — Worked example</h3>
+    <p>See <code>SCD1_Member_Lifecycle_Validation_Sample_v0.1.csv</code> and Section 3 of <code>Foster_Volunteer_KPI_Requirements_v0.3.html</code> (same folder) for the full 5-person dataset (Tom, Sarah, Maria, David, Priya) and every KPI's computed result against it, including the reactivation edge case.</p>
+    <h3>Appendix B — Glossary</h3>
+    <table>
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Applicant</td><td>Just applied to Better Impact, not yet reviewed.</td></tr>
+        <tr><td>In Process</td><td>Being reviewed/onboarded.</td></tr>
+        <tr><td>Active / Accepted</td><td>Approved — a real foster volunteer.</td></tr>
+        <tr><td>Inactive</td><td>Temporary pause — may return to Active.</td></tr>
+        <tr><td>Archived</td><td>Permanent exit (pending confirmation it is truly permanent).</td></tr>
+        <tr><td>Animals in Care</td><td>CATU's (initiative 02) term for the full active animal population in a given month — a population measure, not used as a denominator in this BRD yet (see Section 11, deferred scope).</td></tr>
+        <tr><td>Intake Animals</td><td>Phase 1's (initiative 01) term for new animal arrivals in a given month — the denominator currently used in Section 6's animal-side pairing.</td></tr>
+      </tbody>
+    </table>
+    <h3>Appendix C — Reference artifacts</h3>
+    <ul>
+      <li><code>Better_Impact_Foster_Volunteer_Discovery_v0.1.html</code> — status-lifecycle research and admin question list.</li>
+      <li><code>Better_Impact_Integration_Options_v0.1.html</code> — extraction tier/option comparison.</li>
+      <li><code>Better_Impact_Technical_Integration_And_Risk_v0.1.html</code> — SCD2 fallback plan and gating risk.</li>
+      <li><code>Foster_Volunteer_KPI_Guidance_Process_v0.1.html</code> — the 6-step method used to decompose Lindsay's original 2 draft measures.</li>
+      <li><code>Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html</code> — full technical KPI contracts.</li>
+      <li><code>Industry_Standard_Reference_v0.1.html</code> — confirms no industry-standard formula exists for volunteer-side retention; grounds the Prohibited Conclusion language used throughout.</li>
+      <li><code>Foster_Volunteer_KPI_Requirements_v0.3.html</code> — Data Owner-facing summary, including Sections 5 and 6 referenced throughout this BRD.</li>
+    </ul>
+    <h3>Appendix D — Decision register (naming and scope calls made during intake)</h3>
+    <ul>
+      <li>Analysis Category collapsed from 4 groups to 2 ("Retention," "Engagement") per Tomas's explicit simplification request — "Performance" rejected as a category name because it would contradict the Prohibited Conclusion already written for the Engagement pair.</li>
+      <li>"Member Tenure" and "Tenure at Exit" renamed to "Time as an Active Foster" and "Time With Us Before Leaving" to remove jargon.</li>
+      <li>Dimensions moved back into scope for this phase (not deferred), since they reuse fields already required by already-prioritized measures.</li>
+      <li>Whether to add a "Total Members, all statuses" base measure remains an open design question, not yet decided (Section 10).</li>
+      <li>"Animals in Care" deliberately omitted from the Data-Owner-facing Requirements document but recorded here as deferred scope, per Tomas's explicit instruction (Section 11).</li>
+    </ul>
+  </section>
+
+  <div class="footer-note">Draft for business review — not an approved BRD. BC SPCA internal use. Companion documents: Foster_Volunteer_KPI_Requirements_v0.3.html, Foster_Volunteer_Discovery_KPI_Definitions_v0.1.html, same folder.</div>
+</main>
+</body>
+</html>

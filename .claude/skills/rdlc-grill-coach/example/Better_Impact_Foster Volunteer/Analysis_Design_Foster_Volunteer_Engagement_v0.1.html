@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foster Volunteer Engagement — Analysis Design (Draft)</title>
+<style>
+  :root{
+    --navy:#18364a; --navy-soft:#eef2f6; --blue:#176b87; --blue-soft:#e8f3f6;
+    --teal:#2f7f78; --teal-soft:#e8f5f3; --green:#3f7652; --green-soft:#eaf4ec;
+    --amber:#a56616; --amber-soft:#faf1e3; --red:#9b3d35; --red-soft:#f8ecea;
+    --grey:#5b6670; --grey-soft:#f1f3f4; --ink:#1f2a33; --paper:#ffffff; --line:#dde3e7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Segoe UI",Calibri,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.5; font-size:14.5px;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px 80px;}
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,#0f2635 100%); color:#fff; padding:40px 40px 28px; margin-bottom:28px;}
+  .cover-eyebrow{text-transform:uppercase; letter-spacing:.12em; font-size:12px; color:#9db9c9; font-weight:600;}
+  .cover h1{font-size:24px; margin:12px 0 8px;}
+  .cover .subtitle{font-size:14px; color:#cfe1ea; margin:0 0 14px;}
+  .status{display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; background:var(--amber); color:#fff; text-transform:uppercase; margin-right:8px;}
+  h2{color:var(--navy); font-size:19px; margin:30px 0 6px; padding-bottom:6px; border-bottom:2px solid var(--line);}
+  h3{color:var(--navy); font-size:15px; margin:18px 0 6px;}
+  .callout{border-radius:8px; padding:13px 16px; margin:14px 0; font-size:13.5px;}
+  .callout b{display:block; margin-bottom:4px; font-size:11.5px; text-transform:uppercase;}
+  .callout.warning{background:var(--amber-soft); border-left:4px solid var(--amber); color:#6b4209;}
+  .callout.note{background:var(--grey-soft); border-left:4px solid var(--grey);}
+  table{width:100%; border-collapse:collapse; margin:12px 0; font-size:12.6px;}
+  th{background:var(--navy); color:#fff; text-align:left; padding:8px 9px; font-size:10.8px; text-transform:uppercase;}
+  td{padding:8px 9px; border-bottom:1px solid var(--line); vertical-align:top;}
+  tr:nth-child(even) td{background:var(--navy-soft);}
+  .layer-tag{display:inline-block; padding:2px 8px; border-radius:10px; font-size:10.5px; font-weight:700; background:var(--teal-soft); color:var(--teal);}
+  .tier{display:inline-block; padding:2px 8px; border-radius:10px; font-size:10.5px; font-weight:700;}
+  .tier.must{background:var(--green-soft); color:var(--green);}
+  .tier.prefer{background:var(--blue-soft); color:var(--blue);}
+  .tier.avoid{background:var(--red-soft); color:var(--red);}
+  footer{margin-top:30px; padding-top:12px; border-top:1px solid var(--line); font-size:11.5px; color:var(--grey);}
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-eyebrow">BC SPCA &middot; Foster Volunteer Engagement</div>
+  <h1>Analysis Design — Business Questions &amp; Insight Specification Register</h1>
+  <p class="subtitle">rdlc-data-analysis output — which statistical method backs each required insight, across Better Impact and the ShelterBuddy animal side.</p>
+  <span class="status">Draft / Preview — not run on a confirmed BRD</span>
+</div>
+
+<div class="wrap">
+
+<div class="callout warning">
+  <b>Gate status — read before using this</b>
+  <code>rdlc-data-analysis</code>'s own rule is <strong>no confirmed BRD &rarr; no Analysis Design</strong>. <code>BRD_Foster_Volunteer_Engagement_v0.1.html</code> is still "Draft for business review" — Lindsay has not confirmed it. This register is produced as an explicit preview, at your request, to show what the analysis design would look like — it is not a governed handoff and must not move to Semantic Model Design until the BRD itself is confirmed.
+</div>
+
+<p>Built using the newly added <code>statistical-layer-mapping.md</code> (relationship/driver questions) alongside the existing <code>diagnostic-method-tiering.md</code> (group-comparison/anomaly questions). Every method below is Must or Prefer tier, or explicitly named as a specialist-escalation item — nothing Avoid-tier is proposed as self-service. Every measure referenced is one of the 10 KPIs/2 dimensions already defined (Better Impact) or the 4 already-existing animal-side measures (ShelterBuddy) — nothing new is introduced here.</p>
+
+<h2>Layer 1 — Data: what happened</h2>
+<table>
+<tr><th>Insight</th><th>Business question</th><th>Measure(s)</th><th>Method (tier)</th></tr>
+<tr><td>Current pool size</td><td>How big is our usable foster pool right now?</td><td>Active Fosters (KPI 2)</td><td><span class="tier must">Must</span> Descriptive statistics</td></tr>
+<tr><td>Current attrition rate</td><td>Relative to who we had, is attrition getting worse?</td><td>% Fosters Archived (KPI 8)</td><td><span class="tier must">Must</span> KPI reporting</td></tr>
+</table>
+
+<h2>Layer 2 — Signal detection: did something unusual happen</h2>
+<table>
+<tr><th>Insight</th><th>Business question</th><th>Measure(s)</th><th>Method (tier)</th></tr>
+<tr><td>Attrition spike</td><td>Did this period's attrition fall outside its normal range?</td><td>% Fosters Archived (KPI 8), trended</td><td><span class="tier must">Must</span> Seasonal-baseline standardized residual (<code>diagnostic-method-tiering.md</code>) — <strong>blocked until multi-period history exists</strong>, same dependency as the historical-trend build</td></tr>
+<tr><td>Recruitment drop</td><td>Did New Foster Created fall outside its normal range this period?</td><td>New Foster Created (KPI 6)</td><td><span class="tier must">Must</span> Outlier detection (non-seasonal IQR/z-score) until enough history exists for a seasonal baseline</td></tr>
+</table>
+
+<h2>Layer 3 — Diagnostic analysis: what is related to it</h2>
+<table>
+<tr><th>Insight</th><th>Business question</th><th>Measure(s)</th><th>Method (tier)</th></tr>
+<tr><td>Capacity vs. demand</td><td>Is our volunteer capacity related to animal-side demand?</td><td>Active Fosters (KPI 2) vs. % Animals in Foster / Intake Animals (SB)</td><td><span class="tier must">Must</span> Correlation — <strong>state the sample size alongside the coefficient; correlation is not causation</strong></td></tr>
+<tr><td>Tenure vs. real engagement</td><td>Do longer-tenured Active fosters place animals more or less often than newer ones?</td><td>Time as an Active Foster (Dim 11) vs. Active Fosters With a Recent Foster Placement (KPI 9)</td><td><span class="tier must">Must</span> Cohort analysis</td></tr>
+<tr><td>Exit-timing pattern</td><td>Do early-exit and long-tenure-exit volunteers differ on anything else measured?</td><td>Time With Us Before Leaving (Dim 12), segmented</td><td><span class="tier must">Must</span> Segmentation</td></tr>
+</table>
+
+<h2>Layer 4 — Driver discovery: what's driving it</h2>
+<table>
+<tr><th>Insight</th><th>Business question</th><th>Measure(s)</th><th>Method (tier)</th></tr>
+<tr><td>Candidate drivers of attrition</td><td>Which already-confirmed measures are worth investigating further against a change in attrition?</td><td>% Fosters Archived (KPI 8) vs. Archived&ndash;to&ndash;New Ratio (KPI 7), % Active Fosters With a Recent Placement (KPI 10), % Animals in Foster (SB)</td><td><span class="tier must">Must, provisional only</span> Candidate-driver screening via Layer 3 correlation strength — a short list to investigate, never a final ranking</td></tr>
+<tr><td>How sure are we in a small-roster rate</td><td>How much should we trust a % computed from a realistically small volunteer count?</td><td>% Fosters Archived (KPI 8), % Active Fosters Over 1 Year (KPI 3), any proportion-based measure</td><td><span class="tier prefer">Prefer</span> Confidence interval around a proportion — <strong>only valid once the normal-approximation minimum sample-size condition is met; our own worked example (N=2&ndash;3) would fail that condition and needs an exact method instead, named as specialist-escalation</strong></td></tr>
+<tr><td>Full driver ranking</td><td>(Not attempted at this scale)</td><td>&mdash;</td><td><span class="tier avoid">Avoid</span> Multivariate regression / feature importance — needs specialist ML tooling; not recommended given realistically small volunteer counts</td></tr>
+</table>
+
+<h2>Layer 5 — Decision insight: what's worth focusing on</h2>
+<div class="callout note">
+  <b>Translation rule, not a new method</b>
+  Every insight above may only be phrased as <em>"X is worth investigating as related to Y"</em> — never <em>"X is the cause/driver/constraint behind Y."</em> This applies even where a correlation is strong: strength of relationship is not proof of cause (rule 7).
+</div>
+
+<h2>Layer 6 — Action: explicitly out of scope here</h2>
+<p>No recommended action is drafted in this register. A decision — recruit, intervene on retention, re-engage an under-used Active pool — belongs to the BRD's named Decision Owner (Lindsay, pending confirmation), using the evidence above. This document stops at Layer 5.</p>
+
+<footer>Draft/preview output of <code>rdlc-data-analysis</code>, run against an unconfirmed BRD at explicit request. Companion: BRD_Foster_Volunteer_Engagement_v0.1.html, Foster_Volunteer_KPI_Requirements_v0.3.html, same folder.</footer>
+</div>
+</body>
+</html>
