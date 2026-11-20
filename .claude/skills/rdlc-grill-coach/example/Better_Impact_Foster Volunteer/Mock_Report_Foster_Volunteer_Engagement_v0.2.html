@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foster Volunteer Engagement — Mock Report v0.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:wght@300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.6.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --hummingbird:#D34766; --teal:#0A8C99; --mustard:#E3A526; --berry:#893152;
+    --dark-teal:#0B6F7C; --mustard-seed:#F2CD7D; --dark-berry:#742340;
+    --cloud:#F6F3F2; --mushroom:#E0D7D3; --evolved-blue:#0A4C7A; --darkest:#1A1A1A;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:"Source Sans 3",Arial,sans-serif; color:var(--darkest); background:var(--cloud); line-height:1.5; font-size:14.5px;}
+  h1,h2,h3{font-family:"Work Sans",Arial,sans-serif; font-weight:700; color:var(--evolved-blue);}
+  .topbar{background:var(--teal); color:#fff; padding:16px 28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;}
+  .topbar h1{color:#fff; font-size:19px; margin:0;}
+  .topbar .nav{display:flex; gap:18px; font-size:13px; font-weight:600;}
+  .topbar .nav span{padding-bottom:4px; cursor:pointer;}
+  .topbar .nav span.active{border-bottom:2px solid #fff;}
+  .mockbadge{background:var(--mustard-seed); color:#5c3d02; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:3px 10px; border-radius:20px;}
+  .wrap{max-width:1280px; margin:0 auto; padding:20px 24px 70px;}
+  .findings{background:#fff; border:1px solid var(--mushroom); border-radius:10px; padding:16px 20px; margin-bottom:18px;}
+  .findings h2{font-size:15px; margin:0 0 8px;}
+  .findings ul{margin:0; padding-left:20px; font-size:13.3px;}
+  .findings li{margin:4px 0;}
+  .kpi-strip{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:22px;}
+  .kpi-card{background:#fff; border:1px solid var(--mushroom); border-radius:10px; padding:14px 14px 12px;}
+  .kpi-card .label{font-size:11px; color:#6b6058; text-transform:uppercase; font-weight:700; letter-spacing:.03em;}
+  .kpi-card .val{font-size:26px; font-weight:700; color:var(--evolved-blue); margin:4px 0 2px;}
+  .kpi-card .delta{font-size:11.5px; color:#6b6058;}
+  .pill{display:inline-block; margin-top:8px; padding:3px 10px; border-radius:20px; font-size:10.8px; font-weight:700; color:#fff;}
+  .pill.ontarget{background:var(--teal);}
+  .pill.monitor{background:var(--mustard); color:#4a3200;}
+  .pill.action{background:var(--berry);}
+  .qgrid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .qpanel{background:#fff; border:1px solid var(--mushroom); border-radius:10px; padding:16px 18px; break-inside:avoid;}
+  .qpanel h3{font-size:14.5px; margin:0 0 6px; color:var(--darkest);}
+  .qpanel .insight{font-size:13px; color:#3a3028; margin-bottom:10px;}
+  .qpanel .insight strong{color:var(--evolved-blue);}
+  .chart-box{height:210px; margin-bottom:8px;}
+  .takeaway{background:var(--cloud); border-left:3px solid var(--teal); padding:8px 10px; font-size:12px; margin-top:8px;}
+  .callout{background:#fff; border-left:4px solid var(--hummingbird); border-radius:0 8px 8px 0; padding:12px 16px; margin:18px 0; font-size:12.8px;}
+  .callout b{display:block; font-size:11px; text-transform:uppercase; color:var(--hummingbird); margin-bottom:3px;}
+  footer{margin-top:24px; padding-top:10px; border-top:1px solid var(--mushroom); font-size:11px; color:#6b6058;}
+  .placeholder-page{background:#fff; border:1px solid var(--mushroom); border-radius:10px; padding:28px; text-align:center; color:#6b6058; font-size:13.5px;}
+  table.metarow{width:100%; border-collapse:collapse; font-size:11px; margin:2px 0 8px;}
+  table.metarow th, table.metarow td{padding:3px 5px; text-align:center; border-bottom:1px solid var(--mushroom);}
+  table.metarow th{font-weight:700; color:#6b6058;}
+  table.metarow td:first-child, table.metarow th:first-child{text-align:left; font-weight:600; color:var(--darkest);}
+  .callout-mini{background:var(--cloud); border-left:3px solid var(--mustard); padding:6px 9px; font-size:11px; margin:0 0 8px; color:#4a3200;}
+  @media (max-width:900px){ .kpi-strip,.qgrid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1 id="pageTitle">Foster Volunteer Engagement — Historical Overview <span class="mockbadge">Illustrative Mockup — Not Real Data</span></h1>
+  <div class="nav" role="tablist">
+    <span class="active" id="nav-summary" role="tab" tabindex="0" aria-selected="true" onclick="showPage('summary')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showPage('summary');}">Volunteer Summary</span>
+    <span id="nav-operation" role="tab" tabindex="0" aria-selected="false" onclick="showPage('operation')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showPage('operation');}">Current-Year Monitoring</span>
+    <span id="nav-methodology" role="tab" tabindex="0" aria-selected="false" onclick="showPage('methodology')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showPage('methodology');}">Methodology</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div id="page-summary">
+
+<div class="findings">
+  <h2>Key Findings <span style="font-weight:400;font-size:11.5px;color:#6b6058;">(illustrative numbers — placeholder until a real Better Impact export is confirmed)</span></h2>
+  <ul>
+    <li>The Active foster pool has held in a narrow range over the illustrated period, with roughly two-thirds of current Active fosters past their first year.</li>
+    <li>Fosters Archived has tracked close to New Foster Created most periods — the Archived&ndash;to&ndash;New Ratio has stayed near 100%, meaning losses are roughly offset by new recruits, not compounding.</li>
+    <li>Active Fosters (capacity) keeps growing every year, but Animals In Care (demand) has grown faster in the last two years — which is why % Animals in Foster has plateaued even though volunteer capacity hasn't shrunk (Correlation, Layer 3 of the Analysis Design) — worth investigating as related, not read as either one causing the other.</li>
+    <li>Volunteers who leave early in their first year make up a larger share of exits than long-tenured departures — pointing toward onboarding, not burnout, as the larger pattern in this illustrative data.</li>
+  </ul>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi-card">
+    <div class="label">Active Fosters</div>
+    <div class="val">212</div>
+    <div class="delta">&#9650; 3.1% vs prior period</div>
+    <span class="pill ontarget">On Target</span>
+  </div>
+  <div class="kpi-card">
+    <div class="label">% Active Fosters Over 1 Year</div>
+    <div class="val">64%</div>
+    <div class="delta">&#9650; 2 pts vs prior period</div>
+    <span class="pill ontarget">On Target</span>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Fosters Archived (period)</div>
+    <div class="val">18</div>
+    <div class="delta">&#9650; 4 vs prior period</div>
+    <span class="pill monitor">Monitor</span>
+  </div>
+  <div class="kpi-card">
+    <div class="label">% Fosters Archived</div>
+    <div class="val">9.3%</div>
+    <div class="delta">&#9650; 1.1 pts vs prior period</div>
+    <span class="pill monitor">Monitor</span>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Archived&ndash;to&ndash;New Ratio</div>
+    <div class="val">112%</div>
+    <div class="delta">Losses slightly ahead of new joins</div>
+    <span class="pill action">Action Required</span>
+  </div>
+</div>
+
+<div class="qgrid">
+
+  <div class="qpanel">
+    <h3>Q1. How Has Our Foster Volunteer Pool Evolved Over Time?</h3>
+    <div class="insight">Illustrative trend: the Active pool grew through an early recruitment phase, then settled into a stable range — <strong>Active Fosters Over 1 Year</strong> (KPI 1) has grown as a share of that pool, suggesting the pool is maturing, not just turning over.</div>
+    <div class="chart-box"><canvas id="chart1"></canvas></div>
+    <div class="takeaway">Takeaway: a maturing pool is a different story than a merely stable headcount — KPI 1/3 is what tells them apart.</div>
+  </div>
+
+  <div class="qpanel">
+    <h3>Q2. Are We Losing Volunteers Faster Than We're Gaining Them?</h3>
+    <div class="insight">Illustrative trend: <strong>New Foster Created</strong> (KPI 6) and <strong>Fosters Archived</strong> (KPI 4) have tracked closely, keeping the <strong>Archived&ndash;to&ndash;New Ratio</strong> (KPI 7) near 100% — recent periods show it edging past 100%, meaning losses are slightly outpacing new recruits.</div>
+    <div class="chart-box"><canvas id="chart2"></canvas></div>
+    <div class="takeaway">Takeaway: this is the simple growth-vs-loss read — worth checking before escalating to the true attrition rate (KPI 8).</div>
+  </div>
+
+  <div class="qpanel">
+    <h3>Q3. Is Our Volunteer Capacity Related to Animal-Side Demand?</h3>
+    <div class="insight">Illustrative: <strong>Active Fosters</strong> (KPI 2) &mdash; capacity &mdash; and <strong>Animals In Care</strong> (ShelterBuddy) &mdash; demand &mdash; are both plain counts, shown together on one shared, real axis. Capacity keeps growing every year; demand grows faster in the last two years, which is why % Animals in Foster (below) plateaus even though capacity hasn't shrunk. <strong>This shows a relationship worth investigating, not a confirmed cause in either direction.</strong></div>
+    <div class="chart-box"><canvas id="chart3"></canvas></div>
+    <table class="metarow">
+      <thead><tr><th></th><th>Yr 1</th><th>Yr 2</th><th>Yr 3</th><th>Yr 4</th><th>Yr 5</th></tr></thead>
+      <tbody>
+        <tr><td>Active Fosters (BI)</td><td>140</td><td>165</td><td>190</td><td>200</td><td>212</td></tr>
+        <tr><td>Animals In Care (SB)</td><td>480</td><td>510</td><td>540</td><td>575</td><td>610</td></tr>
+        <tr><td>Foster Animals (SB)</td><td>106</td><td>122</td><td>140</td><td>144</td><td>146</td></tr>
+        <tr><td>% Animals in Foster</td><td>22%</td><td>24%</td><td>26%</td><td>25%</td><td>24%</td></tr>
+      </tbody>
+    </table>
+    <div class="callout-mini">% Animals in Foster here = Foster Animals &divide; Animals In Care (the CATU-style denominator) &mdash; a different denominator than the Intake-Animals version used in the Phase 1 initiative. Shown as context only, not plotted, so it can't be misread as a third independently-scaled line.</div>
+    <div class="takeaway">Takeaway: splitting capacity and demand onto their own real scales — instead of one ratio riding a borrowed second axis — is what lets a demand-driven plateau be told apart from a capacity-driven one. See the companion Analysis Design document for the full method and caveats.</div>
+  </div>
+
+  <div class="qpanel">
+    <h3>Q4. Are We Losing People Early, or After Years?</h3>
+    <div class="insight">Illustrative: using the <strong>Time With Us Before Leaving</strong> dimension (Dimension 12), exits cluster more in the "under 1 year" band than the "2+ year" band in this placeholder data — a pattern that would point toward onboarding/matching, not long-tenure burnout, if it held in real data.</div>
+    <div class="chart-box"><canvas id="chart4"></canvas></div>
+    <div class="takeaway">Takeaway: this is exactly the breakdown a flat Archived count (KPI 4 alone) could never show.</div>
+  </div>
+
+</div>
+</div>
+
+<div id="page-operation" style="display:none;">
+
+<div class="findings">
+  <h2>Key Findings — Current Year <span style="font-weight:400;font-size:11.5px;color:#6b6058;">(illustrative numbers — placeholder until a real Better Impact export is confirmed)</span></h2>
+  <ul>
+    <li>Year-to-date, the Archived&ndash;to&ndash;New Ratio has crossed above 100% for the first time in the illustrated history — losses are now running slightly ahead of new recruits this year, not just keeping pace with them.</li>
+    <li>The Active pool is still larger than it was at the same point last year, but New Foster Created is running behind last year's YTD pace.</li>
+  </ul>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi-card">
+    <div class="label">Active Fosters (current)</div>
+    <div class="val">212</div>
+    <div class="delta">&#9650; 6.0% vs same point last year</div>
+    <span class="pill ontarget">On Target</span>
+  </div>
+  <div class="kpi-card">
+    <div class="label">New Foster Created (YTD)</div>
+    <div class="val">16</div>
+    <div class="delta">&#9660; 2 vs same point last year</div>
+    <span class="pill monitor">Monitor</span>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Fosters Archived (YTD)</div>
+    <div class="val">18</div>
+    <div class="delta">&#9650; 3 vs same point last year</div>
+    <span class="pill monitor">Monitor</span>
+  </div>
+  <div class="kpi-card">
+    <div class="label">% Fosters Archived (YTD)</div>
+    <div class="val">9.2%</div>
+    <div class="delta">&#9650; 1.3 pts vs same point last year</div>
+    <span class="pill monitor">Monitor</span>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Archived&ndash;to&ndash;New Ratio (YTD)</div>
+    <div class="val">112%</div>
+    <div class="delta">vs 83% at same point last year</div>
+    <span class="pill action">Action Required</span>
+  </div>
+</div>
+
+<div class="callout">
+  <b>Why a plain year-over-year comparison, not a monthly benchmark</b>
+  Unlike the animal side — which has a confirmed June&ndash;October seasonal peak — it is <strong>not yet confirmed whether Better Impact volunteer recruitment or archiving follows any seasonal pattern</strong>. Until that's established, comparing a single month against a multi-year seasonal average would risk presenting ordinary noise as if it were a real pattern. This page instead compares this year's running numbers to the same months last year — the simpler, safer read until seasonality (if any) is confirmed.
+</div>
+
+<div class="qgrid">
+
+  <div class="qpanel">
+    <h3>How Is This Year's Pool Tracking So Far?</h3>
+    <div class="insight">Illustrative: <strong>Active Fosters</strong> (KPI 2), running month by month, compared to the same months last year. The current-year line sits consistently above last year's — the pool is larger at every point so far this year.</div>
+    <div class="chart-box"><canvas id="chart5"></canvas></div>
+    <div class="takeaway">Takeaway: a larger pool this year is a separate fact from whether it's being maintained well — see the next panel for the flow in and out of it.</div>
+  </div>
+
+  <div class="qpanel">
+    <h3>Are New Joins Keeping Pace With Archiving This Year?</h3>
+    <div class="insight">Illustrative: <strong>New Foster Created</strong> (KPI 6) vs. <strong>Fosters Archived</strong> (KPI 4), month by month this year. In several recent months Archived has run ahead of New Foster Created — consistent with the YTD Archived&ndash;to&ndash;New Ratio (KPI 7) crossing above 100%.</div>
+    <div class="chart-box"><canvas id="chart6"></canvas></div>
+    <div class="takeaway">Takeaway: this is the same simple growth-vs-loss read as the history page's Q2, just scoped to this year's running months.</div>
+  </div>
+
+</div>
+
+</div>
+
+<div id="page-methodology" style="display:none;">
+  <div class="placeholder-page">Methodology page not yet built — out of scope for this mock request. It would describe each KPI's definition, the diagnostic methods used (per the companion Analysis Design document), and this mock's illustrative-data caveats in one place, mirroring the reference PDF's own Methodology tab.</div>
+</div>
+
+<footer>Illustrative mockup — rdlc-mock-report-design output. Not real Better Impact or ShelterBuddy data. Colours per BC SPCA Visual Branding Guidelines (Sept 2026); fonts substituted per that guide (Work Sans for Graphik, Source Sans 3 for Source Sans, Crimson Pro for Picholine Antique). Content traces to Foster_Volunteer_KPI_Requirements_v0.3.html and Analysis_Design_Foster_Volunteer_Engagement_v0.1.html, same folder — no new KPI or dimension introduced here.</footer>
+</div>
+
+<script>
+const ink = '#1A1A1A';
+Chart.defaults.font.family = "'Source Sans 3', Arial, sans-serif";
+Chart.defaults.color = '#3a3028';
+
+new Chart(document.getElementById('chart1'), {
+  type: 'bar',
+  data: {
+    labels: ['Yr 1','Yr 2','Yr 3','Yr 4','Yr 5'],
+    datasets: [
+      {label:'Active Fosters Over 1 Year', data:[80,98,118,130,136], backgroundColor:'#0A8C99'},
+      {label:'Active Fosters (total)', data:[140,165,190,200,212], backgroundColor:'#E0D7D3'}
+    ]
+  },
+  options: {responsive:true, maintainAspectRatio:false, scales:{y:{beginAtZero:true}}, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10.5}}}}}
+});
+
+new Chart(document.getElementById('chart2'), {
+  type: 'line',
+  data: {
+    labels: ['Yr 1','Yr 2','Yr 3','Yr 4','Yr 5'],
+    datasets: [
+      {label:'New Foster Created', data:[32,29,27,22,20], borderColor:'#0A8C99', backgroundColor:'#0A8C99', tension:.3},
+      {label:'Fosters Archived', data:[18,20,19,21,18], borderColor:'#893152', backgroundColor:'#893152', tension:.3},
+      {label:'Archived-to-New Ratio %', data:[56,69,70,95,112], borderColor:'#D34766', backgroundColor:'#D34766', tension:.3, yAxisID:'y1'}
+    ]
+  },
+  options: {responsive:true, maintainAspectRatio:false,
+    scales:{y:{beginAtZero:true, position:'left'}, y1:{beginAtZero:true, position:'right', grid:{drawOnChartArea:false}}},
+    plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}}}}}
+});
+
+new Chart(document.getElementById('chart3'), {
+  type: 'line',
+  data: {
+    labels: ['Yr 1','Yr 2','Yr 3','Yr 4','Yr 5'],
+    datasets: [
+      {label:'Active Fosters (BI)', data:[140,165,190,200,212], borderColor:'#0A4C7A', backgroundColor:'#0A4C7A', tension:.3},
+      {label:'Animals In Care (SB)', data:[480,510,540,575,610], borderColor:'#893152', backgroundColor:'#893152', tension:.3}
+    ]
+  },
+  options: {responsive:true, maintainAspectRatio:false, scales:{y:{beginAtZero:true}}, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}}}}}
+});
+
+new Chart(document.getElementById('chart4'), {
+  type: 'bar',
+  data: {
+    labels: ['Under 1 yr','1–2 yr','2+ yr'],
+    datasets: [{label:'Share of exits', data:[52,31,17], backgroundColor:['#893152','#D34766','#E0D7D3']}]
+  },
+  options: {responsive:true, maintainAspectRatio:false, indexAxis:'y', scales:{x:{beginAtZero:true, max:60}}, plugins:{legend:{display:false}}}
+});
+
+const pageTitles = {
+  summary: 'Foster Volunteer Engagement — Historical Overview',
+  operation: 'Foster Volunteer Engagement — Current-Year Monitoring',
+  methodology: 'Foster Volunteer Engagement — Methodology'
+};
+let operationChartsBuilt = false;
+
+function buildOperationCharts(){
+  if (operationChartsBuilt) return;
+  operationChartsBuilt = true;
+
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'];
+
+  new Chart(document.getElementById('chart5'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        {label:'Active Fosters — this year', data:[201,203,204,205,206,207,208,209,210,211,212], borderColor:'#0A8C99', backgroundColor:'#0A8C99', tension:.3},
+        {label:'Active Fosters — last year, same months', data:[192,193,194,195,196,197,197,198,199,199,199], borderColor:'#E0D7D3', backgroundColor:'#E0D7D3', borderDash:[5,4], tension:.3}
+      ]
+    },
+    options: {responsive:true, maintainAspectRatio:false, scales:{y:{beginAtZero:true}}, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10.5}}}}}
+  });
+
+  new Chart(document.getElementById('chart6'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        {label:'New Foster Created', data:[2,1,2,1,2,1,2,1,2,1,1], backgroundColor:'#0A8C99'},
+        {label:'Fosters Archived', data:[1,2,1,2,2,1,2,2,1,2,2], backgroundColor:'#893152'}
+      ]
+    },
+    options: {responsive:true, maintainAspectRatio:false, scales:{y:{beginAtZero:true}}, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10.5}}}}}
+  });
+}
+
+function showPage(name){
+  ['summary','operation','methodology'].forEach(p => {
+    document.getElementById('page-' + p).style.display = (p === name) ? '' : 'none';
+    const tab = document.getElementById('nav-' + p);
+    tab.classList.toggle('active', p === name);
+    tab.setAttribute('aria-selected', p === name ? 'true' : 'false');
+  });
+  document.getElementById('pageTitle').childNodes[0].nodeValue = pageTitles[name] + ' ';
+  if (name === 'operation') buildOperationCharts();
+}
+</script>
+</body>
+</html>

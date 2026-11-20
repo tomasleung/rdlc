@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Business case for the RDLC OS pipeline: why a report request is actually a data-product request, why this is human-in-the-loop AI rather than agentic AI, and the minimal document set a developer needs before building.">
+<title>The RDLC OS Data Product Engine | Business Case v0.2</title>
+<style>
+  :root {
+    --navy: #18364a; --blue: #176b87; --teal: #2f7f78; --green: #3f7652;
+    --amber: #a56616; --red: #9b3d35; --ink: #24323b; --muted: #5d6c75;
+    --line: #d8e0e4; --soft: #f3f7f8; --blue-soft: #eaf4f7; --green-soft: #edf6ef;
+    --amber-soft: #fff6e8; --red-soft: #fbeeed; --grey-soft: #f5f6f7; --white: #ffffff;
+    --page-width: 960px;
+  }
+  * { box-sizing: border-box; }
+  html { background: #dfe5e8; }
+  body { margin: 0; color: var(--ink); background: var(--white); font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.47; }
+  a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+  .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+  .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+  h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+  h1 { font-size: 25pt; line-height: 1.1; margin: 8mm 0 3mm; }
+  h2 { font-size: 16.5pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+  h3 { font-size: 12.5pt; margin: 6mm 0 2.5mm; }
+  p { margin: 0 0 3mm; }
+  ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+  li { margin: 1.1mm 0; }
+  .cover { min-height: 200mm; display: flex; flex-direction: column; }
+  .cover-main { margin-top: 22mm; }
+  .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+  .subtitle { color: var(--muted); font-size: 12.5pt; max-width: 720px; }
+  .status { display: inline-block; margin-top: 6mm; padding: 2mm 4mm; border-radius: 99px; background: var(--amber-soft); color: #7b4a0c; font-weight: 700; }
+  .cover-meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+  .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .value { font-weight: 650; color: var(--navy); }
+  .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+  .callout.approved { border-color: var(--green); background: var(--green-soft); }
+  .callout.warning { border-color: var(--amber); background: var(--amber-soft); }
+  .callout.note { border-color: #7b8990; background: var(--grey-soft); }
+  .callout.change { border-color: var(--teal); background: #eefaf8; }
+  .callout strong:first-child { color: var(--navy); }
+  .quote-box { margin: 4mm 0 5mm; padding: 4mm 5mm; border: 1px dashed #9fb0b8; border-radius: 8px; background: var(--soft); font-style: italic; color: var(--ink); }
+  .quote-box .attrib { display: block; margin-top: 2mm; font-style: normal; font-size: 9pt; color: var(--muted); }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; font-size: 9.5pt; }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th, td { padding: 2.6mm 3mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  th:last-child, td:last-child { border-right: 0; }
+  tr:last-child td { border-bottom: 0; }
+  th { background: var(--navy); color: var(--white); text-align: left; font-size: 8.7pt; letter-spacing: .02em; }
+  .tag { display: inline-block; padding: .8mm 2.2mm; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); font-size: 8pt; font-weight: 700; margin: .5mm 0; white-space: nowrap; }
+  .tag.built { background: var(--green-soft); border-color: var(--green); color: #275236; }
+  .tag.draft { background: var(--amber-soft); border-color: var(--amber); color: #7b4a0c; }
+  .tag.notstarted { background: var(--grey-soft); border-color: var(--line); color: var(--muted); }
+  .tag.required { background: var(--red-soft); border-color: var(--red); color: #6f2922; }
+  .tag.scales { background: var(--blue-soft); border-color: var(--blue); color: #0d4b5d; }
+  .toc a { border: 0; }
+  .toc ol { columns: 2; column-gap: 10mm; }
+  .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+  .engine-row { display: flex; align-items: stretch; gap: 3mm; margin: 5mm 0; flex-wrap: wrap; }
+  .engine-col { flex: 1 1 0; min-width: 48mm; display: flex; flex-direction: column; gap: 2.5mm; }
+  .engine-box { border: 1px solid var(--line); border-radius: 8px; padding: 3mm 3.5mm; font-size: 9pt; background: var(--white); }
+  .engine-box.legacy { background: var(--grey-soft); }
+  .engine-box.core { border: 2px solid var(--teal); }
+  .engine-box.ai { border-style: dashed; background: var(--blue-soft); }
+  .engine-box.power { background: var(--green-soft); border-color: var(--green); }
+  .engine-box h4 { margin: 0 0 1mm; font-size: 9.5pt; font-family: "Segoe UI", Arial, sans-serif; color: var(--navy); }
+  .engine-box .d { color: var(--muted); font-size: 8.3pt; }
+  .engine-label { color: var(--muted); font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 1mm; }
+  .engine-arrow { display: flex; align-items: center; justify-content: center; font-size: 16pt; color: var(--teal); flex: 0 0 auto; }
+  .contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 4mm 0 5mm; }
+  .contrast .box { border-radius: 8px; padding: 4mm 4.5mm; font-size: 9.3pt; }
+  .contrast .box.not { background: var(--red-soft); border: 1px solid var(--red); }
+  .contrast .box.yes { background: var(--green-soft); border: 1px solid var(--green); }
+  .contrast .box h4 { margin: 0 0 2mm; font-family: "Segoe UI", Arial, sans-serif; font-size: 10pt; }
+  .contrast .box.not h4 { color: #6f2922; }
+  .contrast .box.yes h4 { color: #275236; }
+  @page { size: Letter; margin: 15mm 14mm 17mm; }
+  @media print {
+    html, body { background: var(--white); }
+    .page { max-width: none; padding: 0; }
+    .cover { page-break-after: always; }
+    a { color: inherit; border-bottom: 0; }
+  }
+  @media (max-width: 720px) {
+    .page { padding: 8mm; }
+    .cover-meta { grid-template-columns: 1fr; }
+    .toc ol { columns: 1; }
+    .engine-row { flex-direction: column; }
+    .engine-arrow { transform: rotate(90deg); }
+    .contrast { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <section class="cover">
+    <div class="eyebrow">RDLC OS &middot; Business Case &middot; v0.2</div>
+    <div class="cover-main">
+      <h1>A Report Request Is Actually a Data-Product Request</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">Why most BI projects fail before the build even starts, why this engine is human-in-the-loop AI and not agentic AI, and the minimal set of documents a developer actually needs before building anything.</p>
+      <span class="status">Draft &middot; internal review &middot; Version 0.2</span>
+    </div>
+    <div class="callout approved">
+      <strong>What this document is for</strong><br>
+      This is a case for the <em>framework itself</em>, not for one report. It uses the Foster Volunteer Engagement initiative — still in flight, not yet signed off — as the live worked example of a repeatable engine: a minimal, risk-scaled set of standard document types, each drafted by AI under a human confirmation gate, that turns "what the Data Owner actually sent us" into a real data product — not just a report.
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Author</div><div class="value">Data &amp; Analytics (RDLC OS), on behalf of Tomas Leung</div></div>
+      <div><div class="label">Created</div><div class="value">2026-11-19</div></div>
+      <div><div class="label">Audience</div><div class="value">Data Owners, developers, and the AI assistants drafting under their direction</div></div>
+      <div><div class="label">Worked example</div><div class="value">Foster Volunteer Engagement (initiative 06) — in-flight, not yet confirmed</div></div>
+      <div><div class="label">Classification</div><div class="value">Internal — BC SPCA</div></div>
+      <div><div class="label">Status</div><div class="value">Draft — for internal review</div></div>
+    </div>
+  </section>
+
+  <div class="callout change">
+    <strong>Change from v0.1</strong><br>
+    Reframed the opening problem around "report vs. data product," not just "the raw ask is vague." Added an explicit section ruling out agentic AI by name. Replaced the fixed 10-stage chain with a minimal-document-set framing (what's always required vs. what scales with risk) and moved the full Foster Volunteer chain to its own worked-example section. Added a closing "Getting started" section for a developer running this on a new initiative. Section 7's open risks (SCD1, unconfirmed fields, unconfirmed join key) are kept exactly as blunt as v0.1 — on purpose, not softened for this audience.
+  </div>
+
+  <section class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#problem">The real problem: a report request is not a data-product request</a></li>
+      <li><a href="#notagentic">This is human-in-the-loop AI, not agentic AI</a></li>
+      <li><a href="#engine">The engine: how the layers fit together</a></li>
+      <li><a href="#ai-roles">How AI scales the implementation</a></li>
+      <li><a href="#minimal">The minimal document set</a></li>
+      <li><a href="#chain">Worked example: the chain as it actually ran</a></li>
+      <li><a href="#proof">What this proved, and what's still open</a></li>
+      <li><a href="#why">Why this matters, and what it actually encodes</a></li>
+      <li><a href="#forward">Getting started on your own initiative</a></li>
+    </ol>
+  </section>
+
+  <section id="problem">
+    <h2>1. The real problem: a report request is not a data-product request</h2>
+    <p>When a Data Owner asks for "a report," what they're actually describing — without knowing it — is a <strong>data product</strong> they don't know how to specify. Most project failures don't come from the build being technically wrong. They come from building the report anyway, without ever building the product underneath it.</p>
+    <div class="contrast">
+      <div class="box not"><h4>A report</h4>A one-off visualization of whatever gets built. It looks finished the moment it renders. Nothing underneath it says whether the number is right, what it means when an edge case hits, or who's allowed to change its definition.</div>
+      <div class="box yes"><h4>A data product</h4>The governed foundation underneath the report: a confirmed definition, a validated grain and population, known edge cases, a named owner. The report becomes one of possibly many things built safely on top of it.</div>
+    </div>
+    <p>This is the real, unedited starting point for the worked example in this document:</p>
+    <div class="quote-box">
+      "Some potential definitions that we can work on with Lindsay:<br><br>
+      Retention = # of fosters that stay (i.e. remain active) with BC SPCA &gt;1 yr<br>
+      Attrition = # fosters lost (i.e. # archived) every year/quarter/etc"
+      <span class="attrib">— Maggie Stewart, Teams message, on behalf of Lindsay (Foster Volunteer Member Support)</span>
+    </div>
+    <p>Taken literally, this is enough to build <em>a report</em> in an afternoon — a number that moves on a chart. It is not enough to build the product underneath it: which field "active" actually reads from, whether a volunteer who leaves and comes back is counted once or twice, what decision the number is meant to support, what "every year/quarter/etc" should default to when nobody's chosen yet. None of that surfaces when you build the report. All of it surfaces when you build the product — which is exactly what the chain in this document exists to do before a single visual gets built.</p>
+  </section>
+
+  <section id="notagentic">
+    <h2>2. This is human-in-the-loop AI, not agentic AI</h2>
+    <p>Worth stating plainly, not just implying through the gates described later: this engine is not agentic AI. An agentic AI pursues a goal on its own — it chooses its own steps, takes action, and moves forward with little or no per-step human confirmation. That is explicitly ruled out here.</p>
+    <div class="contrast">
+      <div class="box not"><h4>Not this — agentic AI</h4>AI is given a goal ("build the report") and decides the steps, the definitions, and when it's done, with the human reviewing only the end result — if at all.</div>
+      <div class="box yes"><h4>This — human-in-the-loop AI</h4>AI drafts exactly one document, from one fixed template, at a time. Nothing moves to the next stage until a named human — the Data Owner, the decision owner, the developer — explicitly confirms it. The AI never decides what's true, what's in scope, or what's finished.</div>
+    </div>
+    <p>Two rules hold this in place at every single stage, with no exception written into this process anywhere: <strong>No Decision &rarr; No Artifact. No Confirmation &rarr; No Action.</strong> AI accelerates the drafting. It does not replace the decision.</p>
+  </section>
+
+  <section id="engine">
+    <h2>3. The engine: how the layers fit together</h2>
+    <p>Legacy systems are good at recording transactions, not at producing decision-ready numbers. The engine's job is the layer in between: turn what the source systems hold into standardized, governed data a report can actually use — with a human confirming each layer before the next is built on top of it.</p>
+
+    <div class="engine-row">
+      <div class="engine-col">
+        <div class="engine-label">Legacy systems</div>
+        <div class="engine-box legacy"><h4>ShelterBuddy</h4><div class="d">Animals and where they are</div></div>
+        <div class="engine-box legacy"><h4>Better Impact</h4><div class="d">Foster volunteers — status lifecycle, join/archive dates</div></div>
+      </div>
+      <div class="engine-arrow">&rarr;</div>
+      <div class="engine-col" style="flex:1.6 1 0;">
+        <div class="engine-label">Our data product &middot; human confirms every layer</div>
+        <div class="engine-box ai"><h4>AI &middot; drafts only</h4><div class="d">Suggests measures, thresholds, mock visuals — never confirms them itself</div></div>
+        <div class="engine-box core"><h4>Standardized data</h4><div class="d">Governed KPI contracts, confirmed grain/population, table definitions</div></div>
+        <div class="engine-box"><h4>Business rules &amp; gates</h4><div class="d">Stored as a document per RDLC OS stage, not buried in code</div></div>
+        <div class="engine-box"><h4>RACI &middot; the foundation</h4><div class="d">Who confirms what, agreed before any artifact is treated as settled</div></div>
+      </div>
+      <div class="engine-arrow">&rarr;</div>
+      <div class="engine-col">
+        <div class="engine-label">What it powers</div>
+        <div class="engine-box power"><h4>Mock report / prototype</h4><div class="d">today — sign-off before real build</div></div>
+        <div class="engine-box power"><h4>Semantic model &amp; Power BI report</h4><div class="d">next, once confirmed</div></div>
+        <div class="engine-box legacy"><h4>Further AI suggestions</h4><div class="d">later — only once the layers below are trusted</div></div>
+      </div>
+    </div>
+    <p style="font-weight:650; color:var(--navy);">Build from the bottom up: a mock-up or an AI-suggested insight only works when the governed layers under it — the KPI contract, the confirmed grain, the sign-off — are already in place. Skipping a layer to go faster is exactly what produces a wrong number nobody catches until it's too late.</p>
+  </section>
+
+  <section id="ai-roles">
+    <h2>4. How AI scales the implementation</h2>
+    <p>Each RDLC OS skill stands in for one specialist role on a traditional project team — drafting that role's output from a fixed template, never deciding on the Data Owner's behalf.</p>
+    <table>
+      <thead><tr><th>AI substitute's functional role</th><th>RDLC OS skill</th><th>Deliverable</th></tr></thead>
+      <tbody>
+        <tr><td>Project manager</td><td><code>rdlc-gate-monitor</code></td><td>Checks each stage's actual output against that stage's own declared gate before anyone treats it as done</td></tr>
+        <tr><td>Business analyst</td><td><code>rdlc-grill-coach</code></td><td>Interviews against a decision tree and drafts the requirements set from our templates</td></tr>
+        <tr><td>Data analyst / data scientist</td><td><code>rdlc-data-analysis</code></td><td>Suggests which data, which signals, and which statistical method back each KPI — and states plainly what's permitted vs. prohibited to conclude from it</td></tr>
+        <tr><td>UX designer</td><td><code>rdlc-mock-report-design</code></td><td>Drafts the report mock-up — illustrative data only, visibly labeled, traceable to a confirmed insight</td></tr>
+        <tr><td>Data modeller</td><td><code>rdlc-coach-semantic-model</code></td><td>Shapes the confirmed KPI set into fact/dimension table definitions a real report can run on</td></tr>
+        <tr><td>Developer</td><td><code>rdlc-tmdl-build-agent</code> / <code>powerbi-authoring</code> skills</td><td>Builds the actual semantic model and report files</td></tr>
+        <tr><td>QA</td><td><code>rdlc-gate-monitor</code>, plus each stage's own checklist</td><td>Tests the rules and the data against the requirements before handoff to the next stage</td></tr>
+        <tr><td>Document formatting</td><td><code>rdlc-doc-formatter</code></td><td>Reformats raw content into house style without changing what it says</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <strong>Ultimately, the Data Owner reviews and decides.</strong><br>
+      Every row above produces a <em>draft</em>. None of them is a decision. The KPI's formula, the project's scope, what's deferred, and whether the result is "confirmed" are calls only the Data Owner or decision owner makes.
+    </div>
+  </section>
+
+  <section id="minimal">
+    <h2>5. The minimal document set</h2>
+    <p>Not every project needs the full chain run at full depth. Three things are never optional, no matter how small the ask is. Everything else should scale with how ambiguous or risky the request actually is — not be produced by default just because a template exists.</p>
+    <table>
+      <thead><tr><th>Always required</th><th>Why it can't be skipped</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag required">Required</span> KPI / Requirements Register</td><td>The one artifact that forces the real definition into the open — formula, population, grain. Skip this and you've built a report on an ask nobody actually agreed on.</td></tr>
+        <tr><td><span class="tag required">Required</span> Confirmed requirements (full BRD, or a lightweight Shared Understanding Summary for a small ask)</td><td>The explicit sign-off moment. It can be short for a small project, but it cannot be silent — "ok sounds good" mid-chat is not confirmation.</td></tr>
+        <tr><td><span class="tag required">Required</span> Table Definitions (confirmed structure)</td><td>The build will break on the first edge case without an agreed grain and relationship design — this is where a wrong assumption becomes expensive to unwind.</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Scales with risk</th><th>Go deep when&hellip;</th><th>Safe to thin or skip when&hellip;</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag scales">Scales</span> Industry Standard Reference</td><td>The business language is contested or ambiguous (e.g. "Retention" means something different to three different people)</td><td>The metric is simple and uncontested (e.g. a straightforward count already defined the same way everywhere)</td></tr>
+        <tr><td><span class="tag scales">Scales</span> Source System Discovery</td><td>The source system is new or poorly understood (a first-time Better Impact extraction)</td><td>The source system is already well-integrated and its fields are already trusted</td></tr>
+        <tr><td><span class="tag scales">Scales</span> Technical Integration &amp; Risk</td><td>There's real integration risk — an unreliable field, an unconfirmed API/export path</td><td>The integration path is already proven; fold any residual risk into the BRD's Assumptions section instead of a standalone document</td></tr>
+        <tr><td><span class="tag scales">Scales</span> Analysis Design + Mock Report</td><td>The report needs real analytical depth — comparisons, driver discovery, multiple stakeholder views</td><td>It's a single, well-understood KPI tile with no diagnostic layer needed — a quick mock may be enough</td></tr>
+      </tbody>
+    </table>
+    <p>The worked example in the next section went deep on every single one of these — because Better Impact was a genuinely new, poorly understood source system with real definitional ambiguity. That's a case for going deep, not the default minimum every project needs.</p>
+  </section>
+
+  <section id="chain">
+    <h2>6. Worked example: the chain as it actually ran</h2>
+    <p>Below is the full chain as it actually ran for Foster Volunteer Engagement — the "go deep" version, per Section 5, because the source system and the business language both carried real ambiguity.</p>
+    <table>
+      <thead><tr><th>#</th><th>Standard document type</th><th>Foster Volunteer Engagement's actual file</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Raw ask</td><td>Maggie Stewart's Teams message (Lindsay's 2 draft KPIs)</td><td><span class="tag built">Received</span></td></tr>
+        <tr><td>2</td><td>Industry Standard Reference</td><td><code>Industry_Standard_Reference_v0.1.html</code></td><td><span class="tag built">Built</span></td></tr>
+        <tr><td>3</td><td>Source System Discovery</td><td><code>Better_Impact_Foster_Volunteer_Discovery_v0.1.html</code></td><td><span class="tag built">Built</span></td></tr>
+        <tr><td>4</td><td>Technical Integration &amp; Risk</td><td><code>Better_Impact_Technical_Integration_And_Risk_v0.1.html</code></td><td><span class="tag built">Built</span></td></tr>
+        <tr><td>5</td><td>KPI / Requirements Register</td><td><code>Foster_Volunteer_KPI_Requirements_v0.3.html</code></td><td><span class="tag built">Built</span></td></tr>
+        <tr><td>6</td><td>Business Requirements Document (BRD)</td><td><code>BRD_Foster_Volunteer_Engagement_v0.1.html</code></td><td><span class="tag draft">Draft for business review — not yet confirmed by Lindsay</span></td></tr>
+        <tr><td>7</td><td>Analysis Design Brief + Insight Specification Register</td><td><code>Analysis_Design_Foster_Volunteer_Engagement_v0.1.html</code></td><td><span class="tag draft">Draft/Preview — run ahead of BRD confirmation, at explicit request</span></td></tr>
+        <tr><td>8</td><td>Mock Report (UX prototype)</td><td><code>Mock_Report_Foster_Volunteer_Engagement_v0.1.html</code></td><td><span class="tag draft">Draft/Preview</span></td></tr>
+        <tr><td>9</td><td>Table Definitions (fact/dimension design)</td><td>Not yet started</td><td><span class="tag notstarted">Not started</span></td></tr>
+        <tr><td>10</td><td>Semantic model / Power BI build</td><td>Not yet started</td><td><span class="tag notstarted">Not started</span></td></tr>
+      </tbody>
+    </table>
+    <p class="footer-note" style="margin-top:0;">Stages 7 and 8 were deliberately run ahead of stage 6's confirmation, at explicit request, to show what the output would look like — both carry an on-page banner saying so. That's itself a worked example of the engine surfacing a skipped gate rather than silently treating it as closed. All files live under <code>.claude/skills/rdlc-grill-coach/example/Better_Impact_Foster Volunteer/</code> in this repository.</p>
+  </section>
+
+  <section id="proof">
+    <h2>7. What this proved, and what's still open</h2>
+    <p>In one continuous working session, the chain above took a two-line Teams message to a clickable, two-page mock report with real BC SPCA branding, a defined KPI set backed by a hand-validated worked example, and a named statistical method behind every proposed insight — without ever treating an unconfirmed upstream artifact as if it were settled. That is the actual claim being made: not that the report is finished, but that the <em>path</em> from raw ask to reviewable prototype is short, fast, and doesn't silently skip governance to get there.</p>
+    <p>What's still open, stated plainly rather than hidden: Lindsay has not yet confirmed the BRD or the KPI set; whether Better Impact's "Active date" and "Archived date" are real, reliable fields is unconfirmed; whether a volunteer can move from Archived back to Active, and whether any trace survives it, is unconfirmed; and the ShelterBuddy&harr;Better Impact join key itself is unconfirmed. None of these gaps were resolved by assumption — each is logged as an open question for the Data Owner or the system admin, exactly as the engine requires.</p>
+  </section>
+
+  <section id="why">
+    <h2>8. Why this matters, and what it actually encodes</h2>
+    <ul>
+      <li><strong>Speed.</strong> One developer, directing AI through each stage, produced a full requirements chain and a working UX prototype in a single session — work that would traditionally need a BA, a data analyst, a UX designer, and a developer in sequence.</li>
+      <li><strong>Governance.</strong> Every stage has a non-negotiable gate it will not skip without saying so out loud. Nothing gets labeled "confirmed" because it would be convenient to move on.</li>
+      <li><strong>Repeatability, demonstrated now, not just claimed.</strong> The same RDLC OS skill set is active, right now, on several other initiatives in this repository — Centre &amp; Animal Type Utilization (Draft for business review), SB Status &amp; Source Pathway (Draft), the Self-Service Data Platform (In progress), the Triage Dashboard (Early). None of those is claimed complete here either — the point is that this isn't a one-off script written for Foster Volunteer specifically; it's the same pipeline, independently in motion, across different source systems and different Data Owners.</li>
+    </ul>
+    <div class="callout note">
+      <strong>What this process actually encodes</strong><br>
+      Bridging a non-technical Data Owner's ask and a technical build has traditionally depended on one experienced person's judgment, call by call — knowing which question to ask, which ambiguity to chase down, which gate not to skip. Writing that judgment down as a fixed, gated sequence of document types means a developer who doesn't yet have that judgment can still run the same bridge safely — the gates catch what their own experience might not yet catch.
+    </div>
+  </section>
+
+  <section id="forward">
+    <h2>9. Getting started on your own initiative</h2>
+    <p>Any future Data Owner request — in any system, not just Better Impact or ShelterBuddy — can enter this same chain. Concretely, for a developer picking this up:</p>
+    <ol>
+      <li>Read <code>PROJECT_STATUS.md</code> at the repository root — the index of every initiative already in flight, so a new ask doesn't collide with an existing name or KPI.</li>
+      <li>Read the specific skill's own definition under <code>.claude/skills/&lt;skill-name&gt;/SKILL.md</code> before using it — each one states its own non-negotiable gate and required input.</li>
+      <li>Start with <code>rdlc-grill-coach</code> on the raw ask, exactly as received — don't clean it up first. Use the Foster Volunteer Engagement example folder as a <em>structural</em> pattern only, never copy its specific content into a different ask.</li>
+      <li>Use Section 5's minimal-document table to decide how deep to go — a simple, uncontested ask doesn't need the full ten-stage chain; a new, poorly understood source system does.</li>
+      <li>Don't move to the next stage until the current one is explicitly confirmed by the Data Owner — not discussed, not "sounds good," confirmed.</li>
+    </ol>
+  </section>
+
+  <div class="footer-note">
+    Business Case &middot; RDLC OS Data Product Engine &middot; Version 0.2 &middot; Draft for internal review &middot; 2026-11-19.<br>
+    Supersedes v0.1 (same folder) — see the "Change from v0.1" callout above for what changed and why.
+  </div>
+
+</main>
+</body>
+</html>

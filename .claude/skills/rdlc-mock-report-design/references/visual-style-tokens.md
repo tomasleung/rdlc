@@ -57,3 +57,20 @@ Insight-box background/text pairs (one per "mode"):
 - Metric-tile value weight: **not bold** (majority pattern already in the built pages).
 - KPI scorecard value color: **indigo by default; green/red only when the number has an approved target to beat** — never color a purely descriptive number green/red (this also matches `rdlc-data-analysis` rule 6: no performance-style status language unless the BRD authorizes it).
 - Insight-box body text size: **11pt**, on the same scale as the rest of the type ramp.
+- Status-pill color convention when the real BC SPCA brand palette is in use (not the indigo system above): see "BC SPCA real-brand status/signal convention" below.
+
+## BC SPCA real-brand status/signal convention
+
+**Source:** `BC SPCA visual branding guidelines.pdf`, same folder — the actual, current BC SPCA brand guide (Sept 2026). This is a more authoritative color source than the indigo-based "Color system" table above for any *new* mock meant to look like a real, current BC SPCA deliverable — the indigo system was reverse-engineered from Phase 1's already-built pages and predates this brand guide being sourced into this skill. Use whichever system the mock is actually meant to represent; don't silently mix the two palettes on one page.
+
+**Finding:** BC SPCA's real brand palette has **no native red/yellow/green alert colors** — there is no traffic-light convention to default to.
+
+**Resolved default substitution** — use this consistently across future mocks whenever status/threshold language is BRD-authorized (rule 4 still governs *whether* status language appears at all; this only governs *which colors* once it's authorized):
+
+| Status meaning | Color | Why |
+|---|---|---|
+| On Target / stable / positive | **Teal** `#0A8C99` | Closest brand meaning: "Community & Belonging," calm |
+| Monitor / caution / attention | **Mustard** `#E3A526` | Closest available warm tone — its real brand meaning is "Celebration," not caution; an imperfect fit used only because nothing closer exists |
+| Action Required / negative | **Berry** `#893152` | Matches the brand's own "Urgency" meaning |
+
+**Always disclose the substitution plainly** the first time status pills appear in a deliverable (a visible callout or footnote) — the imperfect fit, especially Mustard, must never be presented as if it were the brand's native meaning. Thresholds themselves remain illustrative placeholders until a real benchmark is BRD-confirmed, regardless of which color system is in use.

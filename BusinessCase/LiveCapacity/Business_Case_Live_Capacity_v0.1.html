@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Business case for Live Capacity: how a dashboard request became a trusted, governed data product now running BC SPCA's daily placement decisions across 9 centres — built by one developer with human-in-the-loop AI assistants.">
+<title>Where Can This Animal Go? | Business Case</title>
+<style>
+  :root {
+    --navy: #18364a; --blue: #176b87; --teal: #2f7f78; --green: #3f7652;
+    --amber: #a56616; --red: #9b3d35; --ink: #24323b; --muted: #5d6c75;
+    --line: #d8e0e4; --soft: #f3f7f8; --blue-soft: #eaf4f7; --green-soft: #edf6ef;
+    --amber-soft: #fff6e8; --red-soft: #fbeeed; --grey-soft: #f5f6f7; --white: #ffffff;
+    --page-width: 960px;
+  }
+  * { box-sizing: border-box; }
+  html { background: #dfe5e8; }
+  body { margin: 0; color: var(--ink); background: var(--white); font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.47; }
+  a { color: var(--blue); text-decoration: none; border-bottom: 1px solid #9fc4d1; }
+  .page { max-width: var(--page-width); margin: 0 auto; padding: 18mm 17mm 20mm; background: var(--white); }
+  .eyebrow { color: var(--blue); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 9pt; }
+  h1, h2, h3, h4 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); page-break-after: avoid; }
+  h1 { font-size: 25pt; line-height: 1.1; margin: 8mm 0 3mm; }
+  h2 { font-size: 16.5pt; margin: 11mm 0 4mm; padding-top: 2mm; border-top: 2px solid var(--navy); }
+  h3 { font-size: 12.5pt; margin: 6mm 0 2.5mm; }
+  p { margin: 0 0 3mm; }
+  ul, ol { margin: 2mm 0 4mm 6mm; padding-left: 5mm; }
+  li { margin: 1.1mm 0; }
+  .cover { min-height: 200mm; display: flex; flex-direction: column; }
+  .cover-main { margin-top: 22mm; }
+  .cover-rule { width: 55mm; height: 4px; background: var(--teal); margin: 7mm 0; }
+  .subtitle { color: var(--muted); font-size: 12.5pt; max-width: 720px; }
+  .status { display: inline-block; margin-top: 6mm; padding: 2mm 4mm; border-radius: 99px; background: var(--green-soft); color: #275236; font-weight: 700; }
+  .cover-meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; border-top: 1px solid var(--line); padding-top: 6mm; }
+  .label { color: var(--muted); font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .value { font-weight: 650; color: var(--navy); }
+  .callout { margin: 4mm 0; padding: 4mm 5mm; border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 0 8px 8px 0; break-inside: avoid; }
+  .callout.approved { border-color: var(--green); background: var(--green-soft); }
+  .callout.warning { border-color: var(--amber); background: var(--amber-soft); }
+  .callout.note { border-color: #7b8990; background: var(--grey-soft); }
+  .callout strong:first-child { color: var(--navy); }
+  .quote-box { margin: 4mm 0 5mm; padding: 4mm 5mm; border: 1px dashed #9fb0b8; border-radius: 8px; background: var(--soft); font-style: italic; color: var(--ink); }
+  .quote-box .attrib { display: block; margin-top: 2mm; font-style: normal; font-size: 9pt; color: var(--muted); }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 3mm 0 5mm; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; break-inside: auto; font-size: 9.5pt; }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th, td { padding: 2.6mm 3mm; vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  th:last-child, td:last-child { border-right: 0; }
+  tr:last-child td { border-bottom: 0; }
+  th { background: var(--navy); color: var(--white); text-align: left; font-size: 8.7pt; letter-spacing: .02em; }
+  .tag { display: inline-block; padding: .8mm 2.2mm; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); font-size: 8pt; font-weight: 700; margin: .5mm 0; white-space: nowrap; }
+  .tag.built { background: var(--green-soft); border-color: var(--green); color: #275236; }
+  .tag.target { background: var(--amber-soft); border-color: var(--amber); color: #7b4a0c; }
+  .tag.deferred { background: var(--grey-soft); border-color: var(--line); color: var(--muted); }
+  .tag.required { background: var(--red-soft); border-color: var(--red); color: #6f2922; }
+  .stat-row { display: flex; gap: 4mm; margin: 4mm 0 5mm; flex-wrap: wrap; }
+  .stat { flex: 1 1 0; min-width: 38mm; border: 1px solid var(--line); border-radius: 8px; padding: 3.5mm; text-align: center; }
+  .stat .n { font-size: 20pt; font-weight: 800; color: var(--navy); font-family: Georgia, serif; }
+  .stat .l { font-size: 8.3pt; color: var(--muted); margin-top: 1mm; }
+  .toc a { border: 0; }
+  .toc ol { columns: 2; column-gap: 10mm; }
+  .footer-note { margin-top: 10mm; padding-top: 3mm; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); }
+  .engine-row { display: flex; align-items: stretch; gap: 3mm; margin: 5mm 0; flex-wrap: wrap; }
+  .engine-col { flex: 1 1 0; min-width: 48mm; display: flex; flex-direction: column; gap: 2.5mm; }
+  .engine-box { border: 1px solid var(--line); border-radius: 8px; padding: 3mm 3.5mm; font-size: 9pt; background: var(--white); }
+  .engine-box.legacy { background: var(--grey-soft); }
+  .engine-box.core { border: 2px solid var(--teal); }
+  .engine-box.ai { border-style: dashed; background: var(--blue-soft); }
+  .engine-box.power { background: var(--green-soft); border-color: var(--green); }
+  .engine-box h4 { margin: 0 0 1mm; font-size: 9.5pt; font-family: "Segoe UI", Arial, sans-serif; color: var(--navy); }
+  .engine-box .d { color: var(--muted); font-size: 8.3pt; }
+  .engine-label { color: var(--muted); font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 1mm; }
+  .engine-arrow { display: flex; align-items: center; justify-content: center; font-size: 16pt; color: var(--teal); flex: 0 0 auto; }
+  .contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 4mm 0 5mm; }
+  .contrast .box { border-radius: 8px; padding: 4mm 4.5mm; font-size: 9.3pt; }
+  .contrast .box.not { background: var(--red-soft); border: 1px solid var(--red); }
+  .contrast .box.yes { background: var(--green-soft); border: 1px solid var(--green); }
+  .contrast .box h4 { margin: 0 0 2mm; font-family: "Segoe UI", Arial, sans-serif; font-size: 10pt; }
+  .contrast .box.not h4 { color: #6f2922; }
+  .contrast .box.yes h4 { color: #275236; }
+  @page { size: Letter; margin: 15mm 14mm 17mm; }
+  @media print {
+    html, body { background: var(--white); }
+    .page { max-width: none; padding: 0; }
+    .cover { page-break-after: always; }
+    a { color: inherit; border-bottom: 0; }
+  }
+  @media (max-width: 720px) {
+    .page { padding: 8mm; }
+    .cover-meta { grid-template-columns: 1fr; }
+    .toc ol { columns: 1; }
+    .engine-row { flex-direction: column; }
+    .engine-arrow { transform: rotate(90deg); }
+    .contrast { grid-template-columns: 1fr; }
+    .stat-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <section class="cover">
+    <div class="eyebrow">BC SPCA &middot; Business Case</div>
+    <div class="cover-main">
+      <h1>Where Can This Animal Go?</h1>
+      <div class="cover-rule"></div>
+      <p class="subtitle">How a request for "a live capacity dashboard" became Live Capacity — a trusted, governed data product now running BC SPCA's daily placement decisions across 9 centres, built by one developer working with human-in-the-loop AI assistants.</p>
+      <span class="status">Live &middot; in daily operational use &middot; Version 0.1</span>
+    </div>
+    <div class="callout approved">
+      <strong>What this document is for</strong><br>
+      Unlike a from-scratch business case, this one converts a real, already-delivered result into the same house format used across this portfolio — faithfully, not reinterpreted. Every fact below comes from the original request, the product's own requirements record, and the presentation BC SPCA has given externally (most recently to RSPCA Victoria, November 2026).
+    </div>
+    <div class="cover-meta">
+      <div><div class="label">Author</div><div class="value">Data &amp; Analytics, on behalf of Tomas Leung and Kahlee Demers</div></div>
+      <div><div class="label">Created</div><div class="value">2026-11-20</div></div>
+      <div><div class="label">Business owner</div><div class="value">Kahlee Demers, Animal Flow Senior Manager</div></div>
+      <div><div class="label">Technical owner</div><div class="value">Tomas Leung, Business Intelligence Developer</div></div>
+      <div><div class="label">Source material</div><div class="value">Kahlee's original request (below); "Live Capacity — From Legacy Data to Better Decisions V2.pptx," same folder</div></div>
+      <div><div class="label">Classification</div><div class="value">Internal — BC SPCA</div></div>
+    </div>
+  </section>
+
+  <section class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#problem">The real problem: a dashboard request is not a data-product request</a></li>
+      <li><a href="#notagentic">This is human-in-the-loop AI, not agentic AI</a></li>
+      <li><a href="#engine">The engine: how the layers fit together</a></li>
+      <li><a href="#ai-roles">How AI scaled the implementation</a></li>
+      <li><a href="#minimal">The minimal document set — what was written down before building</a></li>
+      <li><a href="#chain">Worked example: the chain as it actually ran</a></li>
+      <li><a href="#proof">What this proved, and what's still open</a></li>
+      <li><a href="#why">Why this matters, and what it actually encodes</a></li>
+      <li><a href="#forward">Getting started — adding a centre, or starting your own</a></li>
+    </ol>
+  </section>
+
+  <section id="problem">
+    <h2>1. The real problem: a dashboard request is not a data-product request</h2>
+    <p>The request, exactly as it arrived:</p>
+    <div class="quote-box">
+      "<strong>Business intent:</strong> Provide a real-time, centralized view of available space across the organization so we (Animal Flow) can make faster, more informed placement decisions. A live dashboard would consolidate capacity data into one accessible location, reducing manual follow-ups and improving operational efficiency.<br><br>
+      <strong>Current process:</strong> space is determined by checking a report on SB and then calling/emailing CACs to confirm availability and resources as that information is not recorded on SB &mdash; i.e. staffing levels, resources, etc. This current process is time-consuming and not accurate.<br><br>
+      <strong>Data needed:</strong> ShelterBuddy shelter locations for all shelters in the province; an Excel sheet CAC managers would fill out twice a day; Parm's physical capacity dashboard; anything else needed to see CAC-specific, region-specific, and organization-wide space."
+      <span class="attrib">— Kahlee Demers, Senior Manager, Animal Triage and Flow, Animal Care Services</span>
+    </div>
+    <p>Taken literally, this reads as a request to put an existing ShelterBuddy report on a screen. What actually blocked that: ShelterBuddy's location data wasn't consistent enough to trust. Every centre named rooms its own way. Kennel was an optional field, so most centres only ever recorded the room, not the specific space. There was no way to record a space as on hold or unavailable, or why. And one centre's own location list mixed real rooms with vet hospitals, an animal-control van, an office, and Foster — all in the same dropdown.</p>
+    <p>In the product team's own words, reviewing that data before building anything:</p>
+    <div class="quote-box">"The data was there, but it meant something different at every centre. A dashboard on top of this data would have shown confident numbers that were wrong."</div>
+    <div class="contrast">
+      <div class="box not"><h4>A report</h4>ShelterBuddy's existing capacity export, pointed at a screen — confident-looking numbers nobody had actually standardized the meaning of first.</div>
+      <div class="box yes"><h4>A data product</h4>Standardized room and kennel names, an agreed status model (Open/In use/Hold/Unavailable, each with a reason), RACI, and a daily confirmation step — the governed layer that makes the number trustworthy.</div>
+    </div>
+  </section>
+
+  <section id="notagentic">
+    <h2>2. This is human-in-the-loop AI, not agentic AI</h2>
+    <p>In the product team's own words, stated twice in the external presentation of this work: <strong>"Each assistant drafts. I review and decide."</strong> and <strong>"AI assists. People decide."</strong> An agentic AI pursues a goal on its own, choosing its own steps with little or no per-step human confirmation — that is explicitly not what was built here.</p>
+    <div class="contrast">
+      <div class="box not"><h4>Not this — agentic AI</h4>AI is given a goal and decides the steps, with the human reviewing only the end result, if at all.</div>
+      <div class="box yes"><h4>This — human-in-the-loop AI</h4>A set of custom Microsoft Copilot assistants, each with one role and working from the product's own requirements and documented principles. One developer reviews and decides before anything reaches the live app.</div>
+    </div>
+    <div class="callout note">
+      <strong>Built with Microsoft Copilot, not this repository's RDLC OS skill set</strong><br>
+      This is a separate, real-world instance of the same method — not run through the <code>rdlc-*</code> skills documented elsewhere in this portfolio. The same philosophy (one developer, a role-specific AI assistant per traditional team role, human confirmation before anything ships) was independently built on a different AI platform. That the pattern holds on two different tools, not just one, is itself part of the case for it being a transferable method rather than a feature of one piece of software.
+    </div>
+  </section>
+
+  <section id="engine">
+    <h2>3. The engine: how the layers fit together</h2>
+    <p>Legacy systems are good at recording transactions, not at producing decision-ready numbers. Rather than replace ShelterBuddy, the team built a trusted layer on top of it, bottom-up.</p>
+    <div class="engine-row">
+      <div class="engine-col">
+        <div class="engine-label">Legacy systems</div>
+        <div class="engine-box legacy"><h4>ShelterBuddy</h4><div class="d">Animals and where they are</div></div>
+        <div class="engine-box legacy"><h4>Better Impact</h4><div class="d">Foster families &mdash; next</div></div>
+      </div>
+      <div class="engine-arrow">&rarr;</div>
+      <div class="engine-col" style="flex:1.6 1 0;">
+        <div class="engine-label">Our data product &middot; only the data decisions need</div>
+        <div class="engine-box ai"><h4>AI &middot; next</h4><div class="d">AI assists, people decide</div></div>
+        <div class="engine-box core"><h4>Standardized data</h4><div class="d">Status, reasons, care capacity, floor plans</div></div>
+        <div class="engine-box"><h4>Business rules</h4><div class="d">Stored as data, changed without code</div></div>
+        <div class="engine-box"><h4>RACI &middot; the foundation</h4><div class="d">Who does what, agreed upfront</div></div>
+      </div>
+      <div class="engine-arrow">&rarr;</div>
+      <div class="engine-col">
+        <div class="engine-label">What it powers</div>
+        <div class="engine-box power"><h4>Live Capacity app</h4><div class="d">today</div></div>
+        <div class="engine-box power"><h4>History and reports</h4><div class="d">building</div></div>
+        <div class="engine-box legacy"><h4>AI suggestions</h4><div class="d">next</div></div>
+      </div>
+    </div>
+    <p style="font-weight:650; color:var(--navy);">Build from the bottom up: AI only works when the layers below it are in place. Secure: access by role and centre.</p>
+    <p>Because the requirements came first, they decided the technology — not the other way around. The standardized data needed is small (about 80KB per sync), so the team built on Microsoft 365 tools BC SPCA already licensed, instead of buying a new platform. The live app adds no new software or IT running cost.</p>
+  </section>
+
+  <section id="ai-roles">
+    <h2>4. How AI scaled the implementation</h2>
+    <p>Delivering a data product like this normally takes a team: a project manager, a business analyst, a data analyst, a UX designer, a developer. Here, it was one developer, using a custom Microsoft Copilot assistant for each role.</p>
+    <table>
+      <thead><tr><th>Role</th><th>What the AI assistant does</th></tr></thead>
+      <tbody>
+        <tr><td>Project manager</td><td>Checks work against our principles and plan</td></tr>
+        <tr><td>Business analyst</td><td>Drafts requirements from our templates</td></tr>
+        <tr><td>Data analyst</td><td>Suggests data, signals and thresholds</td></tr>
+        <tr><td>UX designer</td><td>Drafts screen mock-ups</td></tr>
+        <tr><td>Floor plan</td><td>Turns a sketch into an accurate floor plan</td></tr>
+        <tr><td>Data modeller</td><td>Shapes data into a model reports can use</td></tr>
+        <tr><td>Power Platform developer</td><td>Helps write app logic to our standards</td></tr>
+        <tr><td>QA</td><td>Tests rules and data against requirements</td></tr>
+      </tbody>
+    </table>
+    <div class="callout approved">
+      <strong>Each assistant drafts. I review and decide.</strong><br>
+      Custom assistants built in Microsoft Copilot, which BC SPCA already had — no new software cost. And these assistants aren't specific to Live Capacity; they're reused on the next data projects.
+    </div>
+    <h3>Worked example: sketch to live floor plan</h3>
+    <p>Animal Flow sketches a centre's layout by hand and sends it over. By hand, turning that into a working floor plan — resizing the image, then working out the exact x/y position of every kennel button for Power Apps — took at least 4 hours. With the floor plan assistant, under 30 minutes. The developer still checks the result before it goes live. <strong>AI assists. People decide.</strong></p>
+  </section>
+
+  <section id="minimal">
+    <h2>5. The minimal document set — what was written down before building</h2>
+    <p>Before any technology was built, the team wrote down exactly three things — and left the rest out on purpose, pending trusted history.</p>
+    <table>
+      <thead><tr><th>Always required</th><th>What it actually contains</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag required">Required</span> Decisions &amp; owners register</td><td>Which centre should receive this animal? (Owner: Animal Flow, many times a day.) Does the floor plan match reality? (Owner: centre manager, every morning.) Are ShelterBuddy assignments correct? (Owner: centre manager, daily / as things change.)</td></tr>
+        <tr><td><span class="tag required">Required</span> RACI</td><td>Animal Flow: accountable for placement decisions and the rules. Centre managers: responsible for their floor plan, confirmed once a day. ShelterBuddy admin: responsible for one standard set of room and kennel names. Data team: responsible for guiding the process, building, and supporting it.</td></tr>
+        <tr><td><span class="tag required">Required</span> Standardized naming &amp; business rules</td><td>Every space has one of four statuses &mdash; Open, In use, Hold, Unavailable &mdash; and every Hold or Unavailable carries a reason. Every room/kennel name follows one convention: type + number (e.g. "Cat Room 1," "Portal 3"). Documented on one knowledge page, so anyone can pick it up.</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Deliberately deferred</th><th>Why it waits</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag deferred">Deferred</span> Capacity forecasting</td><td rowspan="3">Each is a later step, once trusted history actually exists. Building any of these on inconsistent data would have produced confident, wrong answers &mdash; the exact failure the current-state product was built to avoid.</td></tr>
+        <tr><td><span class="tag deferred">Deferred</span> Automated routing</td></tr>
+        <tr><td><span class="tag deferred">Deferred</span> Historical trends</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="chain">
+    <h2>6. Worked example: the chain as it actually ran</h2>
+    <table>
+      <thead><tr><th>When</th><th>What happened</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>April 2026</td><td>Request received: "a live capacity dashboard"</td><td><span class="tag built">Received</span></td></tr>
+        <tr><td>+2 weeks</td><td>Quick SharePoint prototype, so every team could see the idea and agree before anything real was built</td><td><span class="tag built">Built</span></td></tr>
+        <tr><td>May 2026</td><td>Project confirmed; RACI, business rules, and the naming convention agreed and written down on one knowledge page</td><td><span class="tag built">Confirmed</span></td></tr>
+        <tr><td>July 9, 2026</td><td>First centre live &mdash; Williams Lake</td><td><span class="tag built">Live</span></td></tr>
+        <tr><td>November 4, 2026</td><td>9 centres live, across 2 regions</td><td><span class="tag built">Live</span></td></tr>
+        <tr><td>Next</td><td>All 31 centres, province-wide</td><td><span class="tag target">Target</span></td></tr>
+      </tbody>
+    </table>
+    <p>The honest lesson from the team's own retrospective: <strong>the technology was the fast part.</strong> Most of the seven months went into Animal Flow working with each centre to confirm its floor plan, not into the build itself.</p>
+    <h3>Managed as a data product, not a one-off app</h3>
+    <table>
+      <thead><tr><th>Data team delivers</th><th>The business provides</th></tr></thead>
+      <tbody>
+        <tr><td>Integration, data quality, standardized data &mdash; up through "can we trust it?"</td><td>Ownership, rules, testing &mdash; and builds "where to focus" and "what to do" together with the data team</td></tr>
+      </tbody>
+    </table>
+    <p>In the product team's own words: <em>"The same model, other products: Foster Analytics."</em> This isn't presented as a one-off build — it's the same method already claimed, by its own authors, to be running under a second product in this same portfolio.</p>
+  </section>
+
+  <section id="proof">
+    <h2>7. What this proved, and what's still open</h2>
+    <div class="stat-row">
+      <div class="stat"><div class="n">9</div><div class="l">centres in daily use, across 2 regions</div></div>
+      <div class="stat"><div class="n">1</div><div class="l">full-time Animal Flow operator runs placement from the app</div></div>
+      <div class="stat"><div class="n">1&times;/day</div><div class="l">confirmation per centre, instead of calls all day</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">code changes needed to add a new centre</div></div>
+    </div>
+    <p><strong>Already realized:</strong> cleaner communication. Animal Flow now only contacts centres the app shows haven't updated, instead of calling every centre for every placement.</p>
+    <p><strong>Stated as targets, not yet formally measured</strong> &mdash; kept exactly as honest as the product team itself presented them: placement under 24 hours, and missing kennels down 95%. One real example was observed at a live centre &mdash; a placement that would otherwise have taken almost 2 days of calls and emails took under 1 hour on the app &mdash; but the team is explicit that this is one anecdotal example, "not yet a formal measure."</p>
+    <p><strong>Still open, deliberately:</strong> capacity forecasting, automated routing, and historical trend analysis all wait on the daily trusted history the product is now building. Rollout is 9 of 31 centres so far, with the remaining 22 the stated next-year target.</p>
+  </section>
+
+  <section id="why">
+    <h2>8. Why this matters, and what it actually encodes</h2>
+    <ul>
+      <li><strong>Speed.</strong> One developer, with a Copilot assistant standing in for each traditional team role, took a dashboard request to 9 live centres in seven months &mdash; work that would normally need a project manager, business analyst, data analyst, UX designer, and developer in sequence.</li>
+      <li><strong>Governance.</strong> Live Capacity is explicitly run as a <em>managed data product</em>, not a one-off app &mdash; an owner on both the data side and the business side, by design, from before the first line of the build.</li>
+      <li><strong>Repeatability, already claimed by its own authors.</strong> The same model is stated to be behind BC SPCA's Foster Analytics work too &mdash; this is not being proposed as repeatable here for the first time; it already is, in a second product.</li>
+    </ul>
+    <div class="callout note">
+      <strong>What this process actually encodes</strong><br>
+      In the product team's own closing words to RSPCA Victoria: <em>"After many years in data and BI, my conclusion is that no product solves this out of the box, because every organization's rules and data are different. Organizations that succeed have someone who owns the connection between operations, data and technology, translating what the intake team needs into rules, data and a working tool."</em> That translation role &mdash; not the app itself &mdash; is the thing being encoded and reused here.
+    </div>
+  </section>
+
+  <section id="forward">
+    <h2>9. Getting started &mdash; adding a centre, or starting your own</h2>
+    <p>Adding a new centre to Live Capacity is five steps, no code:</p>
+    <ol>
+      <li>Sketch the floor plan with the centre manager; AI draws the layout. <span class="label">Owner: Animal Flow + data team</span></li>
+      <li>Define the spaces with standard names. <span class="label">Owner: Animal Flow</span></li>
+      <li>Set up the same rooms and kennels in ShelterBuddy. <span class="label">Owner: ShelterBuddy admin</span></li>
+      <li>Give the centre manager access. <span class="label">Owner: permission list</span></li>
+      <li>Centre is live &mdash; daily confirmation begins.</li>
+    </ol>
+    <p>And for anyone starting a comparable initiative elsewhere, the team's own three lessons, learned the hard way:</p>
+    <ol>
+      <li><strong>Measure your "before" now.</strong> Know how the process works today and what you expect to change, before building anything, so the change can actually be proven later.</li>
+      <li><strong>Make data consistent first.</strong> Standard data and agreed business rules. Nothing works on data nobody can read.</li>
+      <li><strong>Start small, then grow.</strong> Begin with one centre, build a repeatable process, and let real use shape the next features.</li>
+    </ol>
+    <div class="callout">
+      <strong>If you remember one thing</strong><br>
+      Start with what your operation needs to react to, and who owns it. Not with the dashboard.
+    </div>
+  </section>
+
+  <div class="footer-note">
+    Business Case &middot; Live Capacity &middot; Version 0.1 &middot; 2026-11-20.<br>
+    Source: Kahlee Demers's original request, and "Live Capacity &mdash; From Legacy Data to Better Decisions V2.pptx" (presented to RSPCA Victoria, November 2026), same folder. Converted faithfully into this portfolio's house business-case format &mdash; see <code>BusinessCase/Foster/Business_Case_RDLC_OS_Engine_v0.2.html</code> for the companion document this format originated with.
+  </div>
+
+</main>
+</body>
+</html>
